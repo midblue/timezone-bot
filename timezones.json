@@ -70,17 +70,6 @@
     ]
   },
   {
-    "value": "Mountain Standard Time (Mexico)",
-    "abbr": "MDT",
-    "offset": -6,
-    "isdst": true,
-    "text": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
-    "utc": [
-      "America/Chihuahua",
-      "America/Mazatlan"
-    ]
-  },
-  {
     "value": "Mountain Standard Time",
     "abbr": "MDT",
     "offset": -6,
@@ -389,18 +378,6 @@
     "text": "(UTC-03:00) Salvador",
     "utc": [
       "America/Bahia"
-    ]
-  },
-  {
-    "value": "UTC-02",
-    "abbr": "U",
-    "offset": -2,
-    "isdst": false,
-    "text": "(UTC-02:00) Coordinated Universal Time-02",
-    "utc": [
-      "America/Noronha",
-      "Atlantic/South_Georgia",
-      "Etc/GMT+2"
     ]
   },
   {

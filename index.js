@@ -1,40 +1,39 @@
 require('dotenv').config()
 const Discord = require('discord.js')
-const client = new Discord.Client()
-const timeZones = require('./timezones.json')
+const discordClient = new Discord.Client()
+const timezones = require('./timezones.json')
+const fs = require('fs')
+const savedUsers = require('./data/users.json')
+console.log(`Loaded ${Object.keys(savedUsers).length} saved users.`)
 
-const relevantTimeZones = '!tst !pdt !cdt !edt'
-
-client.on('ready', () => {
+discordClient.on('ready', () => {
   console.log('Ready!')
 })
 
-function buildDateForTimezone(timeZone) {
+function buildDateForTimezone(timezone) {
   const localeString = new Date().toLocaleTimeString(undefined, {
-    timeZone,
+    timezone,
     weekday: 'short',
     hour: '2-digit',
     minute: '2-digit'
   })
-
   const singleDigitHourRegex = / ([0-9]{1}):[0-9]+/
   return localeString.replace(singleDigitHourRegex, match => {
       if (match) return ' 0' + match.trim()
   })
 }
 
-function formattedTimeZones (localTimes) {
+function formattedTimezones (localTimes) {
   const longest = localTimes
     .reduce((longestLabel, t) => {
-      return t.abbr.length + t.timeZone.length > longestLabel
-        ? t.abbr.length + t.timeZone.length : longestLabel
-    }, 0)
-
+      return t.abbr.length + t.timezone.length > longestLabel
+        ? t.abbr.length + t.timezone.length : longestLabel
+    }, 0) + 1
   return localTimes.map(t => {
-    let paddedTimeZone = t.timeZone
-    while (t.abbr.length + paddedTimeZone.length < longest)
-      paddedTimeZone += ' '
-    return `(${t.abbr}) ${paddedTimeZone}  ${t.time}`
+    let paddedTimezone = t.timezone + ':'
+    while (t.abbr.length + paddedTimezone.length < longest)
+      paddedTimezone += ' '
+    return `(${t.abbr}) ${paddedTimezone} ${t.time}`
   })
 }
 
@@ -49,53 +48,119 @@ function parseAts (messageText) {
   return atsInMessage
 }
 
-function parseTimeZoneCommands (messageText) {
-  let timeZonesInMessage = []
+function parseTimezoneCommands (messageText) {
+  let timezonesInMessage = []
   const lowerCaseMessage = messageText.toLowerCase()
-  const timeZoneRegex = /!([a-z]{2,4})/g
-  let regexedTimeZone = timeZoneRegex.exec(lowerCaseMessage)
-  while (regexedTimeZone) {
-    const foundTimeZone = timeZones
-      .find(t => t.abbr.toLowerCase() === regexedTimeZone[1])
-    if (foundTimeZone)
-      timeZonesInMessage.push(foundTimeZone)
-    regexedTimeZone = timeZoneRegex.exec(lowerCaseMessage)
+  const timezoneRegex = /!([a-z]{2,5})/g
+  let regexedTimezone = timezoneRegex.exec(lowerCaseMessage)
+  while (regexedTimezone) {
+    const foundTimezone = timezones
+      .find(t => t.abbr.toLowerCase() === regexedTimezone[1])
+    if (foundTimezone)
+      timezonesInMessage.push(foundTimezone)
+    regexedTimezone = timezoneRegex.exec(lowerCaseMessage)
   }
-  return timeZonesInMessage
+  return timezonesInMessage
 }
 
-client.on('message', msg => {
-  const usefulInfo = {
-    content: msg.content,
-    id: msg.author.id,
-    username: msg.author.username,
-    bot: msg.author.bot,
+function getRelevantTimezonesToServer (serverOrChannelObject) {
+  let relevantTimezones = []
+  const userIdsInCurrentServer = serverOrChannelObject.recipient
+    ? [serverOrChannelObject.recipient.id]
+    : serverOrChannelObject.members.keyArray()
+  Object.keys(savedUsers)
+    .map(k => {
+      if (
+        userIdsInCurrentServer.find(i => i === k)
+        && !relevantTimezones.find(z => z.value === savedUsers[k].value)
+      ) {
+        relevantTimezones.push(savedUsers[k])
+      }
+    })
+  return relevantTimezones.sort((a, b) => a.offset > b.offset)
+}
+
+function updateUserTimezone (settings) {
+  savedUsers[settings.id] = settings.timezone
+  fs.writeFile("./data/users.json", JSON.stringify(savedUsers), 'utf8', e => {
+    if (e) return console.log(e)
+  })
+}
+
+discordClient.on('message', async msg => {
+  if (msg.author.bot) return
+
+  // Respond to help command
+  if (msg.content.indexOf('!help') === 0) {
+    msg.channel.send(`Valid commands:
+
+\`!<timezone code>\` to see the current time in a specific timezone.
+\`!all\` to see everyone's timezone on the server (requires them to set their timezone).
+\`!set <timezone code>\` to set your timezone.
+\`!help\` to show this message (duh).
+
+Timezone code reference: https://www.timeanddate.com/time/zones/`)
   }
-  // console.log(usefulInfo)
+
+  const serverOrChannelObject = msg.guild || msg.channel
 
   const atsInMessage = parseAts(msg.content)
   if (atsInMessage.length > 0)
     console.log(atsInMessage)
 
-  const timeZonesInMessage = (msg.content.indexOf('!all') >= 0)
-    ? parseTimeZoneCommands(relevantTimeZones)
-    : parseTimeZoneCommands(msg.content)
+  // Set user timezone
+  if (msg.content.indexOf('!set') === 0) {
+    const regex = /!set.* (\w{2,5})/g
+    const timezoneToSet = regex.exec(msg.content)
+    if (timezoneToSet && timezoneToSet[1]) {
+      const foundTimezone = timezones.find(t => t.abbr.toLowerCase() === timezoneToSet[1])
+      if (foundTimezone) {
+        updateUserTimezone({ id: msg.author.id, timezone: foundTimezone })
+        msg.channel.send(`Time zone for ${msg.author.username} set to ${foundTimezone.value}.`)
+      }
+      else {
+        msg.channel.send(`Time zone code ${timezoneToSet[1]} not found. Reference: https://www.timeanddate.com/time/zones/`)
+      }
+    }
+    else
+      msg.channel.send(`Use this command in the format \`!set <timezone code>\` to set your timezone.
 
-  if (timeZonesInMessage.length === 0) return
+Reference: https://www.timeanddate.com/time/zones/`)
+    return
+  }
 
-  const localTimes = timeZonesInMessage.map(zone => {
+  // Respond to user timezone query
+  const timezonesInMessage = (msg.content.indexOf('!all') >= 0)
+    ? getRelevantTimezonesToServer(serverOrChannelObject)
+    : parseTimezoneCommands(msg.content)
+
+  if (timezonesInMessage.length === 0) {
+    if (msg.content.indexOf('!all') >= 0)
+      msg.channel.send(`No users have registered their timezone in this channel. Use \`!set <timezone code>\` to set your timezone.
+
+Reference: https://www.timeanddate.com/time/zones/`)
+    return //console.log('No valid timezones to send.')
+  }
+
+  // console.log(timezonesInMessage.map(t => t.value))
+
+  const localTimes = timezonesInMessage.map(zone => {
     const localTime = buildDateForTimezone(
       zone.utc.find(u => u.indexOf('Etc/GMT') === -1)
     )
     return {
       abbr: zone.abbr,
-      timeZone: zone.value.substring(0, zone.value.indexOf('Standard Time') - 1),
+      timezone: zone.value.substring(0, zone.value.indexOf('Standard Time') - 1),
       time: localTime
     }
   })
 
-  msg.channel.send(`\`\`\`${formattedTimeZones(localTimes).join(`\n`)}\`\`\``)
+  msg.channel.send(`\`\`\`${
+    formattedTimezones(localTimes)
+      .join(`\n`)
+      .substring(0, 1996)
+    }\`\`\``)
 
 })
 
-client.login(process.env.DISCORD_KEY)
+discordClient.login(process.env.DISCORD_KEY)
