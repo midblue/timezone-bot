@@ -30,7 +30,7 @@ module.exports = {
     fs.writeFile("./data/users.json", JSON.stringify(savedUsers), 'utf8', e => {
       if (e) return console.log(e)
     })
-    console.log('Updated user', id)
+    // console.log('Updated user', id)
     return savedUsers[id]
   },
 
