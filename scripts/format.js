@@ -15,10 +15,11 @@ module.exports = {
 
   currentTimeAt (timezoneLocationString, leadingZero = true) {
     const localeString = new Date().toLocaleTimeString(undefined, {
-      timezoneLocationString,
+      timeZone: timezoneLocationString,
       weekday: 'short',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      hour12: true,
     })
       console.log(timezoneLocationString, localeString)
     if (!leadingZero) return localeString
