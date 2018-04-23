@@ -13,17 +13,18 @@ module.exports = {
     })
   },
 
-  currentTimeAt (timezoneLocationString) {
+  currentTimeAt (timezoneLocationString, leadingZero = true) {
     const localeString = new Date().toLocaleTimeString(undefined, {
       timezoneLocationString,
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit'
     })
+    if (!leadingZero) return localeString
     const singleDigitHourRegex = / ([0-9]{1}):[0-9]+/
     return localeString.replace(singleDigitHourRegex, match => {
         if (match) return ' 0' + match.trim()
     })
   },
-  
+
 }

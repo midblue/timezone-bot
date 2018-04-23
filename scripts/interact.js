@@ -2,6 +2,9 @@ const timezones = require('../timezones.json')
 const db = require('./db')
 const format = require('./format')
 
+const MINIMUM_LAST_SEEN_TIME_SPAN = 2 * 60 * 60 * 1000 // first number is hours
+const MINIMUM_TIMEZONE_DIFFERENCE = 4 // hours
+
 const referenceText = `
 
 Timezone code reference: https://www.timeanddate.com/time/zones/`
@@ -18,8 +21,26 @@ module.exports = {
     msg.channel.send(helpText)
   },
 
-  at (msg, atsInMessage) {
-    console.log(atsInMessage)
+  at (msg, atsInMessage, senderTimezoneOffset) {
+    if (!senderTimezoneOffset) return
+    for (let id of atsInMessage) {
+      const userInfo = db.get(id)
+      if (!userInfo || !userInfo.lastSeen) continue
+      const msSince = Date.now() - new Date(userInfo.lastSeen).getTime()
+      console.log('span since last seen:', msSince)
+      if (
+        msSince >= MINIMUM_LAST_SEEN_TIME_SPAN
+        && Math.abs(senderTimezoneOffset - userInfo.offset) > MINIMUM_TIMEZONE_DIFFERENCE
+      ) {
+        db.update(id)
+        msg.channel.send(`\`It's ${
+            format.currentTimeAt(
+              userInfo.utc.find(u => u.indexOf('Etc/GMT') === -1),
+              false // no leading zero
+            )
+          } for ${userInfo.username}. (${userInfo.value})\``)
+      }
+    }
   },
 
   set (msg) {
@@ -28,7 +49,7 @@ module.exports = {
     if (timezoneToSet && timezoneToSet[1]) {
       const foundTimezone = timezones.find(t => t.abbr.toLowerCase() === timezoneToSet[1])
       if (foundTimezone) {
-        db.update({ id: msg.author.id, timezone: foundTimezone })
+        db.update(msg.author.id, { ...foundTimezone, username: msg.author.username })
         msg.channel.send(`Time zone for ${msg.author.username} set to ${foundTimezone.value}.`)
       }
       else
