@@ -12,5 +12,8 @@
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
     "nodemon": "^1.17.3"
+  },
+  "nodemonConfig": {
+    "ignore": ["data/*"]
   }
 }
