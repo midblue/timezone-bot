@@ -15,9 +15,20 @@ discordClient.login(process.env.DISCORD_KEY)
 discordClient.on('message', async msg => {
   if (msg.author.id === BOT_ID) return
 
+  const isServer = msg.guild != undefined
+
   let userTimezoneOffset
-  if (db.lastSeen(msg.author.id))
-    userTimezoneOffset = db.update(msg.author.id).offset
+  if (db.lastSeen(msg.author.id)) {
+    const updatedUserData = db.update(
+      msg.author.id,
+      {
+        username: isServer
+          ? msg.guild.members.find('id', msg.author.id).nickname || msg.author.username
+          : msg.author.username,
+      }
+    )
+    userTimezoneOffset = updatedUserData.offset
+  }
 
   // Respond to help command
   if (msg.content.indexOf('!help') === 0) return interact.help(msg)
@@ -29,7 +40,8 @@ discordClient.on('message', async msg => {
   // Set user timezone
   if (msg.content.indexOf('!set') === 0) return interact.set(msg)
 
-  if (msg.content.indexOf('!users') === 0) return interact.listUsers()
+  // List all users with timezones
+  if (msg.content.indexOf('!users') === 0) return interact.listUsers(msg)
 
   // Respond to user timezone query
   const timezonesInMessage = (msg.content.indexOf('!all') >= 0)

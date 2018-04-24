@@ -12,8 +12,9 @@ Timezone code reference: https://www.timeanddate.com/time/zones/`
 const helpText = `Valid commands:
 
 \`!<timezone code>\` to see the current time in a specific timezone.
-\`!all\` to see everyone's timezone on the server (requires them to set their timezone).
 \`!set <timezone code>\` to set your timezone.
+\`!users\` to see all users' set timezones.
+\`!all\` to see everyone's timezone on the server (requires them to set their timezone).
 \`!help\` to show this message (duh).${referenceText}`
 
 module.exports = {
@@ -80,27 +81,28 @@ module.exports = {
       }\`\`\``)
   },
 
-  listUsers () {
+  listUsers (msg) {
     const allUsers = db.getAll()
-    const timezonesWithUsers = Object.values(allUsers).reduce((acc, user) => {
-      const timezoneCode = user.abbr
-      if(!acc[timezoneCode]) {
-        acc[timezoneCode] = {
-          locale: user.utc[0],
-          label: user.text,
-          usernames: []
+    const timezonesWithUsers = Object.values(allUsers)
+      .reduce((acc, user) => {
+        const timezoneCode = user.abbr
+        if(!acc[timezoneCode]) {
+          acc[timezoneCode] = {
+            locale: user.utc.find(u => u.indexOf('Etc/GMT') === -1),
+            label: user.text,
+            usernames: []
+          }
         }
-      }
+        acc[timezoneCode].usernames.push(user.username)
+        return acc
+      }, {})
 
-      acc[timezoneCode].usernames.push(user.username)
-      return acc
-    },{})
-
-    const outputString = Object.values(timezonesWithUsers).reduce((acc, timezone) => {
-      const header = `${format.currentTimeAt(timezone.locale, true)} - ${timezone.label}`
-      const body = '\n  ' + timezone.usernames.join('\n  ') + '\n'
-      return acc + header + body
-    }, '')
+    const outputString = Object.values(timezonesWithUsers)
+      .reduce((acc, timezone) => {
+        const header = `${format.currentTimeAt(timezone.locale, true)} - ${timezone.label}`
+        const body = '\n  ' + timezone.usernames.join('\n  ') + '\n'
+        return acc + header + body
+      }, '')
 
     msg.channel.send(`\`\`\`${outputString}\`\`\``)
   }
