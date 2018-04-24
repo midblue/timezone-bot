@@ -46,7 +46,7 @@ module.exports = {
   },
 
   set (msg) {
-    const regex = /!set.* (\w{2,5})/g
+    const regex = /!set (\w{2,5})/g
     const timezoneToSet = regex.exec(msg.content)
     if (timezoneToSet && timezoneToSet[1]) {
       const foundTimezone = timezones.find(t => t.abbr.toLowerCase() === timezoneToSet[1].toLowerCase())

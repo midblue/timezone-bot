@@ -4,7 +4,7 @@ const parse = require('./scripts/parse')
 const db = require('./scripts/db')
 const interact = require('./scripts/interact')
 
-// TODO username changes, !time @<name>, !set by city name
+// TODO !time @<name>, !set by city name
 
 const BOT_ID = '437598259330940939'
 
@@ -32,6 +32,9 @@ discordClient.on('message', async msg => {
 
   // Respond to help command
   if (msg.content.indexOf('!help') === 0) return interact.help(msg)
+
+  // Respond to smooch
+  if (msg.content.indexOf('!smooch') === 0) return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘💏`)
 
   // Note timezone for @'d user if relevant
   const atsInMessage = parse.ats(msg.content)
