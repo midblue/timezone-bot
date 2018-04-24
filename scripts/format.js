@@ -21,7 +21,6 @@ module.exports = {
       minute: '2-digit',
       hour12: true,
     })
-      console.log(timezoneLocationString, localeString)
     if (!leadingZero) return localeString
     const singleDigitHourRegex = / ([0-9]{1}):[0-9]+/
     return localeString.replace(singleDigitHourRegex, match => {

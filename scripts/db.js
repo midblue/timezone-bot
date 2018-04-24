@@ -4,7 +4,7 @@ console.log(`Loaded ${Object.keys(savedUsers).length} saved users`)
 
 module.exports = {
   get (id) { return savedUsers[id] },
-
+  getAll () { return savedUsers },
   timezonesIn (serverOrChannelObject) {
     let relevantTimezones = []
     const userIdsInCurrentServer = serverOrChannelObject.recipient

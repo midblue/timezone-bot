@@ -27,6 +27,8 @@ discordClient.on('message', async msg => {
   // Set user timezone
   if (msg.content.indexOf('!set') === 0) return interact.set(msg)
 
+  if (msg.content.indexOf('!users') === 0) return interact.listUsers()
+
   // Respond to user timezone query
   const timezonesInMessage = (msg.content.indexOf('!all') >= 0)
     ? db.timezonesIn(msg.guild || msg.channel)

@@ -79,4 +79,28 @@ module.exports = {
       }\`\`\``)
   },
 
+  listUsers () {
+    const allUsers = db.getAll()
+    const timezonesWithUsers = Object.values(allUsers).reduce((acc, user) => {
+      const timezoneCode = user.abbr
+      if(!acc[timezoneCode]) {
+        acc[timezoneCode] = {
+          locale: user.utc[0],
+          label: user.text,
+          usernames: []
+        }
+      }
+
+      acc[timezoneCode].usernames.push(user.username)
+      return acc
+    },{})
+
+    const outputString = Object.values(timezonesWithUsers).reduce((acc, timezone) => {
+      const header = `${format.currentTimeAt(timezone.locale, true)} - ${timezone.label}`
+      const body = '\n  ' + timezone.usernames.join('\n  ') + '\n'
+      return acc + header + body
+    }, '')
+
+    msg.channel.send(`\`\`\`${outputString}\`\`\``)
+  }
 }
