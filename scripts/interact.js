@@ -3,7 +3,7 @@ const db = require('./db')
 const format = require('./format')
 
 const MINIMUM_LAST_SEEN_TIME_SPAN = 2 * 60 * 60 * 1000 // first number is hours
-const MINIMUM_TIMEZONE_DIFFERENCE = 4 // hours
+const MINIMUM_TIMEZONE_DIFFERENCE = 3 // hours
 
 const referenceText = `
 
@@ -28,9 +28,10 @@ module.exports = {
       if (!userInfo || !userInfo.lastSeen) continue
       const msSince = Date.now() - new Date(userInfo.lastSeen).getTime()
       console.log('span since last seen:', msSince)
+      console.log('timezone span:', Math.abs(senderTimezoneOffset - userInfo.offset))
       if (
         msSince >= MINIMUM_LAST_SEEN_TIME_SPAN
-        && Math.abs(senderTimezoneOffset - userInfo.offset) > MINIMUM_TIMEZONE_DIFFERENCE
+        && Math.abs(senderTimezoneOffset - userInfo.offset) >= MINIMUM_TIMEZONE_DIFFERENCE
       ) {
         db.update(id)
         msg.channel.send(`\`It's ${

@@ -4,6 +4,8 @@ const parse = require('./scripts/parse')
 const db = require('./scripts/db')
 const interact = require('./scripts/interact')
 
+// TODO username changes, !time @<name>, !set by city name
+
 const BOT_ID = '437598259330940939'
 
 discordClient.on('ready', (e) => console.log('Connected to Discord'))
