@@ -66,6 +66,7 @@ module.exports = {
   listUsers (msg) {
     const allUsers = db.getAll()
     const timezonesWithUsers = Object.values(allUsers)
+      .sort((a, b) => a.offset > b.offset)
       .reduce((acc, user) => {
         const timezoneName = user.timezoneName
         if(!acc[timezoneName]) {
