@@ -14,7 +14,7 @@ module.exports = {
       .map(k => {
         if (
           userIdsInCurrentServer.find(i => i === k)
-          && !relevantTimezones.find(z => z.value === savedUsers[k].value)
+          && !relevantTimezones.find(z => z.timezoneName === savedUsers[k].timezoneName)
         ) {
           relevantTimezones.push(savedUsers[k])
         }

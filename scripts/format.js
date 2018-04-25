@@ -1,21 +1,11 @@
 module.exports = {
-  timezones (timezoneData) {
-    const longest = timezoneData
-      .reduce((longestLabel, t) => {
-        return t.abbr.length + t.timezone.length > longestLabel
-          ? t.abbr.length + t.timezone.length : longestLabel
-      }, 0) + 1
-    return timezoneData.map(t => {
-      let paddedTimezone = t.timezone + ':'
-      while (t.abbr.length + paddedTimezone.length < longest)
-        paddedTimezone += ' '
-      return `(${t.abbr}) ${paddedTimezone} ${this.currentTimeAt(t.location)}`
-    })
+  timezone (timezoneData) {
+    return `${timezoneData.timezoneName + ':'} ${this.currentTimeAt(timezoneData.location)}`
   },
 
-  currentTimeAt (timezoneLocationString, leadingZero = true) {
+  currentTimeAt (location, leadingZero = false) {
     const localeString = new Date().toLocaleTimeString(undefined, {
-      timeZone: timezoneLocationString,
+      timeZone: location,
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit',

@@ -1,25 +1,18 @@
-const timezones = require('../timezones.json')
 const db = require('./db')
 const format = require('./format')
+const get = require('./get')
 
 const MINIMUM_LAST_SEEN_TIME_SPAN = 2 * 60 * 60 * 1000 // first number is hours
 const MINIMUM_TIMEZONE_DIFFERENCE = 3 // hours
 
-const referenceText = `
-
-Timezone code reference: https://www.timeanddate.com/time/zones/`
-
-const helpText = `Valid commands:
-
-\`!<timezone code>\` to see the current time in a specific timezone.
-\`!set <timezone code>\` to set your timezone.
-\`!users\` to see all users' set timezones.
-\`!all\` to see everyone's timezone on the server (requires them to set their timezone).
-\`!help\` to show this message (duh).${referenceText}`
-
 module.exports = {
   help (msg) {
-    msg.channel.send(helpText)
+    msg.channel.send(`Valid commands:
+
+\`!time <city or country name>\` to see the current time in a specific place.
+\`!set <city or country name>\` to set your timezone.
+\`!users\` to see all users' set timezones.
+\`!help\` to show this message.`)
   },
 
   at (msg, atsInMessage, senderTimezoneOffset) {
@@ -28,79 +21,68 @@ module.exports = {
       const userInfo = db.get(id)
       if (!userInfo || !userInfo.lastSeen) continue
       const msSince = Date.now() - new Date(userInfo.lastSeen).getTime()
-      console.log('span since last seen:', msSince)
-      console.log('timezone span:', Math.abs(senderTimezoneOffset - userInfo.offset))
       if (
         msSince >= MINIMUM_LAST_SEEN_TIME_SPAN
         && Math.abs(senderTimezoneOffset - userInfo.offset) >= MINIMUM_TIMEZONE_DIFFERENCE
       ) {
         db.update(id)
-        msg.channel.send(`\`It's ${
-            format.currentTimeAt(
-              userInfo.utc.find(u => u.indexOf('Etc/GMT') === -1),
-              false // no leading zero
-            )
-          } for ${userInfo.username}. (${userInfo.value})\``)
+        msg.channel.send(`\`It's ${format.currentTimeAt(userInfo.location)} for ${userInfo.username}. (${userInfo.timezoneName})\``)
       }
     }
   },
 
-  set (msg) {
-    const regex = /!set (\w{2,5})/g
-    const timezoneToSet = regex.exec(msg.content)
-    if (timezoneToSet && timezoneToSet[1]) {
-      const foundTimezone = timezones.find(t => t.abbr.toLowerCase() === timezoneToSet[1].toLowerCase())
+  async set (msg) {
+    const regex = /!set (.*)/g
+    const location = regex.exec(msg.content)
+    if (location && location[1]) {
+      const foundTimezone = await get.timezoneFromLocation(location[1])
       if (foundTimezone) {
         db.update(msg.author.id, { ...foundTimezone, username: msg.author.username })
-        msg.channel.send(`Time zone for ${msg.author.username} set to ${foundTimezone.value}.`)
+        msg.channel.send(`Time zone for ${msg.author.username} set to ${foundTimezone.timezoneName}.`)
       }
       else
-        msg.channel.send(`Time zone code ${timezoneToSet[1]} not found.${referenceText}`)
+        msg.channel.send(`Time zone lookup failed.`)
     }
     else
-      msg.channel.send(`Use this command in the format \`!set <timezone code>\` to set your timezone.${referenceText}`)
+      msg.channel.send(`Use this command in the format \`!set <city or country name>\` to set your timezone.`)
   },
 
-  list (msg, timezonesInMessage) {
-    if (timezonesInMessage.length === 0) {
-      if (msg.content.indexOf('!all') >= 0)
-        msg.channel.send(`No users have registered their timezone in this channel. Use \`!set <timezone code>\` to set your timezone.${referenceText}`)
+  async timeAt (msg) {
+    const regex = /!time (.*)/g
+    const location = regex.exec(msg.content)
+    if (!location) {
+      msg.channel.send(`Use this command in the format \`!time <city or country name>\` to see the current time there.`)
       return
     }
-    const localTimes = timezonesInMessage.map(zone => {
-      return {
-        abbr: zone.abbr,
-        timezone: zone.value.substring(0, zone.value.indexOf('Standard Time') - 1),
-        location: zone.utc.find(u => u.indexOf('Etc/GMT') === -1)
-      }
-    })
-    msg.channel.send(`\`\`\`${
-      format.timezones(localTimes)
-        .join(`\n`)
-        .substring(0, 1996)
-      }\`\`\``)
+    const foundTimezone = await get.timezoneFromLocation(location[1])
+    if (foundTimezone) {
+      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)
+    }
+    else {
+      msg.channel.send(`No timezone found for ${location[1]}.`)
+    }
   },
 
   listUsers (msg) {
     const allUsers = db.getAll()
     const timezonesWithUsers = Object.values(allUsers)
       .reduce((acc, user) => {
-        const timezoneCode = user.abbr
-        if(!acc[timezoneCode]) {
-          acc[timezoneCode] = {
-            locale: user.utc.find(u => u.indexOf('Etc/GMT') === -1),
-            label: user.text,
+        const timezoneName = user.timezoneName
+        if(!acc[timezoneName]) {
+          acc[timezoneName] = {
+            locale: user.location,
+            label: `${user.timezoneName} (UTC ${user.offset >= 0 ? '+' : ''}${user.offset})`,
             usernames: []
           }
         }
-        acc[timezoneCode].usernames.push(user.username)
+        acc[timezoneName].usernames.push(user.username)
         return acc
       }, {})
 
     const outputString = Object.values(timezonesWithUsers)
       .reduce((acc, timezone) => {
         const header = `${format.currentTimeAt(timezone.locale, true)} - ${timezone.label}`
-        const body = '\n  ' + timezone.usernames.join('\n  ') + '\n'
+        const body = '\n  ' + timezone.usernames.join('\n  ') + '\n\n'
         return acc + header + body
       }, '')
 

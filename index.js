@@ -1,6 +1,6 @@
 require('dotenv').config()
 const discordClient = new (require('discord.js')).Client()
-const parse = require('./scripts/parse')
+const get = require('./scripts/get')
 const db = require('./scripts/db')
 const interact = require('./scripts/interact')
 
@@ -37,7 +37,7 @@ discordClient.on('message', async msg => {
   if (msg.content.indexOf('!smooch') === 0) return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘💏`)
 
   // Note timezone for @'d user if relevant
-  const atsInMessage = parse.ats(msg.content)
+  const atsInMessage = get.ats(msg.content)
   if (atsInMessage.length > 0) return interact.at(msg, atsInMessage, userTimezoneOffset)
 
   // Set user timezone
@@ -46,10 +46,7 @@ discordClient.on('message', async msg => {
   // List all users with timezones
   if (msg.content.indexOf('!users') === 0) return interact.listUsers(msg)
 
-  // Respond to user timezone query
-  const timezonesInMessage = (msg.content.indexOf('!all') >= 0)
-    ? db.timezonesIn(msg.guild || msg.channel)
-    : parse.timezoneCommands(msg.content)
-  if (timezonesInMessage.length > 0) return interact.list(msg, timezonesInMessage)
+  // Respond to location time query
+  if (msg.content.indexOf('!time') === 0) return interact.timeAt(msg)
 
 })
