@@ -4,7 +4,7 @@ const get = require('./scripts/get')
 const db = require('./scripts/db')
 const interact = require('./scripts/interact')
 
-// TODO !time @<name>, !set by city name
+// TODO !time <name>
 
 const BOT_ID = '437598259330940939'
 
@@ -44,7 +44,9 @@ discordClient.on('message', async msg => {
   if (msg.content.indexOf('!set') === 0) return interact.set(msg)
 
   // List all users with timezones
-  if (msg.content.indexOf('!users') === 0) return interact.listUsers(msg)
+  if (msg.content.indexOf('!users') === 0
+    || msg.content.indexOf('!all') === 0)
+    return interact.listUsers(msg)
 
   // Respond to location time query
   if (msg.content.indexOf('!time') === 0) return interact.timeAt(msg)

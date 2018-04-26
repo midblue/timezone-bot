@@ -55,12 +55,10 @@ module.exports = {
       return
     }
     const foundTimezone = await get.timezoneFromLocation(location[1])
-    if (foundTimezone) {
+    if (foundTimezone)
       msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)
-    }
-    else {
+    else
       msg.channel.send(`No timezone found for ${location[1]}.`)
-    }
   },
 
   listUsers (msg) {
@@ -86,6 +84,9 @@ module.exports = {
         const body = '\n  ' + timezone.usernames.join('\n  ') + '\n\n'
         return acc + header + body
       }, '')
+      
+    if (!outputString)
+      return msg.channel.send(`No users in this server have added their timezone yet. Use \`!set <city or country name>\` to set your timezone.`)
 
     msg.channel.send(`\`\`\`${outputString}\`\`\``)
   }

@@ -1,4 +1,3 @@
-const timezones = require('../timezones.json')
 const axios = require('axios')
 
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
@@ -24,7 +23,6 @@ module.exports = {
           .then(res => res.data.results ? res.data.results[0].geometry.location : null)
           .catch(e => console.log)
         if (!foundLatLon) resolve()
-        console.log(foundLatLon.lat+', '+foundLatLon.lng)
         const foundTimezone = await axios
           .get(`${timezoneUrlBase}&location=${foundLatLon.lat},${foundLatLon.lng}&timestamp=${Date.now() / 1000}`)
           .then(res => res.data)

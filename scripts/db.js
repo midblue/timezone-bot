@@ -1,5 +1,10 @@
 const fs = require('fs')
-const savedUsers = require('../data/users.json') || {}
+
+let savedUsersFileExists = true
+try { require.resolve('../data/users.json') }
+catch(e) { savedUsersFileExists = false }
+const savedUsers = savedUsersFileExists ? require('../data/users.json') : {}
+
 console.log(`Loaded ${Object.keys(savedUsers).length} saved users`)
 
 module.exports = {
