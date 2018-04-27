@@ -9,7 +9,16 @@ console.log(`Loaded ${Object.keys(savedUsers).length} saved users`)
 
 module.exports = {
   get (id) { return savedUsers[id] },
+
+  getByUsername (username) {
+    return savedUsers[
+      Object.keys(savedUsers)
+        .find(key => savedUsers[key].username === username)
+    ]
+  },
+
   getAll () { return savedUsers },
+
   timezonesIn (serverOrChannelObject) {
     let relevantTimezones = []
     const userIdsInCurrentServer = serverOrChannelObject.recipient

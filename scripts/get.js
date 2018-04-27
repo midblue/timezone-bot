@@ -1,4 +1,14 @@
 const axios = require('axios')
+const fuse = require('fuse.js')
+const fuseOptions = {
+  shouldSort: true,
+  location: 0,
+  threshold: 0.3,
+  distance: 60,
+  maxPatternLength: 20,
+  minMatchCharLength: 2,
+  keys: [ 'username' ],
+}
 
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
 const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=${process.env.GOOGLE_API_KEY}`
@@ -13,6 +23,12 @@ module.exports = {
       regexedAts = atRegex.exec(messageText)
     }
     return atsInMessage
+  },
+
+  usernameInMessage (searchString, users) {
+    const fuzzySearch = new fuse(users, fuseOptions)
+    const result = fuzzySearch.search(searchString)
+    if (result[0]) return result[0].username
   },
 
   timezoneFromLocation (location) {

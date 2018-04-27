@@ -22,9 +22,9 @@ discordClient.on('message', async msg => {
     const updatedUserData = db.update(
       msg.author.id,
       {
-        username: isServer
-          ? msg.guild.members.find('id', msg.author.id).nickname || msg.author.username
-          : msg.author.username,
+        username: isServer ?
+          msg.guild.members.find('id', msg.author.id).nickname || msg.author.username :
+          msg.author.username,
       }
     )
     userTimezoneOffset = updatedUserData.offset

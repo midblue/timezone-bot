@@ -9,9 +9,9 @@ module.exports = {
   help (msg) {
     msg.channel.send(`Valid commands:
 
-\`!time <city or country name>\` to see the current time in a specific place.
-\`!set <city or country name>\` to set your timezone.
-\`!users\` to see all users' set timezones.
+\`!time <user, city, or country name>\` to see the current time for a specific user or in a specific place.
+\`!set <city or country name>\` to set your own timezone.
+\`!users\` or \`!all\` to see all users' set timezones.
 \`!help\` to show this message.`)
   },
 
@@ -49,16 +49,27 @@ module.exports = {
 
   async timeAt (msg) {
     const regex = /!time (.*)/g
-    const location = regex.exec(msg.content)
-    if (!location) {
-      msg.channel.send(`Use this command in the format \`!time <city or country name>\` to see the current time there.`)
+    const searchString = regex.exec(msg.content)
+    if (!searchString) {
+      msg.channel.send(`Use this command in the format \`!time <user, city, or country name>\` to see the current time there.`)
       return
     }
-    const foundTimezone = await get.timezoneFromLocation(location[1])
-    if (foundTimezone)
-      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)
-    else
-      msg.channel.send(`No timezone found for ${location[1]}.`)
+    const users = msg.guild ?
+      msg.guild.members.map(m => ({ username: m.nickname })) :
+      [{ username: msg.author.username }]
+    let foundUsername = get.usernameInMessage(searchString[1], users)
+    if (foundUsername) {
+      const foundTimezone = db.getByUsername(foundUsername)
+      if (!foundTimezone)
+        return msg.channel.send(`No timezone listed for user ${foundUsername}.`)
+      msg.channel.send(`\`It's ${format.currentTimeAt(foundTimezone.location)} for ${foundTimezone.username}. (${foundTimezone.timezoneName})\``)
+    }
+    else {
+      const foundTimezone = await get.timezoneFromLocation(searchString[1])
+      if (!foundTimezone)
+        return msg.channel.send(`No timezone found for ${searchString[1]}.`)
+      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)  
+    }
   },
 
   listUsers (msg) {
