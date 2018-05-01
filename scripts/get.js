@@ -3,7 +3,7 @@ const fuse = require('fuse.js')
 const fuseOptions = {
   shouldSort: true,
   location: 0,
-  threshold: 0.3,
+  threshold: 0.45,
   distance: 60,
   maxPatternLength: 20,
   minMatchCharLength: 2,
