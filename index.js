@@ -16,39 +16,41 @@ discordClient.on('message', async msg => {
   if (msg.author.id === BOT_ID) return
 
   const isServer = msg.guild != undefined
+  const senderUsername = isServer ?
+    msg.guild.members.find('id', msg.author.id).nickname || msg.author.username :
+    msg.author.username
 
   let userTimezoneOffset
   if (db.lastSeen(msg.author.id)) {
     const updatedUserData = db.update(
       msg.author.id,
-      {
-        username: isServer ?
-          msg.guild.members.find('id', msg.author.id).nickname || msg.author.username :
-          msg.author.username,
-      }
+      { username: senderUsername }
     )
     userTimezoneOffset = updatedUserData.offset
   }
 
   // Respond to help command
-  if (msg.content.indexOf('!help') === 0) return interact.help(msg)
+  if (msg.content.indexOf(`!help`) === 0) return interact.help(msg)
+
+  // Respond to a request for a user's own timezone
+  if (msg.content.indexOf(`!me`) === 0) return interact.me(msg, senderUsername)
 
   // Respond to smooch
-  if (msg.content.indexOf('!smooch') === 0) return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘💏`)
+  if (msg.content.indexOf(`!smooch`) === 0) return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘💏`)
 
   // Note timezone for @'d user if relevant
   const atsInMessage = get.ats(msg.content)
   if (atsInMessage.length > 0) return interact.at(msg, atsInMessage, userTimezoneOffset)
 
   // Set user timezone
-  if (msg.content.indexOf('!set') === 0) return interact.set(msg)
+  if (msg.content.indexOf(`!set`) === 0) return interact.set(msg)
 
   // List all users with timezones
-  if (msg.content.indexOf('!users') === 0
-    || msg.content.indexOf('!all') === 0)
+  if (msg.content.indexOf(`!users`) === 0
+    || msg.content.indexOf(`!all`) === 0)
     return interact.listUsers(msg)
 
   // Respond to location time query
-  if (msg.content.indexOf('!time') === 0) return interact.timeAt(msg)
+  if (msg.content.indexOf(`!time`) === 0) return interact.timeAt(msg)
 
 })

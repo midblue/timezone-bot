@@ -31,6 +31,13 @@ module.exports = {
     }
   },
 
+  me (msg, senderUsername) {
+    const userInfo = db.get(msg.author.id)
+    if (!userInfo)
+      return msg.channel.send(`No timezone has been set for ${senderUsername}.`)
+    msg.channel.send(`\`It's ${format.currentTimeAt(userInfo.location)} for ${userInfo.username}. (${userInfo.timezoneName})\``)
+  },
+
   async set (msg) {
     const regex = /!set (.*)/g
     const location = regex.exec(msg.content)
@@ -68,7 +75,7 @@ module.exports = {
       const foundTimezone = await get.timezoneFromLocation(searchString[1])
       if (!foundTimezone)
         return msg.channel.send(`No timezone found for ${searchString[1]}.`)
-      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)  
+      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)
     }
   },
 
@@ -95,7 +102,7 @@ module.exports = {
         const body = '\n  ' + timezone.usernames.join('\n  ') + '\n\n'
         return acc + header + body
       }, '')
-      
+
     if (!outputString)
       return msg.channel.send(`No users in this server have added their timezone yet. Use \`!set <city or country name>\` to set your timezone.`)
 
