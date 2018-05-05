@@ -14,7 +14,9 @@
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
     "fuse.js": "^3.2.0",
-    "nodemon": "^1.17.3"
+    "mysql": "^2.15.0",
+    "nodemon": "^1.17.3",
+    "redis": "^2.8.0"
   },
   "nodemonConfig": {
     "ignore": [
