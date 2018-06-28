@@ -11,10 +11,7 @@ npm start
 ```
 
 ## Commands:
-```
-!time <user, city, or country name> to see the current time for a specific user or in a specific place.
-!set <city or country name> to set your own timezone.
-!users or !all to see all users' set timezones.
-!help to show a message listing all commands.
-
-```
+- `!time <user, city, or country name>` to see the current time for a specific user or in a specific place.
+- `!set <city or country name>` to set your own timezone.
+- `!users` or `!all` to see all users' set timezones.
+- `!help` to show a message listing all commands.
