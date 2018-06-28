@@ -1,4 +1,6 @@
 # timezone-bot
+A simple timezone bot for Discord servers.  
+  
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.  
 Uses Redis and MYSQL to hold onto user, location, and timezone data.  
