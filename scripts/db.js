@@ -41,7 +41,8 @@ const mysql = require('mysql').createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
-  database: 'timezonebot'
+  database: 'timezonebot',
+  timezone: 'Z' // +0
 })
 
 mysql.query(`SELECT * FROM user;`,
@@ -49,6 +50,10 @@ mysql.query(`SELECT * FROM user;`,
     if (e) err('MySQL error:', e)
     log(`Connected to MySQL (${results.length} saved users)`)
   })
+
+function mySqlTimestamp () {
+  return new Date().toISOString().slice(0, 19).replace('T', ' ')
+}
 
 module.exports = {
   getUser (userId, serverId) {
@@ -134,13 +139,13 @@ module.exports = {
       mysql.query(
         `INSERT INTO server_user (lastSeen, username, serverId, userId)
         VALUES (
-          '${new Date()}', 
+          '${mySqlTimestamp()}',
           '${settings.username || null}', 
           '${serverId}', 
           '${userId}')
         ON DUPLICATE KEY
         UPDATE 
-          lastSeen = '${new Date()}',
+          lastSeen = '${mySqlTimestamp()}',
           ${ settings.username ?
             `username = '${settings.username}'` : ''
           };`,

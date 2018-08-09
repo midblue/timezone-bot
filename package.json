@@ -20,7 +20,8 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "data/*"
+      "data/*",
+      "dump.rdb"
     ]
   }
 }

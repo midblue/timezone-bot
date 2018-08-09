@@ -29,6 +29,8 @@ module.exports = {
       const userInfo = await get.userFullData(id, serverId)
       debug('interact.at', userInfo)
       if (!userInfo || !userInfo.lastSeen) continue
+      // Date.now() returns the date from a UTC time, so as long as
+      // lastSeen is calculated from UTC as well, this should be accurate
       const msSince = Date.now() - new Date(userInfo.lastSeen).getTime()
       if (
         msSince >= MINIMUM_LAST_SEEN_TIME_SPAN

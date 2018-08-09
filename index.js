@@ -9,7 +9,7 @@ const log = logger('index', 'cyan')
 const err = logger('index', 'red')
 const debug = logger('index', 'cyan', true)
 
-const BOT_ID = '437598259330940939'
+const BOT_ID = process.env.BOT_ID.toString()
 
 discordClient.on('ready', (e) => log('Connected to Discord'))
 discordClient.on('error', (e) => err('Discord.js error:', e.message))
@@ -67,8 +67,8 @@ discordClient.on('message', async msg => {
 
 })
 
-function updateTimeStamp (msg, serverId, senderUsername) {
-  if (db.getUserLastSeenInServer(msg.author.id, serverId).length > 0) {
+async function updateTimeStamp (msg, serverId, senderUsername) {
+  if (await db.getUserLastSeenInServer(msg.author.id, serverId)) {
     db.updateUser(
       msg.author.id,
       serverId,
