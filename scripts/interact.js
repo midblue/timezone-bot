@@ -93,12 +93,12 @@ module.exports = {
     const users = msg.guild ?
       msg.guild.members.map(m => ({ username: m.nickname })) :
       [{ username: msg.author.username }]
-    let foundUserInServer = await get.userInMessage(searchString[1], users)
+    let foundUserInServer = await get.userInMessage(searchString[1], get.serverId(msg), users)
 
     if (foundUserInServer && foundUserInServer.location) {
       const { location, lat, lng } = foundUserInServer
-      const foundTimezone = get.timezoneFromLocation(location, lat, lng)
-      msg.channel.send(`\`It's ${format.currentTimeAt(foundTimezone.location)} for ${foundTimezone.username}. (${foundTimezone.timezoneName})\``)
+      const foundTimezone = await get.timezoneFromLocation({ location, lat, lng })
+      msg.channel.send(`\`It's ${format.currentTimeAt(foundTimezone.location)} for ${foundUserInServer.username}. (${foundTimezone.timezoneName})\``)
     }
     else if (foundUserInServer)
       return msg.channel.send(`No timezone listed for user ${foundUsername}.`)
@@ -109,8 +109,8 @@ module.exports = {
         location: searchString[1]
       })
       if (!foundTimezone)
-        return msg.channel.send(`No timezone found for ${searchString[1]}.`)
-      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)}\`\`\``)
+        return msg.channel.send(`No timezone found for location ${searchString[1]}.`)
+      msg.channel.send(`\`\`\`${format.timezone(foundTimezone)} (location)\`\`\``)
     }
   },
 

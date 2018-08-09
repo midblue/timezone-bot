@@ -47,16 +47,6 @@ const mysql = require('mysql').createConnection({
   timezone: 'Z' // +0
 })
 
-mysql.query(
-  `SELECT *
-        FROM server_user
-        LEFT JOIN user ON user.id = server_user.userId
-        LEFT JOIN place ON place.name = user.location;`,
-  (e, results, fields) => {
-    if (e) return err('MySQL error:', e)
-    debug(results)
-  })
-
 mysql.query(`SELECT * FROM user;`,
   (e, results, fields) => {
     if (e) err('MySQL error:', e)
@@ -103,14 +93,14 @@ module.exports = {
     debug('getUserByUsername', username)
     return new Promise((resolve, reject) => {
       mysql.query(
-        `SELECT server_user.lastSeen, user.location, place.lat, place.lng
+        `SELECT server_user.lastSeen, server_user.username, user.location, place.lat, place.lng
         FROM server_user
         LEFT JOIN user ON user.id = server_user.userId
         LEFT JOIN place ON place.name = user.location
         WHERE serverId = '${serverId}' AND username = '${username}';`,
         (e, results, fields) => {
           if (e) return err('MySQL error:', e)
-          debug(`serverId = '${serverId}' AND username = '${username}'`, results)
+          debug(results[0])
           resolve(results[0])
         })
     })

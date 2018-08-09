@@ -39,11 +39,12 @@ module.exports = {
     return atsInMessage
   },
 
-  async userInMessage (searchString, users) {
+  async userInMessage(searchString, serverId, users) {
+    debug('userInMessage', searchString)
     const fuzzySearch = new fuse(users, fuseOptions)
     const foundUser = fuzzySearch.search(searchString)
     if (!foundUser || foundUser.length < 1 || !foundUser[0].username) return
-    return await db.getUserByUsername(foundUser[0].username)
+    return await db.getUserByUsername(foundUser[0].username, serverId)
   },
 
   timezoneFromLocation ({ location, lat, lng }) {
