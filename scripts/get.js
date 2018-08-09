@@ -47,7 +47,7 @@ module.exports = {
   },
 
   timezoneFromLocation ({ location, lat, lng }) {
-    debug('timezoneFromLocation', location, lat, lng)
+    debug('timezoneFromLocation', location)
     return new Promise(async (resolve, reject) => {
       if (!location && (!lat || !lng)) resolve()
       // check cache

@@ -29,8 +29,9 @@ DEBUG=true
 ```
 Make sure to fill in the appropriate information. The default MYSQL user is 'root' and the default password is blank.
 `DISCORD_KEY` is your bot's token.
-`BOT_ID` is the unique Client ID of your bot as listed on the Discord developer pags for your bot.
+`BOT_ID` is the unique Client ID of your bot as listed on the Discord developer page for your bot.
 
+Start your MYSQL server and your Redis server.
 Then, run:
 ```
 npm install

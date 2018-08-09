@@ -21,7 +21,7 @@ setInterval(() => {
 module.exports = {
 
 	getCoords(searchString) {
-		debug('getCoords')
+		debug('getCoords', searchString)
 		if (geocodeCallsToday++ > MAX_API_CALLS) {
 			err('Google API call limit hit! No further API calls available.', searchString)
 			resolve()
@@ -40,7 +40,7 @@ module.exports = {
 	},
 
 	getTimezone (lat, lng) {
-		debug('getTimezone')
+		debug('getTimezone', lat, lng)
 		return new Promise (async (resolve, reject) => {
 			if (timezoneCallsToday++ > MAX_API_CALLS) {
 				err('Google API call limit hit! No further API calls available.', lat, lng)

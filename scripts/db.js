@@ -3,6 +3,8 @@ const log = logger('db', 'yellow')
 const err = logger('db', 'red')
 const debug = logger('db', 'yellow', true)
 
+
+
 /*
 
 Hi! Our SQL database schema looks like this:
@@ -45,6 +47,16 @@ const mysql = require('mysql').createConnection({
   timezone: 'Z' // +0
 })
 
+mysql.query(
+  `SELECT *
+        FROM server_user
+        LEFT JOIN user ON user.id = server_user.userId
+        LEFT JOIN place ON place.name = user.location;`,
+  (e, results, fields) => {
+    if (e) return err('MySQL error:', e)
+    debug(results)
+  })
+
 mysql.query(`SELECT * FROM user;`,
   (e, results, fields) => {
     if (e) err('MySQL error:', e)
@@ -57,7 +69,7 @@ function mySqlTimestamp () {
 
 module.exports = {
   getUser (userId, serverId) {
-    debug('getUser')
+    debug('getUser', userId)
     return new Promise ((resolve, reject) => {
       mysql.query(
         `SELECT server_user.username, server_user.lastSeen, user.location, place.lat, place.lng
@@ -74,7 +86,7 @@ module.exports = {
   },
 
   getUserLocation (userId) {
-    debug('getUserLocation')
+    debug('getUserLocation', userId)
     return new Promise((resolve, reject) => {
       mysql.query(
         `SELECT location FROM user
@@ -88,7 +100,7 @@ module.exports = {
   },
 
   getUserByUsername(username, serverId) {
-    debug('getUserByUsername')
+    debug('getUserByUsername', username)
     return new Promise((resolve, reject) => {
       mysql.query(
         `SELECT server_user.lastSeen, user.location, place.lat, place.lng
@@ -98,14 +110,14 @@ module.exports = {
         WHERE serverId = '${serverId}' AND username = '${username}';`,
         (e, results, fields) => {
           if (e) return err('MySQL error:', e)
-          debug(results)
+          debug(`serverId = '${serverId}' AND username = '${username}'`, results)
           resolve(results[0])
         })
     })
   },
 
   getUsersInServer(serverId) {
-    debug('getUsersInServer')
+    debug('getUsersInServer', serverId)
     return new Promise((resolve, reject) => {
       mysql.query(
         `SELECT server_user.username, server_user.userId AS id, server_user.lastSeen, user.location, place.lat, place.lng
@@ -158,7 +170,7 @@ module.exports = {
   },
 
   getUserLastSeenInServer (userId, serverId) {
-    debug('getUserLastSeen')
+    debug('getUserLastSeen', userId)
     return new Promise((resolve, reject) => {
       mysql.query(
         `SELECT lastSeen FROM server_user
@@ -171,11 +183,12 @@ module.exports = {
   },
 
   getCoords (location) {
-    debug('getCoords')
+    debug('getCoords', location)
+    location = location.replace('\'', '').toLowerCase()
     return new Promise((resolve, reject) => {
       mysql.query(
         `SELECT lat, lng FROM place
-        WHERE name = '${location.toLowerCase()}';`,
+        WHERE name = '${location}';`,
         (e, results, fields) => {
           if (e) err('MySQL error:', e)
           resolve(results[0] ? [results[0].lat, results[0].lng] : null)
@@ -184,11 +197,12 @@ module.exports = {
   },
 
   setCoords(location, coords) {
-    debug('setCoords')
+    debug('setCoords', location)
+    location = location.replace('\'', '').toLowerCase()
     mysql.query(
       `INSERT INTO place (name, lat, lng)
       VALUES (
-        '${location.toLowerCase()}', 
+        '${location}', 
         '${coords[0]}', 
         '${coords[1]}')
       ON DUPLICATE KEY

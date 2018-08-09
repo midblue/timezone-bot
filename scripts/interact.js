@@ -11,7 +11,8 @@ const MINIMUM_LAST_SEEN_TIME_SPAN = 2 * 60 * 60 * 1000 // first number is hours
 const MINIMUM_TIMEZONE_DIFFERENCE = 3 // hours
 
 module.exports = {
-  help (msg) {
+  help(msg) {
+    debug('help')
     msg.channel.send(`Valid commands:
 
 \`!time <user, city, or country name>\` to see the current time for a specific user or in a specific place.
@@ -21,7 +22,7 @@ module.exports = {
   },
 
   async at (msg, atsInMessage) {
-    debug('at')
+    debug('at', atsInMessage)
     const serverId = get.serverId(msg)
     const senderTimezoneOffset = await get.userFullData(msg.author.id, serverId).offset
     if (!senderTimezoneOffset) return
@@ -43,7 +44,7 @@ module.exports = {
   },
 
   async me(msg, senderUsername) {
-    debug('me')
+    debug('me', senderUsername)
     const userInfo = await get.userFullData(msg.author.id, get.serverId(msg))
     if (!userInfo.offset)
       return msg.channel.send(`No timezone has been set for ${senderUsername}.`)
@@ -51,7 +52,7 @@ module.exports = {
   },
 
   unset(msg, senderUsername) {
-    debug('unset')
+    debug('unset', senderUsername)
     db.updateUser(msg.author.id, get.serverId(msg), {
       location: null,
       username: senderUsername
@@ -60,7 +61,7 @@ module.exports = {
   },
 
   async set(msg, senderUsername) {
-    debug('set')
+    debug('set', senderUsername)
     const regex = /!set (.*)/g
     const location = regex.exec(msg.content)
     if (location && location[1]) {
@@ -80,7 +81,7 @@ module.exports = {
   },
 
   async timeAt(msg) {
-    debug('timeAt')
+    debug('timeAt', msg.content.substring(6))
     const regex = /!time (.*)/g
     const searchString = regex.exec(msg.content)
     if (!searchString || !searchString[1]) {

@@ -33,7 +33,7 @@ module.exports = {
 	},
 
 	setTimezone (key, timezoneObj) {
-		debug('setTimezone', key)
+		debug('setTimezone', key, timezoneObj.timezoneName)
 		if (!key) return
 		return new Promise((resolve, reject) => {
 			redis.set(key.toLowerCase(), JSON.stringify(timezoneObj), 'EX', A_DAY_IN_SECONDS)
