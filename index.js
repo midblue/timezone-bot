@@ -15,9 +15,12 @@ discordClient.login(process.env.DISCORD_KEY)
 discordClient.on('message', async msg => {
   if (msg.author.id === BOT_ID) return
 
-  const isServer = msg.guild != undefined
+  const isServer = msg.channel.guild !== undefined
+  if (isServer) 
+    msg.guild = msg.channel.guild
+
   const senderUsername = isServer ?
-    msg.guild.members.find('id', msg.author.id).nickname || msg.author.username :
+    msg.guild.members.find(member => member.user.id === msg.author.id).nickname || msg.author.username :
     msg.author.username
 
   let userTimezoneOffset

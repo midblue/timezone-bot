@@ -62,7 +62,7 @@ module.exports = {
       return
     }
     const users = msg.guild ?
-      msg.guild.members.map(m => ({ username: m.nickname })) :
+      msg.guild.members.map(m => ({ username: m.nickname || m.user.username })) :
       [{ username: msg.author.username }]
     let foundUsername = get.usernameInMessage(searchString[1], users)
     if (foundUsername) {
