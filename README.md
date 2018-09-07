@@ -11,7 +11,7 @@ Uses Redis and MYSQL to hold onto user, location, and timezone data.
 
 There are several APIs you will need to set up.
 
-Sign up for google's apis at https://console.cloud.google.com/apis/, and activate the *Geocoding API* and the *Timezone API* for your project. Save your API key for later. You'll have to sign up for this with a credit card, but there are hard limits built into the app to stop it from crossing into paid territory, so no worries. If you want to check for yourself, look in `scripts/googleapi.js`.
+Sign up for google's apis at https://console.cloud.google.com/apis/, and activate the *Geocoding API* and the *Timezone API* for your project. Save your API key for later. You'll have to sign up for this with a credit card, but you can set hard limits in the API console to stop it from crossing into paid territory.
 
 Also, sign up for a Discord developer account at https://discordapp.com/developers/applications/. Create a new bot, and name it whatever you want. The discord server owner must add the bot to the channel manually.  
 A great guide for setting up a bot, getting a token, and adding it to a server can be found here: https://discordjs.guide/#/preparations/setting-up-a-bot-application
