@@ -1,12 +1,8 @@
+require("dotenv").config();
 const firebase = require("firebase");
 
 var config = {
-  apiKey: "AIzaSyAdl7Z16Dw0CYFKKMOHpKrx61PUdrFdobQ",
-  authDomain: "timezonebot-backend.firebaseapp.com",
-  databaseURL: "https://timezonebot-backend.firebaseio.com",
-  projectId: "timezonebot-backend",
-  storageBucket: "timezonebot-backend.appspot.com",
-  messagingSenderId: "16841591714"
+  databaseURL: process.env.DB_URL
 };
 
 let app = firebase.initializeApp(config);
