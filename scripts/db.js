@@ -1,55 +1,70 @@
-const fs = require('fs')
+const firebase = require("firebase");
 
-let savedUsersFileExists = true
-try { require.resolve('../data/users.json') }
-catch(e) { savedUsersFileExists = false }
-const savedUsers = savedUsersFileExists ? require('../data/users.json') : {}
+var config = {
+  apiKey: "AIzaSyAdl7Z16Dw0CYFKKMOHpKrx61PUdrFdobQ",
+  authDomain: "timezonebot-backend.firebaseapp.com",
+  databaseURL: "https://timezonebot-backend.firebaseio.com",
+  projectId: "timezonebot-backend",
+  storageBucket: "timezonebot-backend.appspot.com",
+  messagingSenderId: "16841591714"
+};
 
-console.log(`Loaded ${Object.keys(savedUsers).length} saved users`)
+let app = firebase.initializeApp(config);
+let db = app.database();
+let ref = db.ref("Users");
+
+let savedUsers;
+
+async function getDB() {
+  const x = await ref.once("value");
+  savedUsers = (await x.val()) || {};
+  console.log(`Loaded ${Object.keys(savedUsers).length} saved users`);
+}
+
+getDB();
 
 module.exports = {
-  get (id) { return savedUsers[id] },
-
-  getByUsername (username) {
-    return savedUsers[
-      Object.keys(savedUsers)
-        .find(key => savedUsers[key].username === username)
-    ]
+  get(id) {
+    return savedUsers[id];
   },
 
-  getAll () { return savedUsers },
+  getByUsername(username) {
+    return savedUsers[
+      Object.keys(savedUsers).find(key => savedUsers[key].username === username)
+    ];
+  },
 
-  timezonesIn (serverOrChannelObject) {
-    let relevantTimezones = []
+  getAll() {
+    return savedUsers;
+  },
+
+  timezonesIn(serverOrChannelObject) {
+    let relevantTimezones = [];
     const userIdsInCurrentServer = serverOrChannelObject.recipient
       ? [serverOrChannelObject.recipient.id]
-      : serverOrChannelObject.members.keyArray()
-    Object.keys(savedUsers)
-      .map(k => {
-        if (
-          userIdsInCurrentServer.find(i => i === k)
-          && !relevantTimezones.find(z => z.timezoneName === savedUsers[k].timezoneName)
-        ) {
-          relevantTimezones.push(savedUsers[k])
-        }
-      })
-    return relevantTimezones.sort((a, b) => a.offset > b.offset)
+      : serverOrChannelObject.members.keyArray();
+    Object.keys(savedUsers).map(k => {
+      if (
+        userIdsInCurrentServer.find(i => i === k) &&
+        !relevantTimezones.find(
+          z => z.timezoneName === savedUsers[k].timezoneName
+        )
+      ) {
+        relevantTimezones.push(savedUsers[k]);
+      }
+    });
+    return relevantTimezones.sort((a, b) => a.offset > b.offset);
   },
 
-  update (id, settings) {
-    savedUsers[id] = savedUsers[id] || {}
-    for (let prop in settings)
-      savedUsers[id][prop] = settings[prop]
-    savedUsers[id].lastSeen = new Date()
-    fs.writeFile("./data/users.json", JSON.stringify(savedUsers), 'utf8', e => {
-      if (e) return console.log(e)
-    })
-    // console.log('Updated user', id)
-    return savedUsers[id]
+  async update(id, settings) {
+    savedUsers[id] = savedUsers[id] || {};
+    for (let prop in settings) savedUsers[id][prop] = settings[prop];
+    savedUsers[id].lastSeen = new Date();
+    await ref.update(savedUsers);
+    return savedUsers[id];
   },
 
-  lastSeen (id) {
-    return savedUsers[id] ? savedUsers[id].lastSeen : undefined
+  lastSeen(id) {
+    return savedUsers[id] ? savedUsers[id].lastSeen : undefined;
   }
-
-}
+};
