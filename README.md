@@ -43,6 +43,7 @@ npm start
 - `!timein <city or country name>` to see the current time in a specific place.
 - `!set <city or country name>` to set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
 - `!users` or `!all` to see all users' set timezones.
+- `!removeme` to delete your set timezone.
 - `!help` to show a message listing all commands.
 
 (All commands can be run by using the first letter of the command, e.g. '!s Chicago' to set. '!timein' becomes '!ti'.)

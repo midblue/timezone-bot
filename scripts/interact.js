@@ -13,6 +13,7 @@ module.exports = {
 \`!timein <city or country name>\` to see the current time in a specific place.
 \`!set <city or country name>\` to set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
 \`!users\` or \`!all\` to see all users' set timezones.
+\`!removeme\` to delete your set timezone.
 \`!help\` to show this message.`)
   },
 
@@ -45,6 +46,13 @@ module.exports = {
       `\`It's ${format.currentTimeAt(userInfo.location)} for ${
         userInfo.username
       }. (${userInfo.timezoneName})\``
+    )
+  },
+
+  removeMe(msg, senderUsername) {
+    db.remove(msg.author.id || msg.author.user.id)
+    return msg.channel.send(
+      `Removed you (${senderUsername}) from timezone tracking.`
     )
   },
 

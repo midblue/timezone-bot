@@ -44,6 +44,10 @@ discordClient.on('message', async msg => {
   if (msg.content.indexOf(`!me`) === 0 || msg.content.indexOf(`!m`) === 0)
     return interact.me(msg, senderUsername)
 
+  // Delete self from the list
+  if (msg.content.indexOf(`!removeme`) === 0 || msg.content.indexOf(`!r`) === 0)
+    return interact.removeMe(msg, senderUsername)
+
   // Respond to smooch
   if (msg.content.indexOf(`!smooch`) === 0)
     return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘`)
