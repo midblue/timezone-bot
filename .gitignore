@@ -3,3 +3,4 @@ node_modules
 data/users.json
 redis
 dump.rdb
+.DS_Store
