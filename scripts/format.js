@@ -1,11 +1,13 @@
 module.exports = {
-  timezone (timezoneData) {
-    return `${timezoneData.timezoneName + ':'} ${this.currentTimeAt(timezoneData.location)}`
+  timezone(timezoneData) {
+    return `${timezoneData.timezoneName + ':'} ${this.currentTimeAt(
+      timezoneData.location,
+    )}`
   },
 
-  currentTimeAt (location, leadingZero = false) {
+  currentTimeAt(location, leadingZero = false) {
     const localeString = new Date().toLocaleTimeString(undefined, {
-      timeZone: location,
+      timeZone: location.replace('Etc/GMT', 'UTC'),
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit',
@@ -14,8 +16,7 @@ module.exports = {
     if (!leadingZero) return localeString
     const singleDigitHourRegex = / ([0-9]{1}):[0-9]+/
     return localeString.replace(singleDigitHourRegex, match => {
-        if (match) return ' 0' + match.trim()
+      if (match) return ' 0' + match.trim()
     })
   },
-
 }
