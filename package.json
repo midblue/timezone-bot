@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
     "fuse.js": "^3.2.0",
