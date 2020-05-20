@@ -32,7 +32,7 @@ module.exports = {
         msg.channel.send(
           `\`It's ${format.currentTimeAt(userInfo.location)} for ${
             userInfo.username
-          }. (${userInfo.timezoneName})\``
+          }. (${userInfo.timezoneName})\``,
         )
       }
     }
@@ -45,14 +45,14 @@ module.exports = {
     msg.channel.send(
       `\`It's ${format.currentTimeAt(userInfo.location)} for ${
         userInfo.username
-      }. (${userInfo.timezoneName})\``
+      }. (${userInfo.timezoneName})\``,
     )
   },
 
   removeMe(msg, senderUsername) {
     db.remove(msg.author.id || msg.author.user.id)
     return msg.channel.send(
-      `Removed you (${senderUsername}) from timezone tracking.`
+      `Removed you (${senderUsername}) from timezone tracking.`,
     )
   },
 
@@ -78,14 +78,12 @@ module.exports = {
           username: msg.author.username,
         })
         msg.channel.send(
-          `Time zone for ${msg.author.username} set to ${
-            foundTimezone.timezoneName
-          }.`
+          `Time zone for ${msg.author.username} set to ${foundTimezone.timezoneName}.`,
         )
       } else msg.channel.send(`Time zone lookup failed.`)
     } else
       msg.channel.send(
-        `Use this command in the format \`!set <city or country name>\` to set your timezone.`
+        `Use this command in the format \`!set <city or country name>\` to set your timezone.`,
       )
   },
 
@@ -94,7 +92,7 @@ module.exports = {
     const searchString = regex.exec(msg.content)
     if (!searchString) {
       msg.channel.send(
-        `Use this command in the format \`!time <user, city, or country name>\` to see the current time there.`
+        `Use this command in the format \`!time <user, city, or country name>\` to see the current time there.`,
       )
       return
     }
@@ -111,7 +109,7 @@ module.exports = {
       msg.channel.send(
         `\`It's ${format.currentTimeAt(foundTimezone.location)} for ${
           foundTimezone.username
-        }. (${foundTimezone.timezoneName})\``
+        }. (${foundTimezone.timezoneName})\``,
       )
     } else {
       const foundTimezone = await get.timezoneFromLocation(searchString[1])
@@ -126,7 +124,7 @@ module.exports = {
     const searchString = regex.exec(msg.content)
     if (!searchString) {
       msg.channel.send(
-        `Use this command in the format \`!timein <city or country name>\` to see the current time there.`
+        `Use this command in the format \`!timein <city or country name>\` to see the current time there.`,
       )
       return
     }
@@ -138,37 +136,48 @@ module.exports = {
 
   listUsers(msg) {
     const allUsers = db.getAll()
-    const timezonesWithUsers = Object.values(allUsers)
-      .sort((a, b) => a.offset > b.offset)
-      .reduce((acc, user) => {
-        const timezoneName = user.timezoneName
-        if (!acc[timezoneName]) {
-          acc[timezoneName] = {
-            locale: user.location,
-            label: `${user.timezoneName} (UTC ${user.offset >= 0 ? '+' : ''}${
-              user.offset
-            })`,
-            usernames: [],
-          }
+    const timezonesWithUsers = Object.values(allUsers).reduce((acc, user) => {
+      const timezoneName = user.timezoneName.replace(
+        /(Standard |Daylight )/gi,
+        '',
+      )
+      if (!acc[timezoneName]) {
+        acc[timezoneName] = {
+          timezoneName,
+          locale: user.location,
+          label: `${user.timezoneName} (UTC ${user.offset >= 0 ? '+' : ''}${
+            user.offset
+          })`,
+          usernames: [],
+          offset: user.offset,
         }
-        acc[timezoneName].usernames.push(user.username)
-        return acc
-      }, {})
+      }
+      acc[timezoneName].usernames.push(user.username)
+      return acc
+    }, {})
 
-    const outputString = Object.values(timezonesWithUsers).reduce(
+    const timezonesWithUsersAsSortedArray = Object.values(
+      timezonesWithUsers,
+    ).sort((a, b) => b.offset - a.offset)
+
+    const outputString = timezonesWithUsersAsSortedArray.reduce(
       (acc, timezone) => {
-        const header = `${format.currentTimeAt(timezone.locale, true)} - ${
-          timezone.label
-        }`
-        const body = '\n  ' + timezone.usernames.join('\n  ') + '\n\n'
+        const header = `${format.currentTimeAt(
+          timezone.locale,
+          true,
+        )} - ${timezone.label.replace(/(Standard |Daylight )/gi, '')}`
+        const body =
+          '\n  ' +
+          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n  ') +
+          '\n\n'
         return acc + header + body
       },
-      ''
+      '',
     )
 
     if (!outputString)
       return msg.channel.send(
-        `No users in this server have added their timezone yet. Use \`!set <city or country name>\` to set your timezone.`
+        `No users in this server have added their timezone yet. Use \`!set <city or country name>\` to set your timezone.`,
       )
 
     msg.channel.send(`\`\`\`${outputString}\`\`\``)
