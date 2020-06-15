@@ -4,6 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "gh": "git push heroku master",
+    "hup": "heroku ps:scale worker=1",
+    "hdown": "heroku ps:scale worker=0",
+    "l": "heroku addons:open timber-logging",
+    "logs": "heroku logs --tail",
     "dev": "nodemon .",
     "start": "node ."
   },
