@@ -14,7 +14,7 @@ module.exports = {
     if (!match[1])
       return send(
         msg,
-        `Use this command in the format \`${settings.prefix}timein <city or country name>\` to see the time in a specific location.`,
+        `Use this command in the format \`${settings.prefix}time <user, city, or country name>\` to see the time in a specific location or for a specific user.`,
       )
 
     // if they typed a username
