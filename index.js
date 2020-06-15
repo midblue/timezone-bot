@@ -40,7 +40,6 @@ client.on('guildDelete', kickedFromServer)
 // other user leaves a guild
 client.on('guildMemberRemove', otherMemberLeaveServer)
 
-console.log(process.env)
 client.login(process.env.DISCORD_TOKEN)
 
 // discordClient.on('message', async msg => {

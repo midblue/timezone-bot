@@ -3,7 +3,7 @@ const { send } = require('../actions/replyInChannel')
 
 // get all commands from files
 const fs = require('fs')
-const { type } = require('os')
+const checkForSavedAts = require('../actions/checkForSavedAts')
 const commands = []
 fs.readdir('./commands', (err, files) => {
   files.forEach(file => {
@@ -25,10 +25,6 @@ module.exports = async function (msg, settings, client) {
         send(msg, `\`This command is only available to server admins.\``)
         return true
       }
-
-      const mentionedUserIds = msg.mentions.members.array().map(u => u.id)
-      // console.log('mentioned users:', mentionedUserIds)
-      // ^ unused so far, could be good for tagging multiple people
 
       // embedded user check
       let typedUser
@@ -54,4 +50,6 @@ module.exports = async function (msg, settings, client) {
       return true
     }
   }
+
+  await checkForSavedAts(msg)
 }

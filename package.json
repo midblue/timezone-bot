@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "gh": "git push heroku master",
-    "hup": "heroku ps:scale worker=1",
-    "hdown": "heroku ps:scale worker=0",
+    "hup": "heroku dyno:scale worker=1",
+    "hdown": "heroku dyno:scale worker=0",
     "l": "heroku addons:open timber-logging",
     "logs": "heroku logs --tail",
     "dev": "nodemon .",

@@ -1,6 +1,6 @@
 const defaultServerSettings = require('../scripts/defaultServerSettings')
 const memo = require('../scripts/memo')
-const { getUserInGuildFromId } = require('../scripts/commonFunctions')
+// const { getUserInGuildFromId } = require('../scripts/commonFunctions')
 
 const memoedGuildData = memo(3000)
 
