@@ -10,15 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/firestore": "^3.8.5",
     "axios": "^0.18.1",
-    "discord.js": "^11.3.2",
+    "discord.js": "^12.2.0",
     "dotenv": "^5.0.1",
     "fuse.js": "^3.2.0",
-    "nodemon": "^1.17.3"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "data/*"
-    ]
+    "nodemon": "^2.0.4"
   }
 }
