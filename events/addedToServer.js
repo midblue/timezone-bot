@@ -1,5 +1,5 @@
 const db = require('../db/firestore')
-const defaultServerSettings = require('../defaultServerSettings')
+const defaultServerSettings = require('../scripts/defaultServerSettings')
 
 module.exports = async guild => {
   if (await db.hasGuild({ guildId: guild.id }))

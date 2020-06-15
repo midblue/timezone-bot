@@ -1,5 +1,5 @@
 const db = require('../db/firestore')
-const { currentTimeAt } = require('../commonFunctions')
+const { currentTimeAt } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 

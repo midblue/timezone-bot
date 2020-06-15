@@ -1,4 +1,4 @@
-const { getUserInGuildFromText } = require('../commonFunctions')
+const { getUserInGuildFromText } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 
 // get all commands from files
@@ -16,8 +16,6 @@ module.exports = async function (msg, settings, client) {
   const sender = msg.author
   for (let command of commands) {
     const match = command.regex(settings).exec(msg.content)
-    if (command.expectsUserInRegexSlot)
-      console.log(msg.content, command.regex(settings))
     if (match) {
       const senderIsAdmin =
         msg.guild &&

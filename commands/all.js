@@ -1,5 +1,8 @@
 const db = require('../db/firestore')
-const { currentTimeAt, getUserInGuildFromId } = require('../commonFunctions')
+const {
+  currentTimeAt,
+  getUserInGuildFromId,
+} = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 
 module.exports = {

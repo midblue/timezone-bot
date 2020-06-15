@@ -1,5 +1,5 @@
 const db = require('../db/firestore')
-const { getAuthorDisplayName } = require('../commonFunctions')
+const { getAuthorDisplayName } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 
 module.exports = {

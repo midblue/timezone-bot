@@ -1,4 +1,4 @@
-const defaultServerSettings = require('../defaultServerSettings')
+const defaultServerSettings = require('../scripts/defaultServerSettings')
 const memo = require('../scripts/memo')
 
 const memoedLocationData = memo(3000)

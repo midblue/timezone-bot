@@ -1,5 +1,5 @@
 const { send } = require('../actions/replyInChannel')
-const defaultServerSettings = require('../defaultServerSettings')
+const defaultServerSettings = require('../scripts/defaultServerSettings')
 
 module.exports = {
   regex(settings) {
