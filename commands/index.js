@@ -41,7 +41,6 @@ module.exports = async function (msg, settings, client) {
         msg,
         settings,
         match,
-        mentions: mentionedUserIds,
         typedUser,
         sender,
         client,
