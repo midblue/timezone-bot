@@ -7,6 +7,8 @@ const { send } = require('../actions/replyInChannel')
 
 const onlyRespondIfLastSeenIsOlderThanMs = 2 * 60 * 60 * 1000
 
+// todo other @ elated stuff
+
 module.exports = async msg => {
   const mentionedUserIds = msg.mentions.members.array().map(u => u.id)
   if (mentionedUserIds.length === 0) return

@@ -34,12 +34,14 @@ module.exports = function (firestore) {
     },
 
     async getGuildSettings({ guildId }) {
+      console.log(`guild ${guildId}`)
       const memoed = memoedGuildData.get(guildId)
       if (memoed) return memoed.settings
 
       const document = firestore.doc(`guilds/${guildId}`)
       const doc = await document.get()
       const data = doc.data()
+      if (!data) return defaultServerSettings
 
       memoedGuildData.set(guildId, data)
       return {
