@@ -2,11 +2,31 @@
 
 A simple timezone bot for Discord servers.
 
+### [Click here to add it to your server!](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot)
+
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.
 
-> Read more about this project [Here](https://www.jasperstephenson.com/posts/timezonebot).
-> Note: This version of the bot uses a local .json file to store data, rather than the MySQL/Redis version. Check the branches for that version.
+> Read more about this project [here](https://www.jasperstephenson.com/posts/timezonebot).
+
+## Commands:
+
+- `t!time <user, city, or country name>` to see the current time for a specific user or in a specific place.
+- `t!timein <city or country name>` to see the current time in a specific place.
+- `t!set <city or country name>` to set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
+- `t!users` or `t!all` to see all users' set timezones.
+- `t!removeme` to delete your set timezone.
+- `t!help` to show a message listing all commands.
+
+#### Admin-only commands:
+
+- `t!prefix <t!/t-/t~>` to set the prefix for bot commands to one of these 3 options. Defaults to "t!"
+
+(All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. '!time' becomes 't!t'.)
+
+---
+
+> Note: This branch of the bot uses a local .json file to store data only for a single server, rather than the multi-server firebase & heroku version. Check the branches for that version.
 
 ## Setup:
 
@@ -23,7 +43,6 @@ Next, create a file called `.env` in your project root. This is where you will k
 DISCORD_KEY=
 BOT_ID=
 GOOGLE_API_KEY=
-DEBUG=true
 ```
 
 Make sure to fill in the appropriate information.
@@ -36,14 +55,3 @@ Then, run:
 npm install
 npm start
 ```
-
-## Commands:
-
-- `!time <user, city, or country name>` to see the current time for a specific user or in a specific place.
-- `!timein <city or country name>` to see the current time in a specific place.
-- `!set <city or country name>` to set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
-- `!users` or `!all` to see all users' set timezones.
-- `!removeme` to delete your set timezone.
-- `!help` to show a message listing all commands.
-
-(All commands can be run by using the first letter of the command, e.g. '!s Chicago' to set. '!timein' becomes '!ti'.)
