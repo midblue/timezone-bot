@@ -9,7 +9,7 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:time|t) (.*)$`, 'gi')
   },
   async action({ msg, settings, match, typedUser }) {
-    console.log(`${msg.guild.name} - time for ${match[1]}`)
+    console.log(`${msg.guild.name} - Time for ${match[1]}`)
 
     if (!match[1])
       return send(
@@ -42,7 +42,6 @@ module.exports = {
     const foundTimezone = await getTimezoneFromLocation(match[1])
     if (!foundTimezone)
       return send(msg, `\`Sorry, I couldn't find a timezone for ${match[1]}.\``)
-    console.log(foundTimezone)
     send(
       msg,
       `\`It's ${currentTimeAt(foundTimezone.location)} in ${

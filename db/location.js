@@ -5,7 +5,7 @@ const memoedLocationData = memo(3000)
 module.exports = function (firestore) {
   return {
     async setLocation({ locationName, locationSettings }) {
-      const sanitizedName = encodeURIComponent(locationName)
+      const sanitizedName = encodeURIComponent(locationName.toLowerCase())
       const document = firestore.doc(`locations/${sanitizedName}`)
       await document.set(locationSettings)
       memoedLocationData.set(sanitizedName, locationSettings)
@@ -13,7 +13,7 @@ module.exports = function (firestore) {
     },
 
     async getLocation(locationName) {
-      const sanitizedName = encodeURIComponent(locationName)
+      const sanitizedName = encodeURIComponent(locationName.toLowerCase())
       const memoed = memoedLocationData.get(sanitizedName)
       if (memoed) return memoed
       const document = firestore.doc(`locations/${sanitizedName}`)

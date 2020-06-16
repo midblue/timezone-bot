@@ -34,7 +34,6 @@ module.exports = function (firestore) {
     },
 
     async getGuildSettings({ guildId }) {
-      console.log(`guild ${guildId}`)
       const memoed = memoedGuildData.get(guildId)
       if (memoed) return memoed.settings
 

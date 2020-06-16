@@ -20,7 +20,7 @@ module.exports = {
 \`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
 \`${settings.prefix}users\` - See all users' set timezones. (\`${settings.prefix}all\` also works)
 \`${settings.prefix}removeme\` - Delete your set timezone.
-\`${settings.prefix}help\` - Show this message.
+\`${settings.prefix}info\` - Show this message. (\`${settings.prefix}help\` also works)
 
 **Admin commands:**
 \`${settings.prefix}prefix <t!/t-/t~>\` - Set the prefix for bot commands to one of these 3 options. Defaults to "t!".
