@@ -30,7 +30,7 @@ module.exports = function (firestore) {
       }
       memoedGuildData.set(guildId, newData)
       await document.set(newData)
-      console.log(`Added guild ${guildId}`)
+      // console.log(`Added guild ${guildId}`)
     },
 
     async getGuildSettings({ guildId }) {
@@ -65,25 +65,16 @@ module.exports = function (firestore) {
 
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
-      const data = doc.data()
+      const data = doc.data() || {}
 
       memoedGuildData.set(guildId, data)
 
-      const users = data.users
+      const users = data.users || {}
       return users
     },
 
     async getUserInGuildFromId({ guildId, userId }) {
-      const memoed = memoedGuildData.get(guildId)
-      if (memoed) return memoed.users[userId]
-
-      const guildDocRef = firestore.doc(`guilds/${guildId}`)
-      const doc = await guildDocRef.get()
-      const data = doc.data()
-
-      memoedGuildData.set(guildId, data)
-
-      const users = data.users
+      const users = await this.getGuildUsers(guildId)
       return users[userId]
     },
 
@@ -91,6 +82,7 @@ module.exports = function (firestore) {
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
       const data = doc.data()
+      // todo add guild if doesn't exist (we need the name prop)
       const users = data.users
       users[userId] = updatedInfo
 
@@ -102,6 +94,7 @@ module.exports = function (firestore) {
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
       const data = doc.data()
+      if (!data) return
       const users = data.users
 
       if (!userId)
