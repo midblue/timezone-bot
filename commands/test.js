@@ -14,14 +14,14 @@ module.exports = {
 
     const richEmbed = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
-      .setTitle('TimezoneBot — Info')
-      .setURL('https://github.com/midblue/timezone-bot')
-      .setDescription(
-        `Hi! I'm TimezoneBot, a simple bot that allows users to set their timezone, then passively notes timezones when appropriate.`,
-      )
+      // .setTitle('TimezoneBot — Info')
+      // .setURL('https://github.com/midblue/timezone-bot')
+      // .setDescription(
+      //   `Hi! I'm TimezoneBot, a simple bot that allows users to set their timezone, then passively notes timezones when appropriate.`,
+      // )
       .addFields(
         {
-          name: `I'll auto-respond to @s with the user's timezone if:`,
+          name: `**I'll auto-respond to @s with the user's timezone if:**`,
           value: `- The user has a timezone set
 - They're not actively sending messages in this server
 - Their timezone is at least 2 hours away from yours (if yours is set), and
@@ -42,6 +42,7 @@ module.exports = {
         },
         {
           name: `(All commands can also be used by their first letter, i.e. \`${settings.prefix}set\` > \`${settings.prefix}s\`).`,
+          value: '\u200B',
         },
       )
       .setFooter(
