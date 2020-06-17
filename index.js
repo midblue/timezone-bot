@@ -12,10 +12,10 @@ const db = require('./db/firestore')
 let messagesScannedSinceLastNotification = 0
 setInterval(() => {
   if (messagesScannedSinceLastNotification > 0) {
-    console.log(`${messagesScannedSinceLastNotification} messages scanned.`)
+    console.log(`${messagesScannedSinceLastNotification} messages watched.`)
   }
   messagesScannedSinceLastNotification = 0
-}, 1 * 60 * 60 * 1000)
+}, 3 * 60 * 60 * 1000)
 
 client.on('error', e => console.log('Discord.js error:', e.message))
 client.on('ready', () => {

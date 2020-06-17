@@ -1,6 +1,7 @@
 const db = require('../db/firestore')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
+const { getUserInGuildFromId } = require('../scripts/commonFunctions')
 
 module.exports = {
   regex(settings) {
@@ -36,9 +37,13 @@ module.exports = {
       userId: msg.author.id,
       updatedInfo: foundTimezone,
     })
+    // todo use nickname if it exists
+    const authorInGuild = await getUserInGuildFromId(msg.guild, msg.author.id)
     send(
       msg,
-      `\`Time zone for ${msg.author.username} set to ${foundTimezone.timezoneName}.\``,
+      `\`Timezone for ${
+        authorInGuild.nickname || authorInGuild.user.username
+      } set to ${foundTimezone.timezoneName}.\``,
     )
   },
 }

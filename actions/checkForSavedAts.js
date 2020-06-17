@@ -64,8 +64,9 @@ module.exports = async msg => {
   // filter out anyone whose timezone is very close to the author
   usersToList = usersToList.filter(
     u =>
+      !authorTimezoneData ||
       Math.abs(u.offset - authorTimezoneData.offset) >=
-      onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo,
+        onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo,
   )
 
   if (!usersToList.length) return
@@ -96,5 +97,12 @@ module.exports = async msg => {
     if (!isLast && usersToList.length > 2) outputString += '\n'
   }
   outputString += '.`'
+
+  console.log(
+    `${msg.guild.name} - Responding to ${usersToList.length} user @${
+      usersToList.length === 1 ? '' : 's'
+    }`,
+  )
+
   send(msg, outputString)
 }
