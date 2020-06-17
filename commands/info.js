@@ -11,30 +11,45 @@ module.exports = {
   async action({ msg, settings }) {
     console.log(`${msg.guild ? msg.guild.name : 'Private Message'} - Info`)
     settings = settings || defaultServerSettings
-    // todo make this a nice rich message object
-    return send(
-      msg,
-      `Hi! I'm TimezoneBot, a simple bot that allows users to set their timezone, then passively notes timezones when appropriate.
 
-I'll auto-respond to @s with the user's timezone if:
-- The user has a timezone set
+    const richEmbed = new Discord.MessageEmbed()
+      .setColor('#7B6FE5')
+      // .setTitle('TimezoneBot')
+      // .setURL('https://github.com/midblue/timezone-bot')
+      .setDescription(
+        `Hi! I'm TimezoneBot. I let users set their timezone, then passively note timezones when appropriate.`,
+      )
+      .addFields(
+        {
+          name: `**I'll auto-respond to @s with the user's timezone if:**`,
+          value: `- The user has a timezone set
 - They're not actively sending messages in this server
 - Their timezone is at least 2 hours away from yours (if yours is set), and
-- Their timezone hasn't been announced in the past 30 minutes.
-
-**Public commands:**
-\`${settings.prefix}time <user, city, or country name>\` - See the current time for a specific user or in a specific place.
+- Their timezone hasn't been announced in the past 30 minutes.`,
+        },
+        {
+          name: '**Public commands:**',
+          value: `\`${settings.prefix}time <user, city, or country name>\` - See the current time for a specific user or in a specific place.
 \`${settings.prefix}timein <city or country name>\` - See the current time in a specific place.
-\`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
+\`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work)
 \`${settings.prefix}users\` - See all users' set timezones. (\`${settings.prefix}all\` also works)
 \`${settings.prefix}removeme\` - Delete your set timezone.
-\`${settings.prefix}info\` - Show this message. (\`${settings.prefix}help\` also works)
-**Admin commands:**
-\`${settings.prefix}prefix <t!/t-/t~>\` - Set the prefix for bot commands to one of these 3 options. Defaults to "t!".
-> All commands can also be used in shorthand with their first letter, i.e. \`${settings.prefix}set\` can be used as \`${settings.prefix}s\`.
+\`${settings.prefix}info\` - Show this message. (\`${settings.prefix}help\` also works)`,
+        },
+        {
+          name: '**Admin commands:**',
+          value: `\`${settings.prefix}prefix <t!/t-/t~>\` - Set the prefix to one of these 3 options. Default is \`t!\`.`,
+        },
+        {
+          name: `(All commands can also be used by their first letter, i.e. \`${settings.prefix}set\` > \`${settings.prefix}s\`).`,
+          value: '\u200B',
+        },
+      )
+      .setFooter(
+        `Made by jasp#8169.
+Feedback/Bugs > https://github.com/midblue/timezone-bot/issues`,
+      )
 
-Made by jasp#8169.
-Go to https://github.com/midblue/timezone-bot for feedback and bug reports!`,
-    )
+    return send(msg, richEmbed)
   },
 }
