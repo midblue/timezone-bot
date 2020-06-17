@@ -1,5 +1,6 @@
 const { send } = require('../actions/replyInChannel')
 const defaultServerSettings = require('../scripts/defaultServerSettings')
+const Discord = require('discord.js')
 
 module.exports = {
   regex(settings) {
