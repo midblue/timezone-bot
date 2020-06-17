@@ -17,11 +17,7 @@ module.exports = {
       .setTitle('TimezoneBot — Info')
       .setURL('https://github.com/midblue/timezone-bot')
       .setDescription(
-        `Hi! I'm TimezoneBot, a simple bot that allows users to set their timezone, then passively notes timezones when appropriate.
-> All commands can also be used in shorthand with their first letter, i.e. \`${settings.prefix}set\` can be used as \`${settings.prefix}s\`.`,
-      )
-      .setThumbnail(
-        'https://www.jasperstephenson.com/posts/timezonebot/header.png',
+        `Hi! I'm TimezoneBot, a simple bot that allows users to set their timezone, then passively notes timezones when appropriate.`,
       )
       .addFields(
         {
@@ -44,9 +40,13 @@ module.exports = {
           name: '**Admin commands:**',
           value: `\`${settings.prefix}prefix <t!/t-/t~>\` - Set the prefix for bot commands to one of these 3 options. Defaults to "t!".`,
         },
+        {
+          name: `(All commands can also be used by their first letter, i.e. \`${settings.prefix}set\` > \`${settings.prefix}s\`).`,
+        },
       )
       .setFooter(
-        'Made by jasp#8169. [Feedback/Bug Reports](https://github.com/midblue/timezone-bot/issues)',
+        `Made by jasp#8169.
+Feedback/Bugs > https://github.com/midblue/timezone-bot/issues`,
       )
 
     return send(msg, richEmbed)
