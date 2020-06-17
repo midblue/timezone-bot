@@ -28,11 +28,11 @@ module.exports = {
     //   userName => userName.searchString.indexOf(searchText.toLowerCase()) >= 0,
     // )
     // return foundUser
-	},
-	
-	getUsersInGuild(guild) {
-		return (await guild.members.fetch()).array()
-	},
+  },
+
+  async getUsersInGuild(guild) {
+    return (await guild.members.fetch()).array()
+  },
 
   getUserInGuildFromId,
 
