@@ -1,5 +1,8 @@
 const db = require('../db/firestore')
-const { currentTimeAt } = require('../scripts/commonFunctions')
+const {
+  currentTimeAt,
+  standardizeTimezoneName,
+} = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 
@@ -22,9 +25,9 @@ module.exports = {
     console.log(foundTimezone)
     send(
       msg,
-      `\`It's ${currentTimeAt(foundTimezone.location)} in ${
-        foundTimezone.timezoneName
-      }.\``,
+      `\`It's ${currentTimeAt(
+        foundTimezone.location,
+      )} in ${standardizeTimezoneName(foundTimezone.timezoneName)}.\``,
     )
   },
 }

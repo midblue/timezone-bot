@@ -3,7 +3,7 @@ const { send } = require('../actions/replyInChannel')
 
 // get all commands from files
 const fs = require('fs')
-const checkForSavedAts = require('../actions/checkForSavedAts')
+const replyToAts = require('../actions/replyToAts')
 const commands = []
 fs.readdir('./commands', (err, files) => {
   files.forEach(file => {
@@ -50,5 +50,5 @@ module.exports = async function (msg, settings, client) {
     }
   }
 
-  await checkForSavedAts(msg)
+  await replyToAts(msg)
 }

@@ -10,6 +10,13 @@ const fuseOptions = {
 }
 
 module.exports = {
+  standardizeTimezoneName(name) {
+    return name.replace(
+      /(Standard |Daylight |Summer |Winter |Spring |Fall )/gi,
+      '',
+    )
+  },
+
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     // todo check for @names too
@@ -79,6 +86,18 @@ module.exports = {
     return localeString.replace(singleDigitHourRegex, match => {
       if (match) return ' 0' + match.trim()
     })
+  },
+  getLightEmoji(location) {
+    const hour = new Date(
+      new Date().toLocaleString(undefined, {
+        timeZone: location.replace('UTC', 'Etc/GMT'),
+      }),
+    ).getHours()
+    if (hour <= 5) return '🌙'
+    // if (hour <= 7) return '🌇'
+    if (hour <= 18) return '☀️'
+    // if (hour <= 19) return '🌅'
+    return '🌙'
   },
 
   async getAuthorDisplayName(msg) {

@@ -1,5 +1,6 @@
 const axios = require('axios')
 const db = require('../db/firestore')
+const { standardizeTimezoneName } = require('../scripts/commonFunctions')
 
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
 const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=${process.env.GOOGLE_API_KEY}`
@@ -40,7 +41,7 @@ module.exports = location => {
         .catch(e => console.log)
       if (foundTimezone.status === 'OK') {
         const result = {
-          timezoneName: foundTimezone.timeZoneName,
+          timezoneName: standardizeTimezoneName(foundTimezone.timeZoneName),
           offset: foundTimezone.rawOffset / 60 / 60,
           location: foundTimezone.timeZoneId,
         }

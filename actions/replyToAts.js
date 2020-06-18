@@ -1,9 +1,11 @@
 const db = require('../db/firestore')
 const {
   getUserInGuildFromId,
+  getLightEmoji,
   currentTimeAt,
+  standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
-const { send } = require('../actions/replyInChannel')
+const { send } = require('./replyInChannel')
 const { auth } = require('firebase-admin')
 
 const onlyRespondIfLastSeenIsOlderThanMs = 2 * 60 * 60 * 1000
@@ -45,6 +47,8 @@ module.exports = async msg => {
   let usersToList = (await Promise.all(userDataWithLastMessageTime)).filter(
     u => u,
   )
+
+  // todo double check that these work as they should
 
   // filter out the author themselves
   usersToList = usersToList.filter(u => u.id !== authorId)
@@ -89,9 +93,11 @@ module.exports = async msg => {
     const isLast = index === usersToList.length - 1
     const isNextToLast = index === usersToList.length - 2
     const currentGuildUser = await getUserInGuildFromId(msg.guild, user.id)
-    outputString += `${currentTimeAt(user.location)} for ${
+    outputString += `${getLightEmoji(user.location)}${currentTimeAt(
+      user.location,
+    )} for ${
       currentGuildUser.nickname || currentGuildUser.user.username
-    } (${user.timezoneName})`
+    } (${standardizeTimezoneName(user.timezoneName)})`
     if (!isLast && usersToList.length > 2) outputString += ', '
     if (isNextToLast) outputString += ' and '
     if (!isLast && usersToList.length > 2) outputString += '\n'

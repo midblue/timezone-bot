@@ -2,6 +2,8 @@ const db = require('../db/firestore')
 const {
   currentTimeAt,
   getUserInGuildFromId,
+  getLightEmoji,
+  standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 
@@ -17,17 +19,12 @@ module.exports = {
     const timezonesWithUsers = await Object.keys(allUsers).reduce(
       async (acc, id) => {
         const userStub = allUsers[id]
-        const timezoneName = userStub.timezoneName.replace(
-          /(Standard |Daylight )/gi,
-          '',
-        )
+        const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+        console.log(timezoneName)
         if (!acc[timezoneName]) {
           acc[timezoneName] = {
             timezoneName,
             locale: userStub.location,
-            label: `${userStub.timezoneName} (UTC ${
-              userStub.offset >= 0 ? '+' : ''
-            }${userStub.offset})`,
             usernames: [],
             offset: userStub.offset,
           }
@@ -47,13 +44,15 @@ module.exports = {
 
     let outputString = timezonesWithUsersAsSortedArray.reduce(
       (acc, timezone) => {
-        const header = `${currentTimeAt(
+        const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
           timezone.locale,
           true,
-        )} - ${timezone.label.replace(/(Standard |Daylight )/gi, '')}`
+        )} - ${timezone.timezoneName} (UTC ${timezone.offset >= 0 ? '+' : ''}${
+          timezone.offset
+        })`
         const body =
-          '\n  ' +
-          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n  ') +
+          '\n    ' +
+          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n    ') +
           '\n\n'
         return acc + header + body
       },

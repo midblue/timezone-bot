@@ -1,5 +1,9 @@
 const db = require('../db/firestore')
-const { currentTimeAt } = require('../scripts/commonFunctions')
+const {
+  currentTimeAt,
+  getLightEmoji,
+  standardizeTimezoneName,
+} = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 
@@ -32,9 +36,11 @@ module.exports = {
       else
         return send(
           msg,
-          `\`It's ${currentTimeAt(foundUser.location)} for ${username}. (${
-            foundUser.timezoneName
-          })\``,
+          `\`It's ${getLightEmoji(foundUser.location)}${currentTimeAt(
+            foundUser.location,
+          )} for ${username}. (${standardizeTimezoneName(
+            foundUser.timezoneName,
+          )})\``,
         )
     }
 
@@ -42,11 +48,12 @@ module.exports = {
     const foundTimezone = await getTimezoneFromLocation(match[1])
     if (!foundTimezone)
       return send(msg, `\`Sorry, I couldn't find a timezone for ${match[1]}.\``)
+
     send(
       msg,
-      `\`It's ${currentTimeAt(foundTimezone.location)} in ${
-        foundTimezone.timezoneName
-      }.\``,
+      `\`It's ${getLightEmoji(foundTimezone.location)}${currentTimeAt(
+        foundTimezone.location,
+      )} in ${standardizeTimezoneName(foundTimezone.timezoneName)}.\``,
     )
   },
 }

@@ -10,8 +10,8 @@ module.exports = async guild => {
     guildName: guild.name,
   })
   console.log(
-    'Was added to a new guild: ' +
-      guild.name +
-      `(${(await getUsersInGuild(guild)).length} users)`,
+    'Was added to a new guild:',
+    guild.name,
+    `(${(await getUsersInGuild(guild)).length} users)`,
   )
 }
