@@ -35,12 +35,23 @@ module.exports = async msg => {
         matched => matched.id === fullMember.user.id,
       )
       if (!found) return
-      const lastMessage = await msg.channel.messages.fetch(
-        fullMember.lastMessageID,
-      )
+      let lastMessage
+      if (fullMember.lastMessageID) {
+        try {
+          lastMessage = await msg.channel.messages.fetch(
+            fullMember.lastMessageID,
+          )
+        } catch (e) {
+          console.log('Failed to get last message for', msg.author.username, e)
+        }
+      }
+      console.log(lastMessage, fullMember.lastMessageID)
       return {
         ...found,
-        lastMessageTime: lastMessage.editedAt || lastMessage.createdAt,
+        displayName: fullMember.nickname || fullMember.user.username,
+        lastMessageTime: lastMessage
+          ? lastMessage.editedAt || lastMessage.createdAt
+          : 0,
       }
     })
 
@@ -87,27 +98,24 @@ module.exports = async msg => {
       }, onlyRespondIfNotAnnouncedInMs)
     })
 
-  let outputString = `\`It's `
+  let outputString = `It's `
   for (let index = 0; index < usersToList.length; index++) {
     const user = usersToList[index]
     const isLast = index === usersToList.length - 1
     const isNextToLast = index === usersToList.length - 2
-    const currentGuildUser = await getUserInGuildFromId(msg.guild, user.id)
     outputString += `${getLightEmoji(user.location)}${currentTimeAt(
       user.location,
-    )} for ${
-      currentGuildUser.nickname || currentGuildUser.user.username
-    } (${standardizeTimezoneName(user.timezoneName)})`
+    )} for ${user.displayName} (${standardizeTimezoneName(user.timezoneName)})`
     if (!isLast && usersToList.length > 2) outputString += ', '
     if (isNextToLast) outputString += ' and '
     if (!isLast && usersToList.length > 2) outputString += '\n'
   }
-  outputString += '.`'
+  outputString += '.'
 
   console.log(
     `${msg.guild.name} - Responding to ${usersToList.length} user @${
       usersToList.length === 1 ? '' : 's'
-    }`,
+    } (${usersToList.map(u => u.displayName).join(', ')})`,
   )
 
   send(msg, outputString)

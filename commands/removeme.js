@@ -18,9 +18,9 @@ module.exports = {
     })
     return send(
       msg,
-      `\`Removed you (${await getAuthorDisplayName(
+      `Removed you (${await getAuthorDisplayName(
         msg,
-      )}) from timezone tracking.\``,
+      )}) from timezone tracking.`,
     )
   },
 }

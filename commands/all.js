@@ -12,7 +12,7 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:all|users|u|a)$`, 'gi')
   },
   async action({ msg, settings, match, typedUser }) {
-    console.log(`${msg.guild.name} - All users`)
+    console.log(`${msg.guild.name} - All users (${msg.author.username})`)
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
@@ -63,9 +63,9 @@ module.exports = {
     if (!outputString)
       return send(
         msg,
-        `\`No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.\``,
+        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
       )
 
-    send(msg, `\`\`\`${outputString}\`\`\``)
+    send(msg, outputString, true)
   },
 }

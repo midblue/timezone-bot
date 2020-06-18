@@ -9,7 +9,11 @@ module.exports = function (firestore) {
       const document = firestore.doc(`locations/${sanitizedName}`)
       await document.set(locationSettings)
       memoedLocationData.set(sanitizedName, locationSettings)
-      console.log(`Added location ${locationName} to database`)
+      console.log(
+        `Added location ${locationName} to database (${JSON.stringify(
+          locationSettings,
+        )})`,
+      )
     },
 
     async getLocation(locationName) {

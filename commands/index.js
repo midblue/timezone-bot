@@ -22,7 +22,7 @@ module.exports = async function (msg, settings, client) {
         msg.guild.member(msg.author) &&
         msg.guild.member(msg.author).permissions.has('ADMINISTRATOR')
       if (command.admin && !senderIsAdmin) {
-        send(msg, `\`This command is only available to server admins.\``)
+        send(msg, `That command is only available to server admins.`)
         return true
       }
 

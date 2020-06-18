@@ -15,7 +15,7 @@ module.exports = {
     if (!match[1])
       return send(
         msg,
-        `\`Use this command in the format \`${settings.prefix}set <city or country name>\` to set your timezone.\``,
+        `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`,
       )
 
     let foundTimezone
@@ -31,7 +31,7 @@ module.exports = {
       }
     else foundTimezone = await getTimezoneFromLocation(match[1])
     if (!foundTimezone)
-      return send(msg, `\`Sorry, I couldn't find a timezone for ${match[1]}.\``)
+      return send(msg, `Sorry, I couldn't find a timezone for ${match[1]}.`)
     await db.updateUserInGuild({
       guildId: msg.guild.id,
       userId: msg.author.id,
@@ -41,9 +41,9 @@ module.exports = {
     const authorInGuild = await getUserInGuildFromId(msg.guild, msg.author.id)
     send(
       msg,
-      `\`Timezone for ${
+      `Timezone for ${
         authorInGuild.nickname || authorInGuild.user.username
-      } set to ${foundTimezone.timezoneName}.\``,
+      } set to ${foundTimezone.timezoneName}.`,
     )
   },
 }
