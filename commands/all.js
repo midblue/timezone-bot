@@ -18,9 +18,9 @@ module.exports = {
 
     const timezonesWithUsers = await Object.keys(allUsers).reduce(
       async (acc, id) => {
+        acc = await acc
         const userStub = allUsers[id]
         const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-        console.log(timezoneName)
         if (!acc[timezoneName]) {
           acc[timezoneName] = {
             timezoneName,
@@ -39,7 +39,7 @@ module.exports = {
     )
 
     const timezonesWithUsersAsSortedArray = Object.values(
-      timezonesWithUsers,
+      await timezonesWithUsers,
     ).sort((a, b) => b.offset - a.offset)
 
     let outputString = timezonesWithUsersAsSortedArray.reduce(
@@ -47,7 +47,7 @@ module.exports = {
         const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
           timezone.locale,
           true,
-        )} - ${timezone.timezoneName} (UTC ${timezone.offset >= 0 ? '+' : ''}${
+        )} - ${timezone.timezoneName} (UTC${timezone.offset >= 0 ? '+' : ''}${
           timezone.offset
         })`
         const body =
