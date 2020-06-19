@@ -6,16 +6,20 @@ const kickedFromServer = require('./events/kickedFromServer')
 const privateMessage = require('./events/receivePrivateMessage')
 const guildMessage = require('./events/receiveGuildMessage')
 const otherMemberLeaveServer = require('./events/otherMemberLeaveServer')
-const db = require('./db/firestore')
 
-// const launchTime = Date.now()
-let messagesScannedSinceLastNotification = 0
+const launchTime = Date.now()
+let messagesScannedSinceLastAnnounce = 0
+const announceTimeSpanInHours = 3
 setInterval(() => {
-  if (messagesScannedSinceLastNotification > 0) {
-    console.log(`${messagesScannedSinceLastNotification} messages watched.`)
+  if (messagesScannedSinceLastAnnounce > 0) {
+    console.log(
+      `${messagesScannedSinceLastAnnounce} messages watched in ${announceTimeSpanInHours} hours. (Running for ${Math.round(
+        (Date.now() - launchTime) / 60 / 60 / 1000,
+      )} hours)`,
+    )
   }
-  messagesScannedSinceLastNotification = 0
-}, 3 * 60 * 60 * 1000)
+  messagesScannedSinceLastAnnounce = 0
+}, announceTimeSpanInHours * 60 * 60 * 1000)
 
 client.on('error', e => console.log('Discord.js error:', e.message))
 client.on('ready', () => {
@@ -29,7 +33,6 @@ client.on('message', async msg => {
   if (!msg.guild || !msg.guild.available) return privateMessage(msg)
   return guildMessage(msg, client)
 })
-// todo check for @s
 
 // added to a server
 client.on('guildCreate', addedToServer)
@@ -42,64 +45,4 @@ client.on('guildMemberRemove', otherMemberLeaveServer)
 
 client.login(process.env.DISCORD_TOKEN)
 
-// discordClient.on('message', async msg => {
-//   if (msg.author.id == BOT_ID) return
-
-//   const isServer = msg.channel.guild !== undefined
-//   if (isServer) msg.guild = msg.channel.guild
-
-//   const senderUsername = isServer
-//     ? msg.guild.members.find(member => member.user.id === msg.author.id)
-//         .nickname || msg.author.username
-//     : msg.author.username
-
-//   let userTimezoneOffset
-//   if (db.lastSeen(msg.author.id)) {
-//     const updatedUserData = db.update(msg.author.id, {
-//       username: senderUsername,
-//     })
-//     userTimezoneOffset = updatedUserData.offset
-//   }
-
-//   // Respond to help command
-//   if (msg.content.indexOf(`!help`) === 0 || msg.content.indexOf(`!h`) === 0)
-//     return interact.help(msg)
-
-//   // Respond to a request for a user's own timezone
-//   if (msg.content.indexOf(`!me`) === 0 || msg.content.indexOf(`!m`) === 0)
-//     return interact.me(msg, senderUsername)
-
-//   // Delete self from the list
-//   if (msg.content.indexOf(`!removeme`) === 0 || msg.content.indexOf(`!r`) === 0)
-//     return interact.removeMe(msg, senderUsername)
-
-//   // Respond to smooch
-//   if (msg.content.indexOf(`!smooch`) === 0)
-//     return msg.channel.send(`💋💋💋💋💋💋😘😘😘😘`)
-
-//   // Note timezone for @'d user if relevant
-//   const atsInMessage = get.ats(msg.content)
-//   if (atsInMessage.length > 0)
-//     return interact.at(msg, atsInMessage, userTimezoneOffset)
-
-//   // Set user timezone
-//   if (msg.content.indexOf(`!set`) === 0 || msg.content.indexOf(`!s`) === 0)
-//     return interact.set(msg)
-
-//   // List all users with timezones
-//   if (
-//     msg.content.indexOf(`!users`) === 0 ||
-//     msg.content.indexOf(`!all`) === 0 ||
-//     msg.content.indexOf(`!u`) === 0 ||
-//     msg.content.indexOf(`!a`) === 0
-//   )
-//     return interact.listUsers(msg)
-
-//   // Respond to location-only time query
-//   if (msg.content.indexOf(`!timein`) === 0 || msg.content.indexOf(`!ti `) === 0)
-//     return interact.timeIn(msg)
-
-//   // Respond to location or user time query
-//   if (msg.content.indexOf(`!time`) === 0 || msg.content.indexOf(`!t`) === 0)
-//     return interact.time(msg)
-// })
+// todo !me

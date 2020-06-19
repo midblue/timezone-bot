@@ -10,7 +10,11 @@ module.exports = {
     )
   },
   async action({ msg, settings }) {
-    console.log(`${msg.guild ? msg.guild.name : 'Private Message'} - Info`)
+    console.log(
+      `${msg.guild ? msg.guild.name : 'Private Message'} - Info (${
+        msg.author.username
+      })`,
+    )
     settings = settings || defaultServerSettings
 
     const richEmbed = new Discord.MessageEmbed()
@@ -48,7 +52,7 @@ module.exports = {
       )
       .setFooter(
         `Made by jasp#8169.
-Feedback/Bugs > https://github.com/midblue/timezone-bot/issues`,
+Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
       )
 
     return send(msg, richEmbed)
