@@ -28,7 +28,7 @@ client.on('ready', () => {
 })
 
 client.on('message', async msg => {
-  messagesScannedSinceLastNotification++
+  messagesScannedSinceLastAnnounce++
   if (!msg.author || msg.author.id === process.env.BOT_ID) return
   if (!msg.guild || !msg.guild.available) return privateMessage(msg)
   return guildMessage(msg, client)
