@@ -40,7 +40,7 @@ module.exports = {
 
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,
-    ).sort((a, b) => b.offset - a.offset)
+    ).sort((a, b) => a.offset - b.offset)
 
     let outputString = timezonesWithUsersAsSortedArray.reduce(
       (acc, timezone) => {
@@ -51,8 +51,8 @@ module.exports = {
           timezone.offset
         })`
         const body =
-          '\n    ' +
-          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n    ') +
+          '\n     ' +
+          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n     ') +
           '\n\n'
         return acc + header + body
       },

@@ -30,11 +30,6 @@ module.exports = {
     const fuzzySearch = new fuse(usersInGuildWithSearchString, fuseOptions)
     const fuzzySearchResult = fuzzySearch.search(searchText)
     if (fuzzySearchResult[0]) return fuzzySearchResult[0]
-
-    // const foundUser = usersInGuildWithSearchString.find(
-    //   userName => userName.searchString.indexOf(searchText.toLowerCase()) >= 0,
-    // )
-    // return foundUser
   },
 
   async getUsersInGuild(guild) {
@@ -81,10 +76,10 @@ module.exports = {
       minute: '2-digit',
       hour12: true,
     })
-    if (!leadingZero) return localeString
-    const singleDigitHourRegex = / ([0-9]{1}):[0-9]+/
-    return localeString.replace(singleDigitHourRegex, match => {
-      if (match) return ' 0' + match.trim()
+    if (leadingZero) return localeString
+    const twoDigitHourRegex = /[0-9]{2}:/
+    return localeString.replace(twoDigitHourRegex, match => {
+      if (match && match.substring(0, 1) === '0') return match.substring(1)
     })
   },
   getLightEmoji(location) {

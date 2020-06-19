@@ -38,6 +38,7 @@ module.exports = {
 \`${settings.prefix}timein <city or country name>\` - See the current time in a specific place.
 \`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work)
 \`${settings.prefix}users\` - See all users' set timezones. (\`${settings.prefix}all\` also works)
+\`${settings.prefix}me\` - See your set timezone.
 \`${settings.prefix}removeme\` - Delete your set timezone.
 \`${settings.prefix}info\` - Show this message. (\`${settings.prefix}help\` also works)`,
         },
