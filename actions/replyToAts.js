@@ -42,7 +42,7 @@ module.exports = async msg => {
             fullMember.lastMessageID,
           )
         } catch (e) {
-          console.log('Failed to get last message for', msg.author.username, e)
+          console.log('Failed to get last message for', msg.author.username)
         }
       }
       return {
@@ -114,7 +114,9 @@ module.exports = async msg => {
   console.log(
     `${msg.guild.name} - Responding to ${usersToList.length} user @${
       usersToList.length === 1 ? '' : 's'
-    } (${usersToList.map(u => u.displayName).join(', ')})`,
+    } (${msg.author.username} > ${usersToList
+      .map(u => u.displayName)
+      .join(', ')})`,
   )
 
   send(msg, outputString)
