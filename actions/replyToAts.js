@@ -45,7 +45,6 @@ module.exports = async msg => {
           console.log('Failed to get last message for', msg.author.username, e)
         }
       }
-      console.log(lastMessage, fullMember.lastMessageID)
       return {
         ...found,
         displayName: fullMember.nickname || fullMember.user.username,
