@@ -1,3 +1,5 @@
+const contactGuildAdmin = require('./contactGuildAdmin')
+
 module.exports = {
   send(msg, text, block = false) {
     const messages = []
@@ -14,7 +16,6 @@ module.exports = {
       msg.channel.send(message).catch(err => {
         contactGuildAdmin({
           guild: msg.guild,
-          msg,
           message: `I don't have permission to send messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot`,
         })
         console.error('Missing permissions to send!', err.message)
@@ -31,7 +32,6 @@ module.exports = {
       msg.channel.send(message).catch(err => {
         contactGuildAdmin({
           guild: msg.guild,
-          msg,
           message: `I don't have permission to reply to messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot`,
         })
         console.error('Missing permissions to reply!', err.message)

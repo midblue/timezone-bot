@@ -44,5 +44,3 @@ client.on('guildDelete', kickedFromServer)
 client.on('guildMemberRemove', otherMemberLeaveServer)
 
 client.login(process.env.DISCORD_TOKEN)
-
-// todo !me
