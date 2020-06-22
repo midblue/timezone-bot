@@ -52,8 +52,7 @@ module.exports = {
     thePeople = getUserInGuildFromId(guild, guild.ownerID)
     if (thePeople) return [thePeople]
     // at this point, we just look for an admin of any kind
-    thePeople = guild.members
-      .array()
+    thePeople = (await msg.guild.members.fetch()).array()
       .filter(member => member.permissions.has('ADMINISTRATOR'))
     if (thePeople && thePeople.length > 0) return thePeople
     return []

@@ -15,6 +15,10 @@ module.exports = async ({ guild, settings, message }) => {
     contact: settings.contact,
   })
 
+  console.log(
+    currentGuildContacts,
+    currentGuildContacts.map(c => c.user),
+  )
   if (!currentGuildContacts)
     return console.log('Failed to find contact points in server', guild.name)
   currentGuildContacts.forEach(singleContact =>
