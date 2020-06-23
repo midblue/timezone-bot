@@ -38,7 +38,7 @@ module.exports = {
 
   getUserInGuildFromId,
 
-  getContactsOrOwnerOrModerator({ guild, contact }) {
+  async getContactsOrOwnerOrModerator({ guild, contact }) {
     // backwards compatible with old single contact method
     if (contact && !Array.isArray(contact)) contact = [contact]
     // default to contact list
@@ -52,7 +52,8 @@ module.exports = {
     thePeople = getUserInGuildFromId(guild, guild.ownerID)
     if (thePeople) return [thePeople]
     // at this point, we just look for an admin of any kind
-    thePeople = (await msg.guild.members.fetch()).array()
+    thePeople = (await msg.guild.members.fetch())
+      .array()
       .filter(member => member.permissions.has('ADMINISTRATOR'))
     if (thePeople && thePeople.length > 0) return thePeople
     return []
