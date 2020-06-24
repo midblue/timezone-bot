@@ -11,20 +11,24 @@ const otherMemberLeaveServer = require('./events/otherMemberLeaveServer')
 const launchTime = Date.now()
 let messagesScannedSinceLastAnnounce = 0
 const announceTimeSpanInHours = 3
-setInterval(() => {
+setInterval(async () => {
   if (messagesScannedSinceLastAnnounce > 0) {
     console.log(
       `${messagesScannedSinceLastAnnounce} messages watched in ${announceTimeSpanInHours} hours. (Running for ${Math.round(
         (Date.now() - launchTime) / 60 / 60 / 1000,
-      )} hours)`,
+      )} hours in ${(await client.guilds.cache.array()).length} guilds)`,
     )
   }
   messagesScannedSinceLastAnnounce = 0
-}, announceTimeSpanInHours * 60 * 60 * 1000)
+}, Math.round(announceTimeSpanInHours * 60 * 60 * 1000))
 
 client.on('error', e => console.log('Discord.js error:', e.message))
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}`)
+client.on('ready', async () => {
+  console.log(
+    `Logged in as ${client.user.tag} in ${
+      (await client.guilds.cache.array()).length
+    } guilds`,
+  )
   client.user.setActivity('t!info', { type: 'LISTENING' })
 })
 

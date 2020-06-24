@@ -1,9 +1,10 @@
 const { getUserInGuildFromText } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
+const defaultServerSettings = require('../scripts/defaultServerSettings')
+const replyToAts = require('../actions/replyToAts')
 
 // get all commands from files
 const fs = require('fs')
-const replyToAts = require('../actions/replyToAts')
 const commands = []
 fs.readdir('./commands', (err, files) => {
   files.forEach(file => {
@@ -15,7 +16,9 @@ fs.readdir('./commands', (err, files) => {
 module.exports = async function (msg, settings, client) {
   const sender = msg.author
   for (let command of commands) {
-    const match = command.regex(settings).exec(msg.content)
+    const match = command
+      .regex(settings || defaultServerSettings)
+      .exec(msg.content)
     if (match) {
       const senderIsAdmin =
         msg.guild &&
@@ -39,7 +42,7 @@ module.exports = async function (msg, settings, client) {
       // execute command
       await command.action({
         msg,
-        settings,
+        settings: settings || defaultServerSettings,
         match,
         typedUser,
         sender,
