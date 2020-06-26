@@ -12,7 +12,7 @@ module.exports = {
   },
   async action({ msg, settings, match }) {
     console.log(
-      `${msg.guild.name} - time in ${match[1]} (${msg.author.username})`,
+      `${msg.guild.name} - Time in ${match[1]} (${msg.author.username})`,
     )
 
     if (!match[1])

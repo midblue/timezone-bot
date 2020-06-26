@@ -8,13 +8,15 @@ const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=
 module.exports = location => {
   if (!location) return
 
+  location = location.replace(/[<>]/gi, '')
+
   // check for UTC command
   const UTCMatch = /^(?:utc|gmt)(\+|-)?(\d*)/gi.exec(location)
   if (UTCMatch)
     return {
       timezoneName: UTCMatch[0].toUpperCase(),
       offset: UTCMatch[2]
-        ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area
+        ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area (swapped back now because people seemed to be having issues)
         : 0,
       location: `Etc/${UTCMatch[0].toUpperCase().replace('UTC', 'GMT')}`,
     }
