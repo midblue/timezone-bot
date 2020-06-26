@@ -1,7 +1,11 @@
 const db = require('../db/firestore')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
-const { getUserInGuildFromId } = require('../scripts/commonFunctions')
+const {
+  getUserInGuildFromId,
+  getLightEmoji,
+  currentTimeAt,
+} = require('../scripts/commonFunctions')
 
 module.exports = {
   regex(settings) {
@@ -18,18 +22,7 @@ module.exports = {
         `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`,
       )
 
-    let foundTimezone
-    // check for UTC command
-    const UTCMatch = /^utc(\+|-)?(\d*)/gi.exec(match[1])
-    if (UTCMatch)
-      foundTimezone = {
-        timezoneName: UTCMatch[0].toUpperCase(),
-        offset: UTCMatch[2]
-          ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1)
-          : 0,
-        location: `Etc/${UTCMatch[0].toUpperCase().replace('UTC', 'GMT')}`,
-      }
-    else foundTimezone = await getTimezoneFromLocation(match[1])
+    const foundTimezone = await getTimezoneFromLocation(match[1])
     if (!foundTimezone)
       return send(msg, `Sorry, I couldn't find a timezone for ${match[1]}.`)
     await db.updateUserInGuild({
@@ -43,7 +36,9 @@ module.exports = {
       msg,
       `Timezone for ${
         authorInGuild.nickname || authorInGuild.user.username
-      } set to ${foundTimezone.timezoneName}.`,
+      } set to ${foundTimezone.timezoneName}. (${getLightEmoji(
+        foundTimezone.location,
+      )}${currentTimeAt(foundTimezone.location)})`,
     )
   },
 }
