@@ -36,7 +36,7 @@ module.exports = {
           name: '**Public commands:**',
           value: `\`${settings.prefix}time <user, city, or country name>\` - See the current time for a specific user or in a specific place.
 \`${settings.prefix}timein <city or country name>\` - See the current time in a specific place.
-\`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work)
+\`${settings.prefix}set <city or country name>\` - Set your own timezone. (UTC codes work, but location names work better.)
 \`${settings.prefix}users\` - See all users' set timezones. (\`${settings.prefix}all\` also works)
 \`${settings.prefix}me\` - See your set timezone.
 \`${settings.prefix}removeme\` - Delete your set timezone.

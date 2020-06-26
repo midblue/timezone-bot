@@ -5,12 +5,12 @@ const memo = require('../scripts/memo')
 const memoedGuildData = memo(3000)
 
 module.exports = function (firestore) {
-  firestore
-    .collection('guilds')
-    .get()
-    .then(snapshot => {
-      console.log(snapshot.size, 'guilds found in database.')
-    })
+  // firestore
+  //   .collection('guilds')
+  //   .get()
+  //   .then(snapshot => {
+  //     console.log(snapshot.size, 'guilds found in database.')
+  //   })
 
   return {
     async hasGuild({ guildId }) {

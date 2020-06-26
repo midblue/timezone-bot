@@ -14,7 +14,7 @@ module.exports = location => {
     return {
       timezoneName: UTCMatch[0].toUpperCase(),
       offset: UTCMatch[2]
-        ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? 1 : -1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area
+        ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area
         : 0,
       location: `Etc/${UTCMatch[0].toUpperCase().replace('UTC', 'GMT')}`,
     }
