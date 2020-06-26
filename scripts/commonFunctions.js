@@ -80,6 +80,7 @@ module.exports = {
     const twoDigitHourRegex = /[0-9]{2}:/
     return localeString.replace(twoDigitHourRegex, match => {
       if (match && match.substring(0, 1) === '0') return match.substring(1)
+      return match
     })
   },
   getLightEmoji(location) {
