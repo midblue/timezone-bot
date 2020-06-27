@@ -31,6 +31,7 @@ module.exports = async msg => {
   const userDataWithLastMessageTime = (await msg.guild.members.fetch())
     .array()
     .map(async fullMember => {
+      if (fullMember.id === msg.author.id) return
       const found = matchedUsers.find(
         matched => matched.id === fullMember.user.id,
       )
@@ -43,6 +44,8 @@ module.exports = async msg => {
           )
         } catch (e) {
           console.log('Failed to get last message for', msg.author.username)
+          // todo check permissions issue for this, seems to be appearing too often
+          // todo and also for the sender???
         }
       }
       return {
