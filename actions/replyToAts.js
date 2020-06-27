@@ -43,12 +43,14 @@ module.exports = async msg => {
             fullMember.lastMessageID,
           )
         } catch (e) {
-          console.log(
-            'Failed to get last message for',
-            fullMember.nickname || fullMember.user.username,
-            e,
-          )
-          // todo check permissions issue for this, seems to be appearing too often
+          if (e.code !== 10008) {
+            // ignoring 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
+            console.log(
+              'Failed to get last message for',
+              fullMember.nickname || fullMember.user.username,
+              e,
+            )
+          }
         }
       }
       return {
