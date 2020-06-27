@@ -43,9 +43,12 @@ module.exports = async msg => {
             fullMember.lastMessageID,
           )
         } catch (e) {
-          console.log('Failed to get last message for', msg.author.username)
+          console.log(
+            'Failed to get last message for',
+            fullMember.nickname || fullMember.user.username,
+            e,
+          )
           // todo check permissions issue for this, seems to be appearing too often
-          // todo and also for the sender???
         }
       }
       return {
