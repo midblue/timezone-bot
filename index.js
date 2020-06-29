@@ -5,7 +5,6 @@ const addedToServer = require('./events/addedToServer')
 const kickedFromServer = require('./events/kickedFromServer')
 const privateMessage = require('./events/receivePrivateMessage')
 const guildMessage = require('./events/receiveGuildMessage')
-const sayToLeagueOfLosers = require('./actions/sayToLeagueOfLosers')
 const otherMemberLeaveServer = require('./events/otherMemberLeaveServer')
 
 const launchTime = Date.now()
@@ -36,8 +35,6 @@ client.on('message', async msg => {
   messagesScannedSinceLastAnnounce++
   if (!msg.author || msg.author.id === process.env.BOT_ID) return
   if (!msg.guild || !msg.guild.available) return privateMessage(msg)
-  if (msg.content.indexOf('t!sayToLeagueOfLosers') === 0)
-    return sayToLeagueOfLosers(client, msg)
   return guildMessage(msg, client)
 })
 
