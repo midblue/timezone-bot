@@ -15,7 +15,8 @@ const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 1.5
 let recentlyAnnounced = []
 
 module.exports = async msg => {
-  console.log(msg.author.bot)
+  if (msg.author.bot) return
+
   const mentionedUserIds = msg.mentions.members.array().map(u => u.id)
   if (mentionedUserIds.length === 0) return
 
