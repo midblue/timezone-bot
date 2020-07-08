@@ -30,7 +30,6 @@ module.exports = {
       userId: msg.author.id,
       updatedInfo: foundTimezone,
     })
-    // todo use nickname if it exists
     const authorInGuild = await getUserInGuildFromId(msg.guild, msg.author.id)
     send(
       msg,

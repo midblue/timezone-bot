@@ -10,13 +10,12 @@ const { auth } = require('firebase-admin')
 
 const onlyRespondIfLastSeenIsOlderThanMs = 2 * 60 * 60 * 1000
 const onlyRespondIfNotAnnouncedInMs = 30 * 60 * 1000
-const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 2
+const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 1.5
 
 let recentlyAnnounced = []
 
-// todo other @ related stuff
-
 module.exports = async msg => {
+  console.log(msg.author.bot)
   const mentionedUserIds = msg.mentions.members.array().map(u => u.id)
   if (mentionedUserIds.length === 0) return
 

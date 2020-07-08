@@ -82,7 +82,6 @@ module.exports = function (firestore) {
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
       const data = doc.data()
-      // todo add guild if doesn't exist (we need the name prop)
       const users = data.users
       users[userId] = updatedInfo
 
