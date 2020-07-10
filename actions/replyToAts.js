@@ -1,6 +1,5 @@
 const db = require('../db/firestore')
 const {
-  getUserInGuildFromId,
   getLightEmoji,
   currentTimeAt,
   standardizeTimezoneName,
@@ -18,7 +17,7 @@ let recentlyAnnounced = []
 module.exports = async msg => {
   if (msg.author.bot) return
 
-  const mentionedUserIds = msg.mentions.members.array().map(u => u.id)
+  const mentionedUserIds = msg.mentions.members.array().map(u => u.id) // todo maybe this needs a cache check too
   if (mentionedUserIds.length === 0) return
 
   const authorId = msg.author.id

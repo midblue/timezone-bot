@@ -38,7 +38,7 @@ module.exports = {
   async getContactsOrOwnerOrModerator({ guild }) {
     let usersToContact
     // check guild.owner
-    usersToContact = this.getUserInGuildFromId(guild, guild.ownerID)
+    usersToContact = getUserInGuildFromId(guild, guild.ownerID)
     if (usersToContact) return [usersToContact]
     // at this point, we just look for an admin of any kind
     usersToContact = (await getGuildMembers({ guild })).filter(member =>
