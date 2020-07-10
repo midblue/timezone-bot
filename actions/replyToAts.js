@@ -4,6 +4,7 @@ const {
   getLightEmoji,
   currentTimeAt,
   standardizeTimezoneName,
+  getGuildMembers,
 } = require('../scripts/commonFunctions')
 const { send } = require('./replyInChannel')
 const { auth } = require('firebase-admin')
@@ -28,9 +29,8 @@ module.exports = async msg => {
     .map(id => (savedUsers[id] ? { ...savedUsers[id], id } : null))
     .filter(u => u)
 
-  const userDataWithLastMessageTime = (await msg.guild.members.fetch())
-    .array()
-    .map(async fullMember => {
+  const userDataWithLastMessageTime = (await getGuildMembers({ msg })).map(
+    async fullMember => {
       if (fullMember.id === msg.author.id) return
       const found = matchedUsers.find(
         matched => matched.id === fullMember.user.id,
@@ -60,7 +60,8 @@ module.exports = async msg => {
           ? lastMessage.editedAt || lastMessage.createdAt
           : 0,
       }
-    })
+    },
+  )
 
   let usersToList = (await Promise.all(userDataWithLastMessageTime)).filter(
     u => u,
@@ -120,7 +121,7 @@ module.exports = async msg => {
   outputString += '.'
 
   console.log(
-    `${msg.guild.name} - Responding to ${usersToList.length} user @${
+    `${msg.guild.name} - Responding to ${usersToList.length} @${
       usersToList.length === 1 ? '' : 's'
     } (${msg.author.username} > ${usersToList
       .map(u => u.displayName)

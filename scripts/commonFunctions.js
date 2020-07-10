@@ -20,7 +20,7 @@ module.exports = {
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     // todo check for @names too
-    const usersInGuild = (await msg.guild.members.fetch()).array()
+    const usersInGuild = await getGuildMembers({ msg })
     const usersInGuildWithSearchString = usersInGuild.map(user => ({
       ...user,
       searchString: `${user.user.username} ${user.user.username}#${
@@ -32,21 +32,18 @@ module.exports = {
     if (fuzzySearchResult[0]) return fuzzySearchResult[0]
   },
 
-  async getUsersInGuild(guild) {
-    return (await guild.members.fetch()).array()
-  },
-
+  getGuildMembers,
   getUserInGuildFromId,
 
   async getContactsOrOwnerOrModerator({ guild }) {
     let usersToContact
     // check guild.owner
-    usersToContact = getUserInGuildFromId(guild, guild.ownerID)
+    usersToContact = this.getUserInGuildFromId(guild, guild.ownerID)
     if (usersToContact) return [usersToContact]
     // at this point, we just look for an admin of any kind
-    usersToContact = (await msg.guild.members.fetch())
-      .array()
-      .filter(member => member.permissions.has('ADMINISTRATOR'))
+    usersToContact = (await getGuildMembers({ guild })).filter(member =>
+      member.permissions.has('ADMINISTRATOR'),
+    )
     if (usersToContact && usersToContact.length > 0) return usersToContact
     return []
   },
@@ -99,6 +96,22 @@ module.exports = {
 
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
-  const usersInGuild = (await guild.members.fetch()).array()
+  const usersInGuild = await getGuildMembers({ guild })
   return usersInGuild.find(user => user.user.id == id)
+}
+
+async function getGuildMembers({ msg, guild }) {
+  if (msg) guild = msg.guild
+  let members = []
+  try {
+    members = (await guild.members.fetch()).array()
+  } catch (e) {
+    console.log(
+      'error getting guild members, falling back to cache',
+      e,
+      guild.members.cache.array(),
+    )
+    members = guild.members.cache.array()
+  }
+  return members
 }

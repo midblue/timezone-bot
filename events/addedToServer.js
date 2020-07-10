@@ -1,5 +1,5 @@
 const db = require('../db/firestore')
-const { getUsersInGuild } = require('../scripts/commonFunctions')
+const { getGuildMembers } = require('../scripts/commonFunctions')
 
 module.exports = async guild => {
   if (await db.hasGuild({ guildId: guild.id }))
@@ -12,6 +12,6 @@ module.exports = async guild => {
   console.log(
     '> > > > > >           Was added to a new guild:',
     guild.name,
-    `(${(await getUsersInGuild(guild)).length} users)`,
+    `(${(await getGuildMembers({ guild })).length} users)`,
   )
 }
