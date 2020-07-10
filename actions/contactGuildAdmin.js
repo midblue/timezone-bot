@@ -8,7 +8,6 @@ module.exports = async ({ guild, message }) => {
     guild,
   })
 
-  console.log(currentGuildContacts)
   if (!currentGuildContacts)
     return console.log('Failed to find contact points in server', guild.name)
   currentGuildContacts.forEach(singleContact =>
