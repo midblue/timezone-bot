@@ -4,7 +4,7 @@ const {
 } = require('../scripts/commonFunctions')
 
 module.exports = async ({ guild, message }) => {
-  const currentGuildContacts = getContactsOrOwnerOrModerator({
+  const currentGuildContacts = await getContactsOrOwnerOrModerator({
     guild,
   })
 
