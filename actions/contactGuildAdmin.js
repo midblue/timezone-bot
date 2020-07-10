@@ -1,23 +1,16 @@
-const db = require('../db/firestore')
 const {
   getContactsOrOwnerOrModerator,
   getLabelFromUser,
 } = require('../scripts/commonFunctions')
 
-module.exports = async ({ guild, settings, message }) => {
-  settings =
-    settings ||
-    (await db.getGuildSettings({
-      guildId: guild.id,
-    }))
+module.exports = async ({ guild, message }) => {
   const currentGuildContacts = getContactsOrOwnerOrModerator({
     guild,
-    contact: settings.contact,
   })
 
   console.log(
     currentGuildContacts,
-    currentGuildContacts.map(c => c.user),
+    (currentGuildContacts || []).map(c => c.user),
   )
   if (!currentGuildContacts)
     return console.log('Failed to find contact points in server', guild.name)
