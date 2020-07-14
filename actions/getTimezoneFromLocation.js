@@ -8,7 +8,10 @@ const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=
 module.exports = location => {
   if (!location) return
 
-  location = location.replace(/[<>]/gi, '').replace(/[_　]/gi, ' ')
+  location = location
+    .replace(/[<>]/gi, '')
+    .replace(/[_　]/gi, ' ')
+    .replace(/@!?\d*/gi, '')
 
   // check for UTC command
   const UTCMatch = /^(?:utc|gmt) ?(\+|-)? ?(\d*)/gi.exec(location)
