@@ -30,9 +30,10 @@ module.exports = {
           }
         }
         const userObject = await getUserInGuildFromId(msg.guild, id)
-        acc[timezoneName].usernames.push(
-          userObject.nickname || userObject.user.username,
-        )
+        if (userObject)
+          acc[timezoneName].usernames.push(
+            userObject.nickname || userObject.user.username,
+          )
         return acc
       },
       {},

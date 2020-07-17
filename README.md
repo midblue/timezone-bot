@@ -32,7 +32,7 @@ If you want to run your own copy of this bot, there are several APIs you will ne
 
 Sign up for Google's apis at https://console.cloud.google.com/apis/, and activate the _Geocoding API_ and the _Timezone API_ for your project. Save your API key for later. You'll have to sign up for this with a credit card, but you can set hard limits in the API console to stop it from crossing into paid territory.
 
-Also, sign up for a Discord developer account at https://discordapp.com/developers/applications/. Create a new bot, and name it whatever you want. The discord server owner must add the bot to the channel manually.  
+Also, sign up for a Discord developer account at https://discord.com/developers/applications/. Create a new bot, and name it whatever you want. The discord server owner must add the bot to the channel manually.  
 A great guide for setting up a bot, getting a token, and adding it to a server can be found here: https://discordjs.guide/#/preparations/setting-up-a-bot-application
 
 Next, create a file called `.env` in your project root. This is where you will keep your keys and logins. Structure this file according to .env_example in the repository. Make sure to fill in the appropriate information.
