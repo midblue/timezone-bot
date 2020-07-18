@@ -11,7 +11,7 @@ module.exports = location => {
   location = location
     .replace(/[<>]/gi, '')
     .replace(/[_　]/gi, ' ')
-    .replace(/@!?\d*/gi, '')
+    .replace(/@!?\d* */gi, '')
 
   // check for UTC command
   const UTCMatch = /^(?:utc|gmt) ?(\+|-)? ?(\d*)/gi.exec(location)

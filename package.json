@@ -7,7 +7,7 @@
     "gh": "git push heroku master",
     "hup": "heroku dyno:scale worker=1",
     "hdown": "heroku dyno:scale worker=0",
-    "l": "heroku addons:open timber-logging",
+    "l": "heroku logs --tail",
     "logs": "heroku logs --tail",
     "dev": "nodemon .",
     "start": "node ."

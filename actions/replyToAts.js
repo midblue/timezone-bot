@@ -6,7 +6,6 @@ const {
   getGuildMembers,
 } = require('../scripts/commonFunctions')
 const { send } = require('./replyInChannel')
-const { auth } = require('firebase-admin')
 
 const onlyRespondIfLastSeenIsOlderThanMs = 2 * 60 * 60 * 1000
 const onlyRespondIfNotAnnouncedInMs = 30 * 60 * 1000
