@@ -15,8 +15,8 @@ module.exports = location => {
 
   // check for UTC command
   const UTCMatch = /^(?:utc|gmt) ?(\+|-)? ?(\d*)/gi.exec(location)
-  if (UTCMatch)
-    return {
+  if (UTCMatch) {
+    const locationData = {
       timezoneName: UTCMatch[0].toUpperCase(),
       offset: UTCMatch[2]
         ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area (swapped back now because people seemed to be having issues)
@@ -28,6 +28,9 @@ module.exports = location => {
         .replace('-', '+')
         .replace('.', '-')}`, // swap + and -
     }
+    if (locationData.offset > 14 || locationData.offset < -12) return
+    return locationData
+  }
 
   return new Promise(async (resolve, reject) => {
     const savedData = await db.getLocation(location)
