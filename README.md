@@ -21,10 +21,10 @@ Allows users to set their timezone, then passively notes timezones when appropri
 #### Admin-only commands:
 
 - `t!prefix <new prefix>` to set the prefix for bot commands. Defaults to "t!"
-- `t!setuser <@user> <location name>\` - Set the timezone for a user in the server.
-- `t!removeuser <@user>\` - Remove the timezone for a user in the server.
-- `t!autorespond\` - Toggles auto-responses on/off.
-- `t!adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
+- `t!setuser <@user> <location name>` - Set the timezone for a user in the server.
+- `t!removeuser <@user>` - Remove the timezone for a user in the server.
+- `t!autorespond` - Toggles auto-responses on/off.
+- `t!adminonly` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 
 (All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. 't!time' becomes 't!t'.)
 
