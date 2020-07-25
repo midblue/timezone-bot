@@ -7,10 +7,11 @@ const {
 const { send } = require('../actions/replyInChannel')
 
 module.exports = {
+  ignoreAdminOnly: true,
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:me|m)$`, 'gi')
   },
-  async action({ msg, settings }) {
+  async action({ msg, settings, senderIsAdmin }) {
     console.log(
       `${msg.guild ? msg.guild.name : 'Private Message'} - Me (${
         msg.author.username
@@ -20,12 +21,15 @@ module.exports = {
       guildId: msg.guild.id,
       userId: msg.author.id,
     })
-    if (!foundUser)
-      return send(
-        msg,
-        `You haven't set a timezone for yourself yet! Use "${settings.prefix}set <location name>" to set your timezone.`,
-      )
-    else
+    if (!foundUser) {
+      if (settings.adminOnly && !senderIsAdmin)
+        return send(msg, `There's no timezone set for you.`)
+      else
+        return send(
+          msg,
+          `You haven't set a timezone for yourself yet! Use "${settings.prefix}set <location name>" to set your timezone.`,
+        )
+    } else
       return send(
         msg,
         `Your timezone is set to ${standardizeTimezoneName(

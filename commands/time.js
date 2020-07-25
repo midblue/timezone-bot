@@ -6,18 +6,19 @@ const {
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
+const all = require('./all')
 
 module.exports = {
   expectsUserInRegexSlot: 1,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:time|t) (.*)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:time|t)( ?)(.*)$`, 'gi')
   },
   async action({ msg, settings, match, typedUser }) {
     console.log(
-      `${msg.guild.name} - Time for ${match[1]} (${msg.author.username})`,
+      `${msg.guild.name} - Time for ${match[2]} (${msg.author.username})`,
     )
 
-    if (!match[1])
+    if (!match[1] || !match[2])
       return send(
         msg,
         `Use this command in the format \`${settings.prefix}time <user, city, or country name>\` to see the time in a specific location or for a specific user.`,
@@ -47,10 +48,18 @@ module.exports = {
         )
     }
 
+    // some people type "all" here expecting time for all users. let's oblige them.
+    if (
+      match[2].toLowerCase() === 'all' ||
+      match[2].toLowerCase() === 'users' ||
+      match[2].toLowerCase() === 'allusers'
+    )
+      return all.action({ msg, settings, match, typedUser })
+
     // otherwise, default back to assuming it's a location
-    const foundTimezone = await getTimezoneFromLocation(match[1])
+    const foundTimezone = await getTimezoneFromLocation(match[2])
     if (!foundTimezone)
-      return send(msg, `Sorry, I couldn't find a timezone for ${match[1]}.`)
+      return send(msg, `Sorry, I couldn't find a timezone for ${match[2]}.`)
 
     send(
       msg,

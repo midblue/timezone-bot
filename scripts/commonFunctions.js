@@ -19,7 +19,6 @@ module.exports = {
 
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
-    // todo check for @names too
     const usersInGuild = await getGuildMembers({ msg })
     const usersInGuildWithSearchString = usersInGuild.map(user => ({
       ...user,

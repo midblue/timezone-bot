@@ -9,7 +9,7 @@ const { send } = require('../actions/replyInChannel')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:all|users|u|a)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:all|users|allusers|u|a)$`, 'gi')
   },
   async action({ msg, settings, match, typedUser }) {
     console.log(`${msg.guild.name} - All users (${msg.author.username})`)
@@ -43,30 +43,41 @@ module.exports = {
       await timezonesWithUsers,
     ).sort((a, b) => a.offset - b.offset)
 
-    let outputString = timezonesWithUsersAsSortedArray.reduce(
-      (acc, timezone) => {
-        const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
-          timezone.locale,
-          true,
-        )} - ${timezone.timezoneName} (UTC${timezone.offset >= 0 ? '+' : ''}${
-          timezone.offset
-        })`
-        const body =
-          '\n     ' +
-          timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n     ') +
-          '\n\n'
-        return acc + header + body
-      },
-      '',
-    )
-    outputString = outputString.substring(0, outputString.length - 2)
+    //  character limit is 2000, so, batching.
+    let outputStrings = [''],
+      currentString = 0
+    timezonesWithUsersAsSortedArray.forEach(timezone => {
+      if (outputStrings[currentString].length >= 1500) {
+        outputStrings[currentString] = outputStrings[currentString].substring(
+          0,
+          outputStrings[currentString].length - 2,
+        )
+        currentString++
+        outputStrings[currentString] = ''
+      }
 
-    if (!outputString)
+      const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
+        timezone.locale,
+        true,
+      )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
+      const body =
+        '\n     ' +
+        timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n     ') +
+        '\n\n'
+      return (outputStrings[currentString] += header + body)
+    }, '')
+
+    outputStrings[currentString] = outputStrings[currentString].substring(
+      0,
+      outputStrings[currentString].length - 2,
+    )
+
+    if (outputStrings[0] === '')
       return send(
         msg,
         `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
       )
 
-    send(msg, outputString, true)
+    outputStrings.forEach(s => send(msg, s, true))
   },
 }

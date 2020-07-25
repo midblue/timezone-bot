@@ -11,18 +11,22 @@ Allows users to set their timezone, then passively notes timezones when appropri
 
 ## Commands:
 
-- `t!time <user, city, or country name>` to see the current time for a specific user or in a specific place.
-- `t!timein <city or country name>` to see the current time in a specific place.
+- `t!time <user or location name>` to see the current time for a specific user or in a specific place.
 - `t!set <city or country name>` to set your own timezone. (UTC codes work, e.g. 'UTC+3', 'UTC-8')
 - `t!users` or `t!all` to see all users' set timezones.
+- `t!me` to see your set timezone.
 - `t!removeme` to delete your set timezone.
-- `t!help` to show a message listing all commands.
+- `t!info` or `t!help` to show a message listing all commands.
 
 #### Admin-only commands:
 
-- `t!prefix <t!/t-/t~>` to set the prefix for bot commands to one of these 3 options. Defaults to "t!"
+- `t!prefix <new prefix>` to set the prefix for bot commands. Defaults to "t!"
+- `t!setuser <@user> <location name>\` - Set the timezone for a user in the server.
+- `t!removeuser <@user>\` - Remove the timezone for a user in the server.
+- `t!autorespond\` - Toggles auto-responses on/off.
+- `t!adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 
-(All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. '!time' becomes 't!t'.)
+  (All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. 't!time' becomes 't!t'.)
 
 ---
 

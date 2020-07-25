@@ -5,11 +5,12 @@ const {
   getUserInGuildFromId,
   getLightEmoji,
   currentTimeAt,
+  getLabelFromUser,
 } = require('../scripts/commonFunctions')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:set|s) (.*)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:set|s)(?!user) (.*)$`, 'gi')
   },
   async action({ msg, settings, match }) {
     console.log(
@@ -33,11 +34,11 @@ module.exports = {
     const authorInGuild = await getUserInGuildFromId(msg.guild, msg.author.id)
     send(
       msg,
-      `Timezone for ${
-        authorInGuild.nickname || authorInGuild.user.username
-      } set to ${foundTimezone.timezoneName}. (${getLightEmoji(
+      `Timezone for ${getLabelFromUser(authorInGuild)} set to ${
+        foundTimezone.timezoneName
+      }. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
-      )}${currentTimeAt(foundTimezone.location)})`,
+      )})`,
     )
   },
 }

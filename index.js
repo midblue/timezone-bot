@@ -1,3 +1,12 @@
+// todo
+/*
+settings for admin-only auto-responses
+remove ___ for admins
+moment
+*/
+
+// test realm is 605053799404666880
+
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
@@ -33,7 +42,8 @@ client.on('ready', async () => {
 
 client.on('message', async msg => {
   messagesScannedSinceLastAnnounce++
-  if (!msg.author || msg.author.id === process.env.BOT_ID) return
+  if (!msg.author || msg.author.id === process.env.BOT_ID || msg.author.bot)
+    return
   if (!msg.guild || !msg.guild.available) return privateMessage(msg)
   return guildMessage(msg, client)
 })

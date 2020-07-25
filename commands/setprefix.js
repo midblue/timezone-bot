@@ -4,32 +4,30 @@ const { send } = require('../actions/replyInChannel')
 module.exports = {
   admin: true,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:prefix|setprefix|p) ?(.*)`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:prefix|setprefix|p)( ?)(.*)`, 'gi')
   },
   async action({ msg, settings, match }) {
-    // todo across the board, make blank commands that expect an operand respond explaining how to use it
     console.log(
       `${msg.guild ? msg.guild.name : 'Private Message'} - Prefix > ${
-        match[1]
+        match[2]
       } (${msg.author.username})`,
     )
-    const newPrefix = match[1]
-    if (!newPrefix)
+    const previousPrefix = settings.prefix
+    let newPrefix = match[2]
+    if (!newPrefix || !match[1])
       return send(
         msg,
         `The current prefix is: \`${settings.prefix}\`
-Type \`${settings.prefix}prefix <t!/t-/t~>\` to set the command prefix for this bot to one of the options listed.`,
+Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for this bot.`,
         'none',
       )
 
-    if (!['t!', 't-', 't~'].includes(newPrefix))
-      return send(msg, `The command prefix must be either t!, t-, or t~.`)
-
+    newPrefix = newPrefix.substring(0, 12)
     await db.setGuildSettings({ guildId: msg.guild.id, prefix: newPrefix })
 
     send(
       msg,
-      `The timezone command prefix been changed from \`${settings.prefix}\` to \`${newPrefix}\``,
+      `The timezone command prefix been changed from \`${previousPrefix}\` to \`${newPrefix}\``,
       'none',
     )
   },

@@ -3,6 +3,7 @@ const { getAuthorDisplayName } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 
 module.exports = {
+  ignoreAdminOnly: true,
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:removeme|r)$`, 'gi')
   },

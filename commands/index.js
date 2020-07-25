@@ -24,6 +24,14 @@ module.exports = async function (msg, settings, client) {
         msg.guild &&
         msg.guild.member(msg.author) &&
         msg.guild.member(msg.author).permissions.has('ADMINISTRATOR')
+      if (
+        settings.adminOnly === true &&
+        !command.ignoreAdminOnly &&
+        !senderIsAdmin
+      ) {
+        send(msg, `This command is currently disabled for non-admins.`)
+        return true
+      }
       if (command.admin && !senderIsAdmin) {
         send(msg, `That command is only available to server admins.`)
         return true
@@ -45,6 +53,7 @@ module.exports = async function (msg, settings, client) {
         settings: settings || defaultServerSettings,
         match,
         typedUser,
+        senderIsAdmin,
         sender,
         client,
       })
@@ -53,5 +62,5 @@ module.exports = async function (msg, settings, client) {
     }
   }
 
-  await replyToAts(msg)
+  if (settings.autoRespond !== false) await replyToAts(msg)
 }
