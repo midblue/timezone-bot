@@ -26,7 +26,7 @@ Allows users to set their timezone, then passively notes timezones when appropri
 - `t!autorespond\` - Toggles auto-responses on/off.
 - `t!adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 
-  (All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. 't!time' becomes 't!t'.)
+(All commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. 't!time' becomes 't!t'.)
 
 ---
 
