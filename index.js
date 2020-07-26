@@ -1,8 +1,7 @@
 // todo
 /*
-settings for admin-only auto-responses
-remove ___ for admins
 moment
+put back accurate UTC codes
 */
 
 // test realm is 605053799404666880

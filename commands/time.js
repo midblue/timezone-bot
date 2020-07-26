@@ -17,6 +17,7 @@ module.exports = {
     console.log(
       `${msg.guild.name} - Time for ${match[2]} (${msg.author.username})`,
     )
+    console.log(match[1] + '/' + match[2])
 
     if (!match[1] || !match[2])
       return send(

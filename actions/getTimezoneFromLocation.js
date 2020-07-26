@@ -7,9 +7,10 @@ const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=
 
 module.exports = location => {
   if (!location) return
+  console.log(location)
 
   location = location
-    .replace(/[<>]/gi, '')
+    .replace(/[<>\[\]]/gi, '')
     .replace(/[_　]/gi, ' ')
     .replace(/@!?\d* */gi, '')
 
@@ -31,6 +32,8 @@ module.exports = location => {
     if (locationData.offset > 14 || locationData.offset < -12) return
     return locationData
   }
+
+  console.log(location)
 
   return new Promise(async (resolve, reject) => {
     const savedData = await db.getLocation(location)
