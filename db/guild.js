@@ -50,13 +50,20 @@ module.exports = function (firestore) {
       return settings
     },
 
-    async setGuildSettings({ guildId, prefix, autoRespond, adminOnly }) {
+    async setGuildSettings({
+      guildId,
+      prefix,
+      autoRespond,
+      adminOnly,
+      deleteCommand,
+    }) {
       const document = firestore.doc(`guilds/${guildId}`)
       const existingSettings = await this.getGuildSettings({ guildId })
       const newSettings = existingSettings
       if (prefix !== undefined) newSettings.prefix = prefix
       if (autoRespond !== undefined) newSettings.autoRespond = autoRespond
       if (adminOnly !== undefined) newSettings.adminOnly = adminOnly
+      if (deleteCommand !== undefined) newSettings.deleteCommand = deleteCommand
 
       memoedGuildData.updateProp(guildId, 'settings', newSettings)
       await document.update({ settings: newSettings })

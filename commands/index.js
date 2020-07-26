@@ -58,6 +58,9 @@ module.exports = async function (msg, settings, client) {
         client,
       })
 
+      if (settings.deleteCommand && !command.doNotDelete)
+        msg.delete().catch(e => console.log('failed to delete message:', e))
+
       return true
     }
   }

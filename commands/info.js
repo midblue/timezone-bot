@@ -30,7 +30,8 @@ module.exports = {
 \`${settings.prefix}setuser <@user> <location name>\` - Set the timezone for a user in the server.
 \`${settings.prefix}removeuser <@user>\` - Remove the timezone for a user in the server.
 \`${settings.prefix}autorespond\` - Toggles auto-responses on/off.
-\`${settings.prefix}adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)`
+\`${settings.prefix}adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
+\`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.`
 
     const fields = []
 
