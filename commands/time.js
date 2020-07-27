@@ -9,7 +9,7 @@ const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 const all = require('./all')
 
 module.exports = {
-  expectsUserInRegexSlot: 1,
+  expectsUserInRegexSlot: 2,
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:time|t)( ?)(.*)$`, 'gi')
   },
