@@ -2,7 +2,7 @@ const { getUserInGuildFromText } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const defaultServerSettings = require('../scripts/defaultServerSettings')
 const replyToAts = require('../actions/replyToAts')
-const contactGuildAdmin = require('./contactGuildAdmin')
+const contactGuildAdmin = require('../actions/contactGuildAdmin')
 
 // get all commands from files
 const fs = require('fs')
