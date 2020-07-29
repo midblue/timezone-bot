@@ -3,7 +3,9 @@ const { getGuildMembers } = require('../scripts/commonFunctions')
 
 module.exports = async guild => {
   if (await db.hasGuild({ guildId: guild.id }))
-    return console.log('Was re-added to a guild: ' + guild.name)
+    return console.log(
+      '> > > > > >           Was re-added to a guild: ' + guild.name,
+    )
 
   await db.addGuild({
     guildId: guild.id,
