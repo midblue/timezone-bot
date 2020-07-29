@@ -9,7 +9,7 @@ module.exports = location => {
   if (!location) return
 
   location = location
-    .replace(/[<>\[\]]/gi, '')
+    .replace(/[<>\[\]()]/gi, '')
     .replace(/[_　]/gi, ' ')
     .replace(/@!?\d* */gi, '')
 

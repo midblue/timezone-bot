@@ -106,12 +106,10 @@ async function getGuildMembers({ msg, guild }) {
   try {
     members = (await guild.members.fetch()).array()
   } catch (e) {
-    console.log(
-      'error getting guild members, falling back to cache',
-      e,
-      guild.members.cache.array().length,
-    )
     members = guild.members.cache.array()
+    console.log(
+      `failed to get ${members.length} guild members, falling back to cache`,
+    )
   }
   return members
 }

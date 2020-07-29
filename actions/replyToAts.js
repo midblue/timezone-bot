@@ -41,8 +41,9 @@ module.exports = async msg => {
             fullMember.lastMessageID,
           )
         } catch (e) {
-          if (e.code !== 10008) {
-            // ignoring 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
+          if (e.code !== 10008 && e.code !== 50001) {
+            // ignoring 10008 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
+            // ignoring 50001 'Missing Permissions' error
             console.log(
               'Failed to get last message for',
               fullMember.nickname || fullMember.user.username,
