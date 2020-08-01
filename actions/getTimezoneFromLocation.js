@@ -1,6 +1,7 @@
 const axios = require('axios')
 const db = require('../db/firestore')
 const { standardizeTimezoneName } = require('../scripts/commonFunctions')
+const timezoneCodes = require('../scripts/timezoneCodes')
 
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
 const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=${process.env.GOOGLE_API_KEY}`
@@ -29,6 +30,23 @@ module.exports = location => {
         .replace('.', '-')}`, // swap + and -
     }
     if (locationData.offset > 14 || locationData.offset < -12) return
+    return locationData
+  }
+
+  // check for literal timezone code
+  const timezoneCodeName = location.replace(/\s*/g, '').toUpperCase()
+  const foundTimezoneCode = timezoneCodes[timezoneCodeName]
+  if (foundTimezoneCode !== undefined) {
+    const locationData = {
+      timezoneName: timezoneCodeName,
+      offset: foundTimezoneCode,
+      location: `Etc/GMT${
+        foundTimezoneCode >= 0 ? '+' : ''
+      }${foundTimezoneCode}`
+        .replace('+', '.')
+        .replace('-', '+')
+        .replace('.', '-'), // swap + and -,
+    }
     return locationData
   }
 

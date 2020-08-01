@@ -58,6 +58,7 @@ module.exports = {
   },
 
   currentTimeAt(location, leadingZero = false) {
+    // todo does this support .5s in UTC codes?
     const localeString = new Date().toLocaleTimeString(undefined, {
       timeZone: location.replace('UTC', 'Etc/GMT'),
       weekday: 'short',
