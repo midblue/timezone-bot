@@ -43,9 +43,9 @@ module.exports = {
       msg,
       `Timezone for ${getLabelFromUser(typedUser)} set to ${
         foundTimezone.timezoneName
-      }. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
+      } by admin. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
-      )})`,
+      )}) `,
     )
   },
 }

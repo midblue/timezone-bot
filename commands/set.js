@@ -7,17 +7,34 @@ const {
   currentTimeAt,
   getLabelFromUser,
 } = require('../scripts/commonFunctions')
+const allCommands = require('./index')
 
 module.exports = {
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:set|s)(?!user) (.*)$`, 'gi')
   },
-  async action({ msg, settings, match }) {
+  async action({ msg, settings, match, client }) {
     console.log(
       `${msg.guild.name} - ${msg.author.username} > set to ${match[1]}`,
     )
-
+    // todo check for admin trying to set someone else
     if (!match[1])
+      return send(
+        msg,
+        `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`,
+      )
+
+    // admin accidentally used this command to try to set someone
+    const hasAt = match[1].indexOf('<@') >= 0
+    const hasSpaceAfterAt = match[1].lastIndexOf(' ') > hasAt
+    if (hasAt && hasSpaceAfterAt) {
+      const commandRegex = new RegExp(`${settings.prefix}[^ ]* `, 'gi')
+      msg.content = msg.content.replace(
+        commandRegex,
+        `${settings.prefix}setuser `,
+      )
+      return allCommands(msg, settings, client)
+    } else if (hasAt)
       return send(
         msg,
         `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`,
