@@ -1,17 +1,9 @@
 const defaultServerSettings = require('../scripts/defaultServerSettings')
 const memo = require('../scripts/memo')
-// const { getUserInGuildFromId } = require('../scripts/commonFunctions')
 
-const memoedGuildData = memo(3000)
+const memoedGuildData = memo(100)
 
 module.exports = function (firestore) {
-  // firestore
-  //   .collection('guilds')
-  //   .get()
-  //   .then(snapshot => {
-  //     console.log(snapshot.size, 'guilds found in database.')
-  //   })
-
   return {
     async hasGuild({ guildId }) {
       const document = firestore.doc(`guilds/${guildId}`)

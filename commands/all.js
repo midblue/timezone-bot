@@ -16,24 +16,27 @@ module.exports = {
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
+    // todo empty ones showing up
     const timezonesWithUsers = await Object.keys(allUsers).reduce(
       async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
-        const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-        if (!acc[timezoneName]) {
-          acc[timezoneName] = {
-            timezoneName,
-            locale: userStub.location,
-            usernames: [],
-            offset: userStub.offset,
-          }
-        }
         const userObject = await getUserInGuildFromId(msg.guild, id)
-        if (userObject)
+
+        if (userObject) {
+          const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+          if (!acc[timezoneName]) {
+            acc[timezoneName] = {
+              timezoneName,
+              locale: userStub.location,
+              usernames: [],
+              offset: userStub.offset,
+            }
+          }
           acc[timezoneName].usernames.push(
             userObject.nickname || userObject.user.username,
           )
+        }
         return acc
       },
       {},
