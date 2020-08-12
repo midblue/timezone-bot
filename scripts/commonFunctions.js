@@ -76,7 +76,7 @@ module.exports = {
   getLightEmoji(location) {
     const hour = new Date(
       new Date().toLocaleString(undefined, {
-        timeZone: location.replace('UTC', 'Etc/GMT'),
+        timeZone: location.replace(/UTC\s*/gi, 'Etc/GMT'),
       }),
     ).getHours()
     if (hour <= 5) return '🌙'

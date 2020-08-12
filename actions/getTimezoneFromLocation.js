@@ -25,6 +25,7 @@ module.exports = location => {
       location: `Etc/${UTCMatch[0]
         .toUpperCase()
         .replace('UTC', 'GMT')
+        .replace(/\s/g, '')
         .replace('+', '.')
         .replace('-', '+')
         .replace('.', '-')}`, // swap + and -

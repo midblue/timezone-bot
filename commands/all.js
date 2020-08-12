@@ -9,7 +9,10 @@ const { send } = require('../actions/replyInChannel')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:all|users|allusers|u|a)$`, 'gi')
+    return new RegExp(
+      `^${settings.prefix}(?:all|users|allusers|list|u|a)$`,
+      'gi',
+    )
   },
   async action({ msg, settings, match, typedUser }) {
     console.log(`${msg.guild.name} - All users (${msg.author.username})`)
