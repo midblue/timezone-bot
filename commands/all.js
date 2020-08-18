@@ -15,7 +15,11 @@ module.exports = {
     )
   },
   async action({ msg, settings, match, typedUser }) {
-    console.log(`${msg.guild.name} - All users (${msg.author.username})`)
+    console.log(
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - All users (${msg.author.username})`,
+    )
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 

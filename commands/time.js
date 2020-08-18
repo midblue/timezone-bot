@@ -7,15 +7,18 @@ const {
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 const all = require('./all')
+const me = require('./me')
 
 module.exports = {
   expectsUserInRegexSlot: 2,
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:time|t)( ?)(.*)$`, 'gi')
   },
-  async action({ msg, settings, match, typedUser }) {
+  async action({ msg, settings, match, typedUser, senderIsAdmin }) {
     console.log(
-      `${msg.guild.name} - Time for ${match[2]} (${msg.author.username})`,
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Time for ${match[2]} (${msg.author.username})`,
     )
 
     if (!match[1] || !match[2])
@@ -55,6 +58,10 @@ module.exports = {
       match[2].toLowerCase() === 'allusers'
     )
       return all.action({ msg, settings, match, typedUser })
+
+    // some people type "me" here expecting their timezone. let's oblige them.
+    if (match[2].toLowerCase() === 'me')
+      return me.action({ msg, settings, senderIsAdmin })
 
     // otherwise, default back to assuming it's a location
     const foundTimezone = await getTimezoneFromLocation(match[2])

@@ -9,9 +9,9 @@ module.exports = {
   },
   async action({ msg }) {
     console.log(
-      `${msg.guild ? msg.guild.name : 'Private Message'} - Remove ${
-        msg.author.username
-      }`,
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Remove ${msg.author.username}`,
     )
     db.removeUserFromGuild({
       guildId: msg.guild.id,

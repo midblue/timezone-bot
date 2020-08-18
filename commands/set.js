@@ -15,7 +15,9 @@ module.exports = {
   },
   async action({ msg, settings, match, client }) {
     console.log(
-      `${msg.guild.name} - ${msg.author.username} > set to ${match[1]}`,
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - ${msg.author.username} > set to ${match[1]}`,
     )
     // todo check for admin trying to set someone else
     if (!match[1])

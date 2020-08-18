@@ -13,9 +13,9 @@ module.exports = {
   },
   async action({ msg, settings, senderIsAdmin }) {
     console.log(
-      `${msg.guild ? msg.guild.name : 'Private Message'} - Me (${
-        msg.author.username
-      })`,
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Me (${msg.author.username})`,
     )
     const foundUser = await db.getUserInGuildFromId({
       guildId: msg.guild.id,

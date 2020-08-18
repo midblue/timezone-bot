@@ -16,6 +16,7 @@ fs.readdir('./commands', (err, files) => {
 
 module.exports = async function (msg, settings, client) {
   const sender = msg.author
+  if (settings.prefix === '?') console.log(msg.guild.name, msg.guild.id)
   for (let command of commands) {
     const match = command
       .regex(settings || defaultServerSettings)

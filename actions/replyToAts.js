@@ -120,7 +120,9 @@ module.exports = async msg => {
   outputString += '.'
 
   console.log(
-    `${msg.guild.name} - Responding to ${usersToList.length} @${
+    `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+      msg.guild ? ` (${msg.guild.id})` : ''
+    } - Responding to ${usersToList.length} @${
       usersToList.length === 1 ? '' : 's'
     } (${msg.author.username} > ${usersToList
       .map(u => u.displayName)
