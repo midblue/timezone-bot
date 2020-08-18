@@ -22,6 +22,42 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
         'none',
       )
 
+    const illegalCharacters = [
+      '?',
+      '\\',
+      '.',
+      '^',
+      '$',
+      '`',
+      '{',
+      '}',
+      '[',
+      ']',
+      '(',
+      ')',
+      ':',
+      '*',
+      '|',
+      '+',
+    ]
+    let foundIllegalCharacter = false
+    for (let char of illegalCharacters)
+      if (newPrefix.indexOf(char) > -1) foundIllegalCharacter = char
+    if (foundIllegalCharacter === '`')
+      return send(
+        msg,
+        'The character `' +
+          foundIllegalCharacter +
+          '` is not allowed in prefixes. Please try again. (Your prefix has not been changed.)',
+        'none',
+      )
+    if (foundIllegalCharacter)
+      return send(
+        msg,
+        `The character \`${foundIllegalCharacter}\` is not allowed in prefixes. Please try again. (Your prefix has not been changed.)`,
+        'none',
+      )
+
     newPrefix = newPrefix.substring(0, 12)
     await db.setGuildSettings({ guildId: msg.guild.id, prefix: newPrefix })
 
