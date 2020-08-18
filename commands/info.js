@@ -20,7 +20,8 @@ module.exports = {
 
     const publicCommands = `\`${settings.prefix}time <user or location name>\` - See the current time for a specific user or in a specific place.
 \`${settings.prefix}set <location name>\` - Set your own timezone. (UTC codes work, but location names work better.)
-\`${settings.prefix}users\` - See timezones for all users in the current channel. (\`${settings.prefix}all\` also works)`
+\`${settings.prefix}users\` - See timezones for all users. (\`${settings.prefix}all\` also works)
+\`${settings.prefix}users here\` - See timezones for all users in the current channel.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
 \`${settings.prefix}removeme\` - Delete your set timezone.

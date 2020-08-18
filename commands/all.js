@@ -12,7 +12,7 @@ const Discord = require('discord.js')
 module.exports = {
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:all|users|allusers|list|u|a)$`,
+      `^${settings.prefix}(?:all|users|allusers|list|u|a) ?(.*)?$`,
       'gi',
     )
   },
@@ -23,10 +23,14 @@ module.exports = {
       } - All users (${msg.author.username})`,
     )
 
+    const onlyHere =
+      (match[1] || '').toLowerCase() === 'here' ||
+      (match[1] || '').toLowerCase() === 'h'
+
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
     const timezonesWithUsers = await Object.keys(allUsers)
-      .filter(id => msg.channel.members.get(id)) // only members in this channel
+      .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
