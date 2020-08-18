@@ -29,6 +29,12 @@ module.exports = {
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
+    if ((await Object.keys(allUsers)).length === 0)
+      return send(
+        msg,
+        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+      )
+
     const timezonesWithUsers = await Object.keys(allUsers)
       .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
       .reduce(async (acc, id) => {
@@ -96,6 +102,8 @@ module.exports = {
     ).sort((a, b) => a.offset - b.offset)
 
     //  character limit is 2000, so, batching.
+    if (onlyHere)
+      send(msg, `Users with saved timezones in <#${msg.channel.id}>:`, 'none')
     let outputStrings = [''],
       currentString = 0
     timezonesWithUsersAsSortedArray.forEach(timezone => {
@@ -123,12 +131,6 @@ module.exports = {
       0,
       outputStrings[currentString].length - 2,
     )
-
-    if (outputStrings[0] === '')
-      return send(
-        msg,
-        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
-      )
 
     outputStrings.forEach(s => send(msg, s, true))
   },
