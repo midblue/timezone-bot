@@ -6,6 +6,8 @@ const {
   standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
+const time = require('./time')
+const Discord = require('discord.js')
 
 module.exports = {
   regex(settings) {
@@ -14,7 +16,7 @@ module.exports = {
       'gi',
     )
   },
-  async action({ msg, settings, match, typedUser }) {
+  async action({ msg, settings, match }) {
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
         msg.guild ? ` (${msg.guild.id})` : ''
@@ -23,9 +25,9 @@ module.exports = {
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
-    // todo empty ones showing up
-    const timezonesWithUsers = await Object.keys(allUsers).reduce(
-      async (acc, id) => {
+    const timezonesWithUsers = await Object.keys(allUsers)
+      .filter(id => msg.channel.members.get(id)) // only members in this channel
+      .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
         const userObject = await getUserInGuildFromId(msg.guild, id)
@@ -45,9 +47,45 @@ module.exports = {
           )
         }
         return acc
+      }, {})
+
+    /*
+    const hoursWithTimezonesAndUsers = Object.values(timezonesWithUsers).reduce(
+      (hours, timezone) => {
+        let hour = currentTimeAt(timezone.locale)
+        if (!hours[hour]) hours[hour] = { timezones: [], usernames: [] }
+        hours[hour].timezones.push({ ...timezone, usernames: undefined })
+        hours[hour].usernames.push(...timezone.usernames)
+        hours[hour].timeString = hour
+        hours[hour].emoji = getLightEmoji(timezone.locale)
+        return hours
       },
       {},
     )
+    const hoursWithTimezonesAndUsersAsSortedArray = Object.values(
+      hoursWithTimezonesAndUsers,
+    ).sort((a, b) => a.timezones[0].offset - b.timezones[0].offset)
+
+    const fields = []
+    hoursWithTimezonesAndUsersAsSortedArray.forEach(time => {
+      const header = `${time.emoji}${time.timeString}`
+      const body =
+        `**${time.timezones.map(t => t.timezoneName).join(', ')}**\n` +
+        `${time.usernames.sort((a, b) => (b > a ? -1 : 1)).join(', ')}\n\u200B`
+      fields.push({ name: header, value: body, inline: true })
+    }, '')
+
+    if (fields.length === 0)
+      return send(
+        msg,
+        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+      )
+
+    const richEmbed = new Discord.MessageEmbed()
+      .setColor('#7B6FE5')
+      .addFields(...fields)
+		return send(msg, richEmbed)
+		*/
 
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,

@@ -25,10 +25,8 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
     const illegalCharacters = [
       '?',
       '\\',
-      '.',
       '^',
       '$',
-      '`',
       '{',
       '}',
       '[',
@@ -39,6 +37,8 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
       '*',
       '|',
       '+',
+      '.',
+      '`',
     ]
     let foundIllegalCharacter = false
     for (let char of illegalCharacters)
@@ -46,15 +46,19 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
     if (foundIllegalCharacter === '`')
       return send(
         msg,
-        'The character `' +
-          foundIllegalCharacter +
-          '` is not allowed in prefixes. Please try again. (Your prefix has not been changed.)',
+        `The backtick character is not allowed in prefixes. Please try a different prefix.
+(Disallowed characters are \`${illegalCharacters.join(
+          '',
+        )} and the backtick character. Your prefix has not been changed.)`,
         'none',
       )
     if (foundIllegalCharacter)
       return send(
         msg,
-        `The character \`${foundIllegalCharacter}\` is not allowed in prefixes. Please try again. (Your prefix has not been changed.)`,
+        `The character \`${foundIllegalCharacter}\` is not allowed in prefixes. Please try a different prefix.
+(Disallowed characters are \`${illegalCharacters.join(
+          '',
+        )} and the backtick character. Your prefix has not been changed.)`,
         'none',
       )
 
