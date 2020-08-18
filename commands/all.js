@@ -17,15 +17,17 @@ module.exports = {
     )
   },
   async action({ msg, settings, match }) {
-    console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - All users (${msg.author.username})`,
-    )
-
     const onlyHere =
       (match[1] || '').toLowerCase() === 'here' ||
       (match[1] || '').toLowerCase() === 'h'
+
+    console.log(
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - All users ${onlyHere ? `in #${msg.channel.name} ` : ''}(${
+        msg.author.username
+      })`,
+    )
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
 
