@@ -101,16 +101,22 @@ async function getUserInGuildFromId(guild, id) {
   return usersInGuild.find(user => user.user.id == id)
 }
 
-async function getGuildMembers({ msg, guild }) {
+async function getGuildMembers({ msg, guild, ids }) {
   if (msg) guild = msg.guild
   let members = []
-  try {
-    members = (await guild.members.fetch()).array()
-  } catch (e) {
-    members = guild.members.cache.array()
-    console.log(
-      `failed to get ${members.length} guild members, falling back to cache`,
-    )
+  if (!ids) {
+    // just get everything
+    try {
+      members = (await guild.members.fetch()).array()
+    } catch (e) {
+      members = guild.members.cache.array()
+      console.log(
+        `failed to get ${members.length} guild members, falling back to cache`,
+      )
+    }
   }
+  // get specific ids
+  else members = await guild.members.fetch({ user: ids })
+
   return members
 }

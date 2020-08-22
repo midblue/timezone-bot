@@ -27,46 +27,42 @@ module.exports = async msg => {
     .map(id => (savedUsers[id] ? { ...savedUsers[id], id } : null))
     .filter(u => u)
 
-  const userDataWithLastMessageTime = (await getGuildMembers({ msg })).map(
-    async fullMember => {
-      if (fullMember.id === msg.author.id) return
-      const found = matchedUsers.find(
-        matched => matched.id === fullMember.user.id,
-      )
-      if (!found) return
-      let lastMessage
-      if (fullMember.lastMessageID) {
-        try {
-          lastMessage = await msg.channel.messages.fetch(
-            fullMember.lastMessageID,
+  const userDataWithLastMessageTime = (
+    await getGuildMembers({ msg, ids: mentionedUserIds })
+  ).map(async fullMember => {
+    if (fullMember.id === msg.author.id) return
+    let lastMessage
+    const found = matchedUsers.find(
+      matched => matched.id === fullMember.user.id,
+    )
+    if (!found) return
+    if (fullMember.lastMessageID) {
+      try {
+        lastMessage = await msg.channel.messages.fetch(fullMember.lastMessageID)
+      } catch (e) {
+        if (e.code !== 10008 && e.code !== 50001) {
+          // ignoring 10008 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
+          // ignoring 50001 'Missing Permissions' error
+          console.log(
+            'Failed to get last message for',
+            fullMember.nickname || fullMember.user.username,
+            e,
           )
-        } catch (e) {
-          if (e.code !== 10008 && e.code !== 50001) {
-            // ignoring 10008 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
-            // ignoring 50001 'Missing Permissions' error
-            console.log(
-              'Failed to get last message for',
-              fullMember.nickname || fullMember.user.username,
-              e,
-            )
-          }
         }
       }
-      return {
-        ...found,
-        displayName: fullMember.nickname || fullMember.user.username,
-        lastMessageTime: lastMessage
-          ? lastMessage.editedAt || lastMessage.createdAt
-          : 0,
-      }
-    },
-  )
+    }
+    return {
+      ...found,
+      displayName: fullMember.nickname || fullMember.user.username,
+      lastMessageTime: lastMessage
+        ? lastMessage.editedAt || lastMessage.createdAt
+        : 0,
+    }
+  })
 
   let usersToList = (await Promise.all(userDataWithLastMessageTime)).filter(
     u => u,
   )
-
-  // todo double check that these work as they should
 
   // filter out the author themselves
   usersToList = usersToList.filter(u => u.id !== authorId)

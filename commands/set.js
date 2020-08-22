@@ -19,7 +19,7 @@ module.exports = {
         msg.guild ? ` (${msg.guild.id})` : ''
       } - ${msg.author.username} > set to ${match[1]}`,
     )
-    // todo check for admin trying to set someone else
+
     if (!match[1])
       return send(
         msg,
