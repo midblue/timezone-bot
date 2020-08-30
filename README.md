@@ -2,7 +2,7 @@
 
 A simple timezone bot for Discord servers.
 
-### [Click here to add it to your server!](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot)
+### [Click here to add it to your server!](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot)
 
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.
