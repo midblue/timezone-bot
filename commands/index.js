@@ -8,7 +8,7 @@ const contactGuildAdmin = require('../actions/contactGuildAdmin')
 const fs = require('fs')
 const commands = []
 fs.readdir('./commands', (err, files) => {
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.endsWith('.js') || file === 'index.js') return
     commands.push(require(`./${file}`))
   })
@@ -31,11 +31,21 @@ module.exports = async function (msg, settings, client) {
         !command.ignoreAdminOnly &&
         !senderIsAdmin
       ) {
-        send(msg, `This command is currently disabled for non-admins.`)
+        send(
+          msg,
+          `This command is currently disabled for non-admins.`,
+          false,
+          settings,
+        )
         return true
       }
       if (command.admin && !senderIsAdmin) {
-        send(msg, `That command is only available to server admins.`)
+        send(
+          msg,
+          `That command is only available to server admins.`,
+          false,
+          settings,
+        )
         return true
       }
 
@@ -61,7 +71,7 @@ module.exports = async function (msg, settings, client) {
       })
 
       if (settings.deleteCommand && !command.doNotDelete)
-        msg.delete().catch(e => {
+        msg.delete().catch((e) => {
           console.log('failed to delete message:', e.code)
           contactGuildAdmin({
             guild: msg.guild,
@@ -73,5 +83,5 @@ module.exports = async function (msg, settings, client) {
     }
   }
 
-  if (settings.autoRespond !== false) await replyToAts(msg)
+  if (settings.autoRespond !== false) await replyToAts(msg, settings)
 }

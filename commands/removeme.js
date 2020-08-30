@@ -7,7 +7,7 @@ module.exports = {
   regex(settings) {
     return new RegExp(`^${settings.prefix}(?:removeme|r)$`, 'gi')
   },
-  async action({ msg }) {
+  async action({ msg, settings }) {
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
         msg.guild ? ` (${msg.guild.id})` : ''
@@ -22,6 +22,8 @@ module.exports = {
       `Removed you (${await getAuthorDisplayName(
         msg,
       )}) from timezone tracking.`,
+      false,
+      settings,
     )
   },
 }

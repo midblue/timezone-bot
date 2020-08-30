@@ -23,11 +23,13 @@ module.exports = {
     })
     if (!foundUser) {
       if (settings.adminOnly && !senderIsAdmin)
-        return send(msg, `There's no timezone set for you.`)
+        return send(msg, `There's no timezone set for you.`, false, settings)
       else
         return send(
           msg,
           `You haven't set a timezone for yourself yet! Use "${settings.prefix}set <location name>" to set your timezone.`,
+          false,
+          settings,
         )
     } else
       return send(
@@ -37,6 +39,8 @@ module.exports = {
         )}. (${getLightEmoji(foundUser.location)}${currentTimeAt(
           foundUser.location,
         )})`,
+        false,
+        settings,
       )
   },
 }

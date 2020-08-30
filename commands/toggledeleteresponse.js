@@ -4,30 +4,28 @@ const { send } = require('../actions/replyInChannel')
 module.exports = {
   admin: true,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:admins?only)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:deleteresponses?)$`, 'gi')
   },
   async action({ msg, settings, match }) {
-    const turnOff = settings.adminOnly === true
+    const turnOff = settings.deleteResponse === true
     console.log(
       `${
         msg.guild ? msg.guild.name : 'Private Message'
-      } - Toggle admin mode > ${turnOff ? 'off' : 'on'} (${
+      } - Toggle deleteResponse > ${turnOff ? 'off' : 'on'} (${
         msg.author.username
       }) `,
     )
 
     await db.setGuildSettings({
       guildId: msg.guild.id,
-      adminOnly: turnOff ? false : true,
+      deleteResponse: turnOff ? false : true,
     })
 
     send(
       msg,
-      `Commands ${
-        turnOff
-          ? 'may now be used by all users'
-          : 'may now only be used by admins'
-      }.`,
+      `Bot response messages will ${
+        turnOff ? 'not ' : ''
+      }be deleted after 5 minutes.`,
       false,
       settings,
     )

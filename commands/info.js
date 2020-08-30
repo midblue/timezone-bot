@@ -32,7 +32,8 @@ module.exports = {
 \`${settings.prefix}removeuser <@user>\` - Remove the timezone for a user in the server.
 \`${settings.prefix}autorespond\` - Toggles auto-responses on/off.
 \`${settings.prefix}adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
-\`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.`
+\`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.
+\`${settings.prefix}deleteresponse\` - Toggles bot response deletion (after 5 minutes) on/off.`
 
     const fields = []
 
@@ -92,6 +93,6 @@ module.exports = {
 Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
       )
 
-    return send(msg, richEmbed)
+    return send(msg, richEmbed, false, settings)
   },
 }

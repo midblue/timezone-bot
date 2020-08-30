@@ -20,6 +20,7 @@ module.exports = {
         `The current prefix is: \`${settings.prefix}\`
 Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for this bot.`,
         'none',
+        settings,
       )
 
     const illegalCharacters = [
@@ -51,6 +52,7 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
           '',
         )} and the backtick character. Your prefix has not been changed.)`,
         'none',
+        settings,
       )
     if (foundIllegalCharacter)
       return send(
@@ -60,6 +62,7 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
           '',
         )} and the backtick character. Your prefix has not been changed.)`,
         'none',
+        settings,
       )
 
     newPrefix = newPrefix.substring(0, 12)
@@ -69,6 +72,7 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
       msg,
       `The timezone command prefix been changed from \`${previousPrefix}\` to \`${newPrefix}\``,
       'none',
+      settings,
     )
   },
 }

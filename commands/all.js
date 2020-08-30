@@ -35,10 +35,12 @@ module.exports = {
       return send(
         msg,
         `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+        false,
+        settings,
       )
 
     const timezonesWithUsers = await Object.keys(allUsers)
-      .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
+      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
@@ -90,13 +92,13 @@ module.exports = {
     if (fields.length === 0)
       return send(
         msg,
-        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, false, settings,
       )
 
     const richEmbed = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       .addFields(...fields)
-		return send(msg, richEmbed)
+		return send(msg, richEmbed, false, settings)
 		*/
 
     const timezonesWithUsersAsSortedArray = Object.values(
@@ -105,10 +107,15 @@ module.exports = {
 
     //  character limit is 2000, so, batching.
     if (onlyHere)
-      send(msg, `Users with saved timezones in <#${msg.channel.id}>:`, 'none')
+      send(
+        msg,
+        `Users with saved timezones in <#${msg.channel.id}>:`,
+        'none',
+        settings,
+      )
     let outputStrings = [''],
       currentString = 0
-    timezonesWithUsersAsSortedArray.forEach(timezone => {
+    timezonesWithUsersAsSortedArray.forEach((timezone) => {
       if (outputStrings[currentString].length >= 1500) {
         outputStrings[currentString] = outputStrings[currentString].substring(
           0,
@@ -134,6 +141,6 @@ module.exports = {
       outputStrings[currentString].length - 2,
     )
 
-    outputStrings.forEach(s => send(msg, s, true))
+    outputStrings.forEach((s) => send(msg, s, true, settings))
   },
 }

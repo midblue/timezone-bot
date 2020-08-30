@@ -26,6 +26,7 @@ module.exports = {
         msg,
         `Use this command in the format \`${settings.prefix}time <user, city, or country name>\` to see the time in a specific location or for a specific user.`,
         'none',
+        settings,
       )
 
     // if they typed a username
@@ -39,6 +40,8 @@ module.exports = {
         return send(
           msg,
           `It doesn't look like ${username} has set a timezone for themselves yet.`,
+          false,
+          settings,
         )
       else
         return send(
@@ -48,6 +51,8 @@ module.exports = {
           )} for ${username}. (${standardizeTimezoneName(
             foundUser.timezoneName,
           )})`,
+          false,
+          settings,
         )
     }
 
@@ -66,7 +71,12 @@ module.exports = {
     // otherwise, default back to assuming it's a location
     const foundTimezone = await getTimezoneFromLocation(match[2])
     if (!foundTimezone)
-      return send(msg, `Sorry, I couldn't find a timezone for ${match[2]}.`)
+      return send(
+        msg,
+        `Sorry, I couldn't find a timezone for ${match[2]}.`,
+        false,
+        settings,
+      )
 
     send(
       msg,
@@ -75,6 +85,8 @@ module.exports = {
       )} in ${match[2]}. (${standardizeTimezoneName(
         foundTimezone.timezoneName,
       )})`,
+      false,
+      settings,
     )
   },
 }

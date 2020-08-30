@@ -21,6 +21,11 @@ module.exports = {
       deleteCommand: turnOff ? false : true,
     })
 
-    send(msg, `Bot command messages will ${turnOff ? 'not ' : ''}be deleted.`)
+    send(
+      msg,
+      `Bot command messages will ${turnOff ? 'not ' : ''}be deleted.`,
+      false,
+      settings,
+    )
   },
 }

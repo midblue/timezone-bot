@@ -27,6 +27,8 @@ module.exports = {
     send(
       msg,
       `Auto-responding to @s has been turned ${turnOff ? 'off' : 'on'}.`,
+      false,
+      settings,
     )
   },
 }

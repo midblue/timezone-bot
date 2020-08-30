@@ -23,15 +23,27 @@ module.exports = {
       return send(
         msg,
         `Use this command in the format ${settings.prefix}setuser <@user> <location name> to set that user's timezone.`,
+        false,
+        settings,
       )
     }
     if (!typedUser) {
-      return send(msg, `I couldn't find a user by the name ${match[1]}.`)
+      return send(
+        msg,
+        `I couldn't find a user by the name ${match[1]}.`,
+        false,
+        settings,
+      )
     }
 
     const foundTimezone = await getTimezoneFromLocation(match[2])
     if (!foundTimezone)
-      return send(msg, `Sorry, I couldn't find a timezone for ${match[2]}.`)
+      return send(
+        msg,
+        `Sorry, I couldn't find a timezone for ${match[2]}.`,
+        false,
+        settings,
+      )
 
     await db.updateUserInGuild({
       guildId: msg.guild.id,
@@ -45,7 +57,9 @@ module.exports = {
         foundTimezone.timezoneName
       } by admin. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
-      )}) `,
+      )})`,
+      false,
+      settings,
     )
   },
 }

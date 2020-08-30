@@ -13,10 +13,10 @@ const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 1.5
 
 let recentlyAnnounced = []
 
-module.exports = async msg => {
+module.exports = async (msg, settings) => {
   if (msg.author.bot) return
 
-  const mentionedUserIds = msg.mentions.members.array().map(u => u.id) // todo maybe this needs a cache check too
+  const mentionedUserIds = msg.mentions.members.array().map((u) => u.id) // todo maybe this needs a cache check too
   if (mentionedUserIds.length === 0) return
 
   const authorId = msg.author.id
@@ -24,16 +24,16 @@ module.exports = async msg => {
   const savedUsers = (await db.getGuildUsers(msg.guild.id)) || []
   const authorTimezoneData = savedUsers[authorId]
   const matchedUsers = mentionedUserIds
-    .map(id => (savedUsers[id] ? { ...savedUsers[id], id } : null))
-    .filter(u => u)
+    .map((id) => (savedUsers[id] ? { ...savedUsers[id], id } : null))
+    .filter((u) => u)
 
   const userDataWithLastMessageTime = (
     await getGuildMembers({ msg, ids: mentionedUserIds })
-  ).map(async fullMember => {
+  ).map(async (fullMember) => {
     if (fullMember.id === msg.author.id) return
     let lastMessage
     const found = matchedUsers.find(
-      matched => matched.id === fullMember.user.id,
+      (matched) => matched.id === fullMember.user.id,
     )
     if (!found) return
     if (fullMember.lastMessageID) {
@@ -61,27 +61,27 @@ module.exports = async msg => {
   })
 
   let usersToList = (await Promise.all(userDataWithLastMessageTime)).filter(
-    u => u,
+    (u) => u,
   )
 
   // filter out the author themselves
-  usersToList = usersToList.filter(u => u.id !== authorId)
+  usersToList = usersToList.filter((u) => u.id !== authorId)
 
   // filter out anyone who has been recently announced
   usersToList = usersToList.filter(
-    u => !recentlyAnnounced.find(id => id === u.id),
+    (u) => !recentlyAnnounced.find((id) => id === u.id),
   )
 
   // filter out anyone who is active now
   usersToList = usersToList.filter(
-    u =>
+    (u) =>
       new Date(u.lastMessageTime).getTime() <
       Date.now() - onlyRespondIfLastSeenIsOlderThanMs,
   )
 
   // filter out anyone whose timezone is very close to the author
   usersToList = usersToList.filter(
-    u =>
+    (u) =>
       !authorTimezoneData ||
       Math.abs(u.offset - authorTimezoneData.offset) >=
         onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo,
@@ -91,12 +91,12 @@ module.exports = async msg => {
 
   // add to recently announced list
   usersToList
-    .map(u => u.id)
-    .forEach(id => {
+    .map((u) => u.id)
+    .forEach((id) => {
       recentlyAnnounced.push(id)
       setTimeout(() => {
         recentlyAnnounced = recentlyAnnounced.filter(
-          existingId => existingId !== id,
+          (existingId) => existingId !== id,
         )
       }, onlyRespondIfNotAnnouncedInMs)
     })
@@ -116,14 +116,16 @@ module.exports = async msg => {
   outputString += '.'
 
   console.log(
-    `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-      msg.guild ? ` (${msg.guild.id})` : ''
-    } - Responding to ${usersToList.length} @${
+    `${
+      msg.guild && msg.guild.name
+        ? msg.guild.name.substring(0, 20)
+        : 'Private Message'
+    }${msg.guild ? ` (${msg.guild.id})` : ''} - ${usersToList.length} @${
       usersToList.length === 1 ? '' : 's'
     } (${msg.author.username} > ${usersToList
-      .map(u => u.displayName)
+      .map((u) => u.displayName)
       .join(', ')})`,
   )
 
-  send(msg, outputString)
+  send(msg, outputString, false, settings)
 }

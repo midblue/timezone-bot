@@ -3,4 +3,6 @@ module.exports = {
   autoRespond: true,
   adminOnly: false,
   deleteCommand: false,
+  deleteResponse: false,
+  repeatAnnounceTime: 30,
 }
