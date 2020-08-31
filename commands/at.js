@@ -8,33 +8,70 @@ const {
 const { send } = require('../actions/replyInChannel')
 const time = require('./time')
 const Discord = require('discord.js')
+const all = require('./all')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(
-      `^${settings.prefix}(?:all|users|allusers|list|u|a(?!t)) ?(.*)?$`,
-      'gi',
-    )
+    return new RegExp(`^${settings.prefix}(?:at) ?(.*)?`, 'gi')
   },
   async action({ msg, settings, match }) {
-    const onlyHere =
-      (match[1] || '').toLowerCase() === 'here' ||
-      (match[1] || '').toLowerCase() === 'h'
+    console.log(match)
+    const onlyHere = (match[1] || '').toLowerCase().indexOf('h') >= 0
 
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
         msg.guild ? ` (${msg.guild.id})` : ''
-      } - All users ${onlyHere ? `in #${msg.channel.name} ` : ''}(${
+      } - Time at ${match[1]} ${onlyHere ? `in #${msg.channel.name} ` : ''}(${
         msg.author.username
       })`,
     )
 
+    if (!match[1])
+      return send(
+        msg,
+        `The 'at' command compares your timezone to others'.
+Use \`${settings.prefix}at <time>\` to see other users' times at a certain time for you.
+(Use \`${settings.prefix}at <time> here\` to restrict the command to users in the current channel.)`,
+        'none',
+        settings,
+      )
+
+    let [unused, hours, minutes, pmAm] = /(\d+):?(\d+)?\s*?(pm|am)?/gi.exec(
+      match[1].toLowerCase(),
+    )
+    hours = parseInt(hours)
+    if (!minutes) minutes = '00'
+
+    if (pmAm === 'pm') hours += 12
+
+    if (hours > 24 || hours < 0)
+      return send(
+        msg,
+        `The 'at' command compares your timezone to others'.
+Use \`${settings.prefix}at <time>\` to see other users' times at a certain time for you.
+Times can be in 12-hour or 24-hour format: i.e. "10PM" or "18:00". 
+(Use \`${settings.prefix}at <time> here\` to restrict the command to users in the current channel.)`,
+        'none',
+        settings,
+      )
+
     const allUsers = await db.getGuildUsers(msg.guild.id)
+    const senderTimezone = allUsers[msg.author.id]
+
+    if (!senderTimezone)
+      return send(
+        msg,
+        `The 'at' command compares your timezone to others'. Use \`${settings.prefix}set <city or country name>\` to set your timezone first, and then you can use this command.`,
+        'none',
+        settings,
+      )
+
+    delete allUsers[msg.author.id]
 
     if ((await Object.keys(allUsers)).length === 0)
       return send(
         msg,
-        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+        `No other users in this server have added their timezone yet, so there's nothing to compare to.`,
         false,
         settings,
       )
@@ -54,6 +91,7 @@ module.exports = {
               locale: userStub.location,
               usernames: [],
               offset: userStub.offset,
+              difference: senderTimezone.offset - userStub.offset,
             }
           }
           acc[timezoneName].usernames.push(
@@ -63,44 +101,6 @@ module.exports = {
         return acc
       }, {})
 
-    /*
-    const hoursWithTimezonesAndUsers = Object.values(timezonesWithUsers).reduce(
-      (hours, timezone) => {
-        let hour = currentTimeAt(timezone.locale)
-        if (!hours[hour]) hours[hour] = { timezones: [], usernames: [] }
-        hours[hour].timezones.push({ ...timezone, usernames: undefined })
-        hours[hour].usernames.push(...timezone.usernames)
-        hours[hour].timeString = hour
-        hours[hour].emoji = getLightEmoji(timezone.locale)
-        return hours
-      },
-      {},
-    )
-    const hoursWithTimezonesAndUsersAsSortedArray = Object.values(
-      hoursWithTimezonesAndUsers,
-    ).sort((a, b) => a.timezones[0].offset - b.timezones[0].offset)
-
-    const fields = []
-    hoursWithTimezonesAndUsersAsSortedArray.forEach(time => {
-      const header = `${time.emoji}${time.timeString}`
-      const body =
-        `**${time.timezones.map(t => t.timezoneName).join(', ')}**\n` +
-        `${time.usernames.sort((a, b) => (b > a ? -1 : 1)).join(', ')}\n\u200B`
-      fields.push({ name: header, value: body, inline: true })
-    }, '')
-
-    if (fields.length === 0)
-      return send(
-        msg,
-        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, false, settings,
-      )
-
-    const richEmbed = new Discord.MessageEmbed()
-      .setColor('#7B6FE5')
-      .addFields(...fields)
-		return send(msg, richEmbed, false, settings)
-		*/
-
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,
     ).sort((a, b) => a.offset - b.offset)
@@ -109,7 +109,11 @@ module.exports = {
     if (onlyHere)
       send(
         msg,
-        `Users with saved timezones in <#${msg.channel.id}>:`,
+        `At ${hours}:${minutes} in ${
+          senderTimezone.timezoneName
+        }, it will be... ${
+          onlyHere ? ` (for users in <#${msg.channel.id}>)` : ''
+        }`,
         'none',
         settings,
       )
@@ -124,11 +128,11 @@ module.exports = {
         currentString++
         outputStrings[currentString] = ''
       }
+      const currentTimeInTimezone = currentTimeAt(timezone.locale)
 
-      const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
+      const header = `${getLightEmoji(
         timezone.locale,
-        true,
-      )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
+      )}${currentTimeInTimezone} - ${timezone.timezoneName}`
       const body =
         '\n     ' +
         timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n     ') +

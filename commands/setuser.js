@@ -13,7 +13,7 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:setuser|su) ([^\s]*) (.*)`, 'gi')
   },
   expectsUserInRegexSlot: 1,
-  async action({ msg, match, typedUser }) {
+  async action({ msg, match, settings, typedUser }) {
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
         msg.guild ? ` (${msg.guild.id})` : ''
