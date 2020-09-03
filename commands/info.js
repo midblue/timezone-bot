@@ -6,7 +6,7 @@ module.exports = {
   ignoreAdminOnly: true,
   regex(settings) {
     return new RegExp(
-      `^(?:${settings.prefix}|t!)(i|h|info|help|guide|about)`,
+      `^(?:${settings.prefix}|t!)(i|info|help|guide|about)`,
       'gi',
     )
   },

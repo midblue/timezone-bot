@@ -12,12 +12,13 @@ const Discord = require('discord.js')
 module.exports = {
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:all|users|allusers|list|u|a(?!t|ut)) ?(.*)?$`,
+      `^${settings.prefix}(?:all|users|allusers|list|u|a(?!t|ut|d)) ?(.*)?$`,
       'gi',
     )
   },
-  async action({ msg, settings, match }) {
+  async action({ msg, settings, match, here = false }) {
     const onlyHere =
+      here ||
       (match[1] || '').toLowerCase() === 'here' ||
       (match[1] || '').toLowerCase() === 'h'
 
