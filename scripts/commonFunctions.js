@@ -18,6 +18,7 @@ module.exports = {
   },
 
   // todo find a way to do this where we don't get EVERY guild member
+  // * looks like {query} param does some sort of fuzzy search?
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     const usersInGuild = await getGuildMembers({ msg })
@@ -59,7 +60,7 @@ module.exports = {
   },
 
   currentTimeAt(location, leadingZero = false) {
-    // todo does this support .5s in UTC codes? no.
+    // todo does not support .5s in UTC codes
     const localeString = new Date().toLocaleTimeString(undefined, {
       timeZone: location.replace('UTC', 'Etc/GMT'),
       weekday: 'short',
@@ -74,8 +75,6 @@ module.exports = {
       return match
     })
   },
-
-  localeTimeAt(location, leadingZero = false, hour, minute) {},
 
   getLightEmoji(location) {
     let hour
@@ -110,7 +109,7 @@ module.exports = {
 
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
-  const usersInGuild = await getGuildMembers({ guild })
+  const usersInGuild = await getGuildMembers({ guild, ids: [id] })
   return usersInGuild.find((user) => user.user.id == id)
 }
 

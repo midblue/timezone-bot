@@ -21,7 +21,7 @@ const announceTimeSpanInHours = 3
 setInterval(async () => {
   if (messagesScannedSinceLastAnnounce > 0) {
     console.log(
-      `${messagesScannedSinceLastAnnounce} messages watched in ${announceTimeSpanInHours} hours. (Running for ${Math.round(
+      `. . . . ${messagesScannedSinceLastAnnounce} messages watched in ${announceTimeSpanInHours} hours. (Running for ${Math.round(
         (Date.now() - launchTime) / 60 / 60 / 1000,
       )} hours in ${(await client.guilds.cache.array()).length} guilds)`,
     )
@@ -29,7 +29,7 @@ setInterval(async () => {
   messagesScannedSinceLastAnnounce = 0
 }, Math.round(announceTimeSpanInHours * 60 * 60 * 1000))
 
-client.on('error', e => console.log('Discord.js error:', e.message))
+client.on('error', (e) => console.log('Discord.js error:', e.message))
 client.on('ready', async () => {
   console.log(
     `Logged in as ${client.user.tag} in ${
@@ -39,7 +39,7 @@ client.on('ready', async () => {
   client.user.setActivity('t!info', { type: 'LISTENING' })
 })
 
-client.on('message', async msg => {
+client.on('message', async (msg) => {
   messagesScannedSinceLastAnnounce++
   if (!msg.author || msg.author.id === process.env.BOT_ID || msg.author.bot)
     return

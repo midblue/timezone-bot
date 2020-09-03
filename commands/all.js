@@ -12,7 +12,7 @@ const Discord = require('discord.js')
 module.exports = {
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:all|users|allusers|list|u|a(?!t)) ?(.*)?$`,
+      `^${settings.prefix}(?:all|users|allusers|list|u|a(?!t|ut)) ?(.*)?$`,
       'gi',
     )
   },
@@ -44,6 +44,7 @@ module.exports = {
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
+        // todo we could do them all at once
         const userObject = await getUserInGuildFromId(msg.guild, id)
 
         if (userObject) {
