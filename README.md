@@ -15,7 +15,7 @@ Allows users to set their timezone, then passively notes timezones when appropri
 
 - `t!time <user or location name>` to see the current time for a specific user or in a specific place.
 - `t!set <city or country name>` to set your own timezone. (UTC codes also work, e.g. 'UTC+3', 'UTC-8')
-- `t!users` or `t!all` to see all users' set timezones. (use `t!users here` to restrict to the current channel)
+- `t!users` or `t!all` to see all users' set timezones. (use `t!here` to restrict to the current channel)
 - `t!me` to see your set timezone.
 - `t!removeme` to delete your set timezone.
 - `t!info` or `t!help` to show a message listing all commands.

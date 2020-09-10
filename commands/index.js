@@ -16,11 +16,9 @@ fs.readdir('./commands', (err, files) => {
 
 module.exports = async function (msg, settings, client) {
   const sender = msg.author
-  if (settings.prefix === '?') console.log(msg.guild.name, msg.guild.id)
+  if (!settings) settings = defaultServerSettings
   for (let command of commands) {
-    const match = command
-      .regex(settings || defaultServerSettings)
-      .exec(msg.content)
+    const match = command.regex(settings).exec(msg.content)
     if (match) {
       const senderIsAdmin =
         msg.guild &&

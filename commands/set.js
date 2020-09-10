@@ -14,12 +14,6 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:set|s)(?!user) (.*)$`, 'gi')
   },
   async action({ msg, settings, match, client }) {
-    console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - ${msg.author.username} > set to ${match[1]}`,
-    )
-
     if (!match[1])
       return send(
         msg,
@@ -45,6 +39,12 @@ module.exports = {
         false,
         settings,
       )
+
+    console.log(
+      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - ${msg.author.username} > set to ${match[1]}`,
+    )
 
     const foundTimezone = await getTimezoneFromLocation(match[1])
     if (!foundTimezone)
