@@ -2,7 +2,7 @@ const fuse = require('fuse.js')
 const fuseOptions = {
   shouldSort: true,
   location: 0,
-  threshold: 0.3,
+  threshold: 0.18, // was .3 for a long time
   distance: 1000,
   maxPatternLength: 20,
   minMatchCharLength: 2,

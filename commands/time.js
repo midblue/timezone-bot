@@ -57,6 +57,7 @@ module.exports = {
     }
 
     // some people type "all" here expecting time for all users. let's oblige them.
+    // todo
     if (
       match[2].toLowerCase() === 'all' ||
       match[2].toLowerCase() === 'users' ||
