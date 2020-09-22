@@ -12,7 +12,7 @@ const me = require('./me')
 module.exports = {
   expectsUserInRegexSlot: 2,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:time|t)( ?)(.*)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:time(?!in)|t(?!i))( ?)(.*)$`, 'gi')
   },
   async action({ msg, settings, match, typedUser, senderIsAdmin }) {
     console.log(
