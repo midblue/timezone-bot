@@ -119,7 +119,12 @@ async function getGuildMembers({ msg, guild, ids }) {
   if (!ids) {
     // just get everything
     try {
-      members = (await guild.members.fetch()).array()
+      members = (
+        await guild.members.fetch().catch((e) => {
+          console.log(e)
+          return
+        })
+      ).array()
     } catch (e) {
       members = guild.members.cache.array()
       console.log(

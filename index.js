@@ -2,6 +2,9 @@
 /*
 moment
 put back accurate UTC codes
+save server counts/dates
+t!at 10pm -> all @ time
+set times for non-users
 */
 
 // test realm is 605053799404666880
