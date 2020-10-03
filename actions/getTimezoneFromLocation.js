@@ -6,7 +6,7 @@ const timezoneCodes = require('../scripts/timezoneCodes')
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
 const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=${process.env.GOOGLE_API_KEY}`
 
-module.exports = location => {
+module.exports = (location) => {
   if (!location) return
 
   location = location
@@ -17,6 +17,7 @@ module.exports = location => {
   // check for UTC command
   const UTCMatch = /^(?:utc|gmt) ?(\+|-)? ?(\d*)/gi.exec(location)
   if (UTCMatch) {
+    // todo fix "UTC8" bug
     const locationData = {
       timezoneName: UTCMatch[0].toUpperCase(),
       offset: UTCMatch[2]
@@ -58,10 +59,10 @@ module.exports = location => {
       console.log(`Making new API request for ${location}`)
       const foundLatLon = await axios
         .get(`${geocodeUrlBase}&address=${location}`)
-        .then(res =>
+        .then((res) =>
           res.data.results ? res.data.results[0].geometry.location : null,
         )
-        .catch(e => console.log)
+        .catch((e) => console.log)
       if (!foundLatLon) resolve()
       const foundTimezone = await axios
         .get(
@@ -69,8 +70,8 @@ module.exports = location => {
             foundLatLon.lng
           }&timestamp=${Date.now() / 1000}`,
         )
-        .then(res => res.data)
-        .catch(e => console.log)
+        .then((res) => res.data)
+        .catch((e) => console.log)
       if (foundTimezone.status === 'OK') {
         const result = {
           timezoneName: standardizeTimezoneName(foundTimezone.timeZoneName),

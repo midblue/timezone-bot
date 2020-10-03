@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gh": "git push heroku master",
+    "gh": "git push heroku master && npm run l",
     "hup": "heroku dyno:scale worker=1",
     "hdown": "heroku dyno:scale worker=0",
     "l": "heroku logs --tail",

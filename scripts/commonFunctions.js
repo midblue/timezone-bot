@@ -76,6 +76,29 @@ module.exports = {
     })
   },
 
+  toTimeString(date, location, leadingZero) {
+    const localeString = new Date(date).toLocaleTimeString(undefined, {
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+    if (leadingZero) return localeString
+    const twoDigitHourRegex = /[0-9]{2}:/
+    return localeString.replace(twoDigitHourRegex, (match) => {
+      if (match && match.substring(0, 1) === '0') return match.substring(1)
+      return match
+    })
+  },
+
+  dateObjectAt(location) {
+    return new Date(
+      new Date().toLocaleString(undefined, {
+        timeZone: location.replace(/UTC/gi, 'Etc/GMT'),
+      }),
+    )
+  },
+
   getLightEmoji(location) {
     let hour
     if (typeof location === 'number') hour = location
