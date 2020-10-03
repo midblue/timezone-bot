@@ -18,8 +18,6 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:at) ?(h|here)? ?(.*)?$`, 'gi')
   },
   async action({ msg, settings, match }) {
-    console.log(match)
-
     const onlyHere = (match[1] || '').toLowerCase().indexOf('h') === 0
     const timeString = match[2]
 

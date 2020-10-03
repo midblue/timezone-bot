@@ -22,6 +22,7 @@ module.exports = {
 \`${settings.prefix}timein <location name>\` - See the current time in a specific place.
 \`${settings.prefix}set <location name>\` - Set your own timezone. (UTC+/- codes work too)
 \`${settings.prefix}users\` or \`${settings.prefix}all\` - See timezones for all users.
+\`${settings.prefix}at <time> <location name>\` to see all users' times from the viewpoint of a specific time and place. (i.e. \`${settings.prefix}at 5PM Cairo\`. Use \`${settings.prefix}at here <time> <location>\` to restrict to the current channel.)
 \`${settings.prefix}here\` - See timezones for all users in the current channel.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
