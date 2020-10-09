@@ -37,10 +37,11 @@ module.exports = {
 \`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.
 \`${settings.prefix}deleteresponse\` - Toggles bot response deletion (after 5 minutes) on/off.`
 
-    const fields = []
+    const fields1 = []
+    const fields2 = []
 
     if (settings.autoRespond)
-      fields.push({
+      fields1.push({
         name: `**I'll auto-respond to @s with the user's timezone if:**`,
         value: `- The user has a timezone set
 - They're not actively sending messages in this server
@@ -48,28 +49,28 @@ module.exports = {
 - Their timezone hasn't been announced in the past 30 minutes.`,
       })
     if (!settings.autoRespond)
-      fields.push({
+      fields1.push({
         name: `Auto-responding is **off.**`,
         value: `I won't reply to @s with users' timezones.`,
       })
 
     if (!settings.adminOnly)
-      fields.push({
+      fields2.push({
         name: `**Public commands:**`,
         value: publicCommands + '\n' + alwaysAvailableCommands,
       })
     else {
-      fields.push({
+      fields1.push({
         name: `Admin-only mode is **on.**`,
         value: 'Most commands are disabled for non-admins.',
       })
-      fields.push({
+      fields2.push({
         name: `**Public commands:**`,
         value: alwaysAvailableCommands,
       })
     }
 
-    fields.push(
+    fields2.push(
       {
         name: `**Admin commands:**`,
         value: settings.adminOnly
@@ -82,19 +83,24 @@ module.exports = {
       },
     )
 
-    const richEmbed = new Discord.MessageEmbed()
+    const richEmbed1 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       // .setTitle('TimezoneBot')
       // .setURL('https://github.com/midblue/timezone-bot')
       .setDescription(
         `Hi! I'm TimezoneBot. I let users set their timezone, then passively note timezones when appropriate.`,
       )
-      .addFields(...fields)
+      .addFields(...fields1)
+
+    const richEmbed2 = new Discord.MessageEmbed()
+      .setColor('#7B6FE5')
+      .addFields(...fields2)
       .setFooter(
         `Made by jasp#8169.
 Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
       )
 
-    return send(msg, richEmbed, false, settings)
+    send(msg, richEmbed1, false, settings)
+    return send(msg, richEmbed2, false, settings)
   },
 }
