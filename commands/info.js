@@ -39,6 +39,7 @@ module.exports = {
 
     const fields1 = []
     const fields2 = []
+    const fields3 = []
 
     if (settings.autoRespond)
       fields1.push({
@@ -70,7 +71,7 @@ module.exports = {
       })
     }
 
-    fields2.push(
+    fields3.push(
       {
         name: `**Admin commands:**`,
         value: settings.adminOnly
@@ -95,12 +96,17 @@ module.exports = {
     const richEmbed2 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       .addFields(...fields2)
+
+    const richEmbed3 = new Discord.MessageEmbed()
+      .setColor('#7B6FE5')
+      .addFields(...fields3)
       .setFooter(
         `Made by jasp#8169.
 Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
       )
 
     send(msg, richEmbed1, false, settings)
-    return send(msg, richEmbed2, false, settings)
+    send(msg, richEmbed2, false, settings)
+    return send(msg, richEmbed3, false, settings)
   },
 }
