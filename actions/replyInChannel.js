@@ -20,7 +20,7 @@ module.exports = {
             sentMsg.delete({ timeout: 5 * 60 * 1000 }).catch((err) => {
               contactGuildAdmin({
                 guild: msg.guild,
-                message: `I don't have permission to delete messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+                message: `I failed to delete a message in your server. It's most likely because I don't have delete permissions on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
               })
               console.error('Missing permissions to delete!', err.message)
             })
@@ -28,7 +28,7 @@ module.exports = {
         .catch((err) => {
           contactGuildAdmin({
             guild: msg.guild,
-            message: `I don't have permission to send messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+            message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
           })
           console.error('Missing permissions to send!', err.message)
         })
@@ -44,7 +44,7 @@ module.exports = {
       msg.channel.send(message).catch((err) => {
         contactGuildAdmin({
           guild: msg.guild,
-          message: `I don't have permission to reply to messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+          message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
         })
         console.error('Missing permissions to reply!', err.message)
       })

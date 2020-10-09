@@ -40,6 +40,7 @@ module.exports = {
     const fields1 = []
     const fields2 = []
     const fields3 = []
+    const fields4 = []
 
     if (settings.autoRespond)
       fields1.push({
@@ -71,18 +72,33 @@ module.exports = {
       })
     }
 
-    fields3.push(
-      {
+    if (settings.adminOnly) {
+      fields3.push({
         name: `**Admin commands:**`,
-        value: settings.adminOnly
-          ? publicCommands + '\n' + adminCommands
-          : adminCommands,
-      },
-      {
-        name: `(Most commands can also be used by their first letter, i.e. \`${settings.prefix}set\` → \`${settings.prefix}s\`).`,
-        value: '\u200B',
-      },
-    )
+        value: publicCommands,
+      })
+      fields4.push(
+        {
+          name: `**Admin commands (cont.):**`,
+          value: adminCommands,
+        },
+        {
+          name: `(Most commands can also be used by their first letter, i.e. \`${settings.prefix}set\` → \`${settings.prefix}s\`).`,
+          value: '\u200B',
+        },
+      )
+    } else {
+      fields3.push(
+        {
+          name: `**Admin commands:**`,
+          value: adminCommands,
+        },
+        {
+          name: `(Most commands can also be used by their first letter, i.e. \`${settings.prefix}set\` → \`${settings.prefix}s\`).`,
+          value: '\u200B',
+        },
+      )
+    }
 
     const richEmbed1 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
@@ -100,13 +116,25 @@ module.exports = {
     const richEmbed3 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       .addFields(...fields3)
-      .setFooter(
+
+    const richEmbed4 = new Discord.MessageEmbed()
+      .setColor('#7B6FE5')
+      .addFields(...fields4)
+
+    if (fields4.length)
+      richEmbed4.setFooter(
+        `Made by jasp#8169.
+Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
+      )
+    else
+      richEmbed3.setFooter(
         `Made by jasp#8169.
 Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
       )
 
     send(msg, richEmbed1, false, settings)
     send(msg, richEmbed2, false, settings)
-    return send(msg, richEmbed3, false, settings)
+    send(msg, richEmbed3, false, settings)
+    fields4.length && send(msg, richEmbed4, false, settings)
   },
 }
