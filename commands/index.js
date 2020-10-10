@@ -68,7 +68,11 @@ module.exports = async function (msg, settings, client) {
         client,
       })
 
-      if (settings.deleteCommand && !command.doNotDelete)
+      if (
+        settings.deleteCommand &&
+        !settings.suppressWarnings &&
+        !command.doNotDelete
+      )
         msg.delete().catch((e) => {
           console.log('failed to delete message:', e.code)
           contactGuildAdmin({

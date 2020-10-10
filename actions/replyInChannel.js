@@ -16,7 +16,7 @@ module.exports = {
       msg.channel
         .send(message)
         .then((sentMsg) => {
-          if (settings && settings.deleteResponse)
+          if (settings && settings.deleteResponse && !settings.suppressWarnings)
             sentMsg.delete({ timeout: 5 * 60 * 1000 }).catch((err) => {
               contactGuildAdmin({
                 guild: msg.guild,
@@ -26,10 +26,11 @@ module.exports = {
             })
         })
         .catch((err) => {
-          contactGuildAdmin({
-            guild: msg.guild,
-            message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
-          })
+          if (!settings.suppressWarnings)
+            contactGuildAdmin({
+              guild: msg.guild,
+              message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+            })
           console.error('Missing permissions to send!', err.message)
         })
   },
@@ -42,10 +43,11 @@ module.exports = {
     }
     for (let message of messages)
       msg.channel.send(message).catch((err) => {
-        contactGuildAdmin({
-          guild: msg.guild,
-          message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
-        })
+        if (!settings.suppressWarnings)
+          contactGuildAdmin({
+            guild: msg.guild,
+            message: `I failed to send a message in your server. It's most likely because I don't have the right permissions. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+          })
         console.error('Missing permissions to reply!', err.message)
       })
   },
