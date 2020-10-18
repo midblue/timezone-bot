@@ -66,6 +66,8 @@ module.exports = {
         foundTimezone.timezoneName
       }. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
+        false,
+        settings.format24,
       )})`,
       false,
       settings,

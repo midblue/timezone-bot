@@ -56,13 +56,10 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       )
     }
 
-    let [
-      unused,
-      hours,
-      minutes,
-      pmAm,
-      userOrLocation,
-    ] = /(\d+):?(\d+)?\s*?(pm|am)?\s?(.*)?$/gi.exec(timeString.toLowerCase())
+    let tsMatch = /(\d+):?(\d+)?\s*?(pm|am)?\s?(.*)?$/gi.exec(
+      timeString.toLowerCase(),
+    )
+    let [unused, hours, minutes, pmAm, userOrLocation] = tsMatch || []
 
     if (!userOrLocation)
       return send(
@@ -140,6 +137,10 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       knownTimezoneDataForEnteredUserOrLocation.location,
     )
     let hoursFromNow = hours - currentTimeAtThatLocation.getHours()
+
+    let minutesFromNow =
+      parseInt(minutes) - currentTimeAtThatLocation.getMinutes()
+
     if (dayOfWeek === null && hoursFromNow < 0) {
       hoursFromNow += 24 // no checking into the past
       enteredDateAsObject = enteredDateAsObject.add(1, 'day')
@@ -223,8 +224,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       if (dayOfWeek !== null)
         dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
       dateObjectInTimezone = dateObjectInTimezone
-        .minute(parseInt(minutes))
         .second(0)
+        .add(minutesFromNow, 'minute')
         .add(hoursFromNow, 'hour')
 
       // ========= add to string =========
