@@ -68,7 +68,12 @@ module.exports = {
         foundTimezone.location,
         false,
         settings.format24,
-      )})`,
+      )})` +
+        (match[1].length <= 4 ||
+        (match[1].length <= 7 && match[1].indexOf('+') > -1) ||
+        (match[1].length <= 7 && match[1].indexOf('-') > -1)
+          ? `\nBy the way, location names always work better than timezone codes!`
+          : ''),
       false,
       settings,
     )
