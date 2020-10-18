@@ -20,7 +20,7 @@ const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:at) ?(h|here)? ?(.*)?$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:at) ?(he?r?e?)? ?(.*)?$`, 'gi')
   },
   async action({ msg, settings, match }) {
     const onlyHere = (match[1] || '').toLowerCase().indexOf('h') === 0
