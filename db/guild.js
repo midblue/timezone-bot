@@ -3,7 +3,7 @@ const memo = require('../scripts/memo')
 
 const memoedGuildData = memo(100)
 
-module.exports = function (firestore) {
+module.exports = function(firestore) {
   return {
     async hasGuild({ guildId }) {
       const document = firestore.doc(`guilds/${guildId}`)
@@ -50,6 +50,7 @@ module.exports = function (firestore) {
       deleteCommand,
       deleteResponse,
       suppressWarnings,
+      format24,
     }) {
       const document = firestore.doc(`guilds/${guildId}`)
       const existingSettings = await this.getGuildSettings({ guildId })
@@ -58,6 +59,7 @@ module.exports = function (firestore) {
       if (autoRespond !== undefined) newSettings.autoRespond = autoRespond
       if (adminOnly !== undefined) newSettings.adminOnly = adminOnly
       if (deleteCommand !== undefined) newSettings.deleteCommand = deleteCommand
+      if (format24 !== undefined) newSettings.format24 = format24
       if (deleteResponse !== undefined)
         newSettings.deleteResponse = deleteResponse
       if (suppressWarnings !== undefined)

@@ -29,6 +29,20 @@ module.exports = {
         settings,
       )
 
+    // some people type "all" here expecting the time for all users. let's oblige them.
+    if (
+      match[2].toLowerCase() === 'all' ||
+      match[2].toLowerCase() === 'users' ||
+      match[2].toLowerCase() === 'all users' ||
+      match[2].toLowerCase() === 'allusers' ||
+      match[2].toLowerCase() === 'everyone'
+    )
+      return all.action({ msg, settings, match, typedUser })
+
+    // some people type "me" here expecting their own timezone. let's oblige them.
+    if (match[2].toLowerCase() === 'me')
+      return me.action({ msg, settings, senderIsAdmin })
+
     // if they typed a username
     if (typedUser) {
       const username = typedUser.nickname || typedUser.user.username
@@ -48,6 +62,8 @@ module.exports = {
           msg,
           `It's ${getLightEmoji(foundUser.location)}${currentTimeAt(
             foundUser.location,
+            false,
+            settings.format24,
           )} for ${username}. (${standardizeTimezoneName(
             foundUser.timezoneName,
           )})`,
@@ -55,19 +71,6 @@ module.exports = {
           settings,
         )
     }
-
-    // some people type "all" here expecting time for all users. let's oblige them.
-    // todo
-    if (
-      match[2].toLowerCase() === 'all' ||
-      match[2].toLowerCase() === 'users' ||
-      match[2].toLowerCase() === 'allusers'
-    )
-      return all.action({ msg, settings, match, typedUser })
-
-    // some people type "me" here expecting their timezone. let's oblige them.
-    if (match[2].toLowerCase() === 'me')
-      return me.action({ msg, settings, senderIsAdmin })
 
     // otherwise, default back to assuming it's a location
     const foundTimezone = await getTimezoneFromLocation(match[2])
@@ -83,6 +86,8 @@ module.exports = {
       msg,
       `It's ${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
+        false,
+        settings.format24,
       )} in ${match[2]}. (${standardizeTimezoneName(
         foundTimezone.timezoneName,
       )})`,

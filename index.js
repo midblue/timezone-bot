@@ -8,6 +8,7 @@ set times for non-users
 */
 
 // test realm is 605053799404666880
+// https://discord.com/api/oauth2/authorize?client_id=723017262369472603&permissions=75840&scope=bot
 
 require('dotenv').config()
 const Discord = require('discord.js')
@@ -32,7 +33,7 @@ setInterval(async () => {
   messagesScannedSinceLastAnnounce = 0
 }, Math.round(announceTimeSpanInHours * 60 * 60 * 1000))
 
-client.on('error', (e) => console.log('Discord.js error:', e.message))
+client.on('error', e => console.log('Discord.js error:', e.message))
 client.on('ready', async () => {
   console.log(
     `Logged in as ${client.user.tag} in ${
@@ -42,7 +43,7 @@ client.on('ready', async () => {
   client.user.setActivity('t!info', { type: 'LISTENING' })
 })
 
-client.on('message', async (msg) => {
+client.on('message', async msg => {
   messagesScannedSinceLastAnnounce++
   if (!msg.author || msg.author.id === process.env.BOT_ID || msg.author.bot)
     return

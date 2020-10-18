@@ -1,4 +1,5 @@
 const db = require('../db/firestore')
+
 const {
   currentTimeAt,
   getUserInGuildFromId,
@@ -41,7 +42,7 @@ module.exports = {
       )
 
     const timezonesWithUsers = await Object.keys(allUsers)
-      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
+      .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
@@ -65,44 +66,6 @@ module.exports = {
         return acc
       }, {})
 
-    /*
-    const hoursWithTimezonesAndUsers = Object.values(timezonesWithUsers).reduce(
-      (hours, timezone) => {
-        let hour = currentTimeAt(timezone.locale)
-        if (!hours[hour]) hours[hour] = { timezones: [], usernames: [] }
-        hours[hour].timezones.push({ ...timezone, usernames: undefined })
-        hours[hour].usernames.push(...timezone.usernames)
-        hours[hour].timeString = hour
-        hours[hour].emoji = getLightEmoji(timezone.locale)
-        return hours
-      },
-      {},
-    )
-    const hoursWithTimezonesAndUsersAsSortedArray = Object.values(
-      hoursWithTimezonesAndUsers,
-    ).sort((a, b) => a.timezones[0].offset - b.timezones[0].offset)
-
-    const fields = []
-    hoursWithTimezonesAndUsersAsSortedArray.forEach(time => {
-      const header = `${time.emoji}${time.timeString}`
-      const body =
-        `**${time.timezones.map(t => t.timezoneName).join(', ')}**\n` +
-        `${time.usernames.sort((a, b) => (b > a ? -1 : 1)).join(', ')}\n\u200B`
-      fields.push({ name: header, value: body, inline: true })
-    }, '')
-
-    if (fields.length === 0)
-      return send(
-        msg,
-        `No users in this server have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, false, settings,
-      )
-
-    const richEmbed = new Discord.MessageEmbed()
-      .setColor('#7B6FE5')
-      .addFields(...fields)
-		return send(msg, richEmbed, false, settings)
-		*/
-
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,
     ).sort((a, b) => a.offset - b.offset)
@@ -117,7 +80,7 @@ module.exports = {
       )
     let outputStrings = [''],
       currentString = 0
-    timezonesWithUsersAsSortedArray.forEach((timezone) => {
+    timezonesWithUsersAsSortedArray.forEach(timezone => {
       if (outputStrings[currentString].length >= 1500) {
         outputStrings[currentString] = outputStrings[currentString].substring(
           0,
@@ -130,6 +93,7 @@ module.exports = {
       const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
         timezone.locale,
         true,
+        settings.format24,
       )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
       const body =
         '\n     ' +
@@ -143,6 +107,6 @@ module.exports = {
       outputStrings[currentString].length - 2,
     )
 
-    outputStrings.forEach((s) => send(msg, s, true, settings))
+    outputStrings.forEach(s => send(msg, s, true, settings))
   },
 }

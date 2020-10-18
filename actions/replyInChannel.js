@@ -15,17 +15,29 @@ module.exports = {
     for (let message of messages)
       msg.channel
         .send(message)
-        .then((sentMsg) => {
-          if (settings && settings.deleteResponse && !settings.suppressWarnings)
-            sentMsg.delete({ timeout: 5 * 60 * 1000 }).catch((err) => {
-              contactGuildAdmin({
-                guild: msg.guild,
-                message: `I failed to delete a message in your server. It's most likely because I don't have delete permissions on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
-              })
-              console.error('Missing permissions to delete!', err.message)
-            })
+        .then(sentMsg => {
+          if (
+            settings &&
+            settings.deleteResponse &&
+            !settings.suppressWarnings
+          ) {
+            setTimeout(async () => {
+              try {
+                const msgToDelete = await sentMsg.channel.messages.fetch(
+                  sentMsg.id,
+                )
+                msgToDelete.delete().catch(err => {
+                  contactGuildAdmin({
+                    guild: msg.guild,
+                    message: `I failed to delete a message in your server. It's most likely because I don't have delete permissions on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+                  })
+                  console.error('Missing permissions to delete!', err.message)
+                })
+              } catch (e) {}
+            }, 5 * 60 * 1000)
+          }
         })
-        .catch((err) => {
+        .catch(err => {
           if (!settings.suppressWarnings)
             contactGuildAdmin({
               guild: msg.guild,
@@ -42,7 +54,7 @@ module.exports = {
       remainingText = remainingText.substring(1998)
     }
     for (let message of messages)
-      msg.channel.send(message).catch((err) => {
+      msg.channel.send(message).catch(err => {
         if (!settings.suppressWarnings)
           contactGuildAdmin({
             guild: msg.guild,

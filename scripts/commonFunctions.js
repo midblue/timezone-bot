@@ -1,3 +1,10 @@
+const dayjs = require('dayjs')
+const relativeTime = require('dayjs/plugin/relativeTime')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.extend(relativeTime)
 const fuse = require('fuse.js')
 const fuseOptions = {
   shouldSort: true,
@@ -22,7 +29,7 @@ module.exports = {
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     const usersInGuild = await getGuildMembers({ msg })
-    const usersInGuildWithSearchString = usersInGuild.map((user) => ({
+    const usersInGuildWithSearchString = usersInGuild.map(user => ({
       ...user,
       searchString: `${user.user.username} ${user.user.username}#${
         user.user.discriminator
@@ -43,7 +50,7 @@ module.exports = {
     usersToContact = await getUserInGuildFromId(guild, guild.ownerID)
     if (usersToContact) return [usersToContact]
     // at this point, we just look for an admin of any kind
-    usersToContact = (await getGuildMembers({ guild })).filter((member) =>
+    usersToContact = (await getGuildMembers({ guild })).filter(member =>
       member.permissions.has('ADMINISTRATOR'),
     )
     if (usersToContact && usersToContact.length > 0) return usersToContact
@@ -52,43 +59,40 @@ module.exports = {
 
   getLabelFromUser(user) {
     if (!user) return
-    return `${user.nickname ? user.nickname + ' (' : ''}${
-      user.username || user.user.username
-    }#${user.discriminator || user.user.discriminator}${
+    return `${user.nickname ? user.nickname + ' (' : ''}${user.username ||
+      user.user.username}#${user.discriminator || user.user.discriminator}${
       user.nickname ? ')' : ''
     }`
   },
 
-  currentTimeAt(location, leadingZero = false) {
+  currentTimeAt(location, leadingZero = false, format24) {
     // todo does not support .5s in UTC codes
     const localeString = new Date().toLocaleTimeString(undefined, {
       timeZone: location.replace('UTC', 'Etc/GMT'),
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true,
+      hour12: !format24,
     })
     if (leadingZero) return localeString
     const twoDigitHourRegex = /[0-9]{2}:/
-    return localeString.replace(twoDigitHourRegex, (match) => {
+    return localeString.replace(twoDigitHourRegex, match => {
       if (match && match.substring(0, 1) === '0') return match.substring(1)
       return match
     })
   },
 
-  toTimeString(date, location, leadingZero) {
-    const localeString = new Date(date).toLocaleTimeString(undefined, {
-      weekday: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    })
-    if (leadingZero) return localeString
-    const twoDigitHourRegex = /[0-9]{2}:/
-    return localeString.replace(twoDigitHourRegex, (match) => {
-      if (match && match.substring(0, 1) === '0') return match.substring(1)
-      return match
-    })
+  toTimeString(date, location, leadingZero, format24) {
+    let formatString = 'ddd '
+    if (format24) formatString += 'H'
+    else formatString += 'h'
+    if (leadingZero) {
+      if (format24) formatString += 'H'
+      else formatString += 'h'
+    }
+    formatString += ':mm'
+    if (!format24) formatString += ' A'
+    return dayjs(date).format(formatString)
   },
 
   dateObjectAt(location) {
@@ -133,7 +137,7 @@ module.exports = {
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
   const usersInGuild = await getGuildMembers({ guild, ids: [id] })
-  return usersInGuild.find((user) => user.user.id == id)
+  return usersInGuild.find(user => user.user.id == id)
 }
 
 async function getGuildMembers({ msg, guild, ids }) {
@@ -143,7 +147,7 @@ async function getGuildMembers({ msg, guild, ids }) {
     // just get everything
     try {
       members = (
-        await guild.members.fetch().catch((e) => {
+        await guild.members.fetch().catch(e => {
           console.log(e)
           return
         })

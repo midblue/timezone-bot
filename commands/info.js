@@ -22,7 +22,7 @@ module.exports = {
 \`${settings.prefix}timein <location name>\` - See the current time in a specific place.
 \`${settings.prefix}set <location name>\` - Set your own timezone. (UTC+/- codes work too)
 \`${settings.prefix}users\` or \`${settings.prefix}all\` - See timezones for all users.
-\`${settings.prefix}at <time> <location name>\` to see all users' times from the viewpoint of a specific time and place. (i.e. \`${settings.prefix}at 5PM Cairo\`. Use \`${settings.prefix}at here <time> <location>\` to restrict to the current channel.)
+\`${settings.prefix}at <time> <user or location>\` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. \`${settings.prefix}at Mon 5PM Cairo\`. Use \`${settings.prefix}at here <time> <user or location>\` to restrict to the current channel.)
 \`${settings.prefix}here\` - See timezones for all users in the current channel.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
@@ -32,6 +32,7 @@ module.exports = {
     const adminCommands = `\`${settings.prefix}prefix <new prefix>\` - Set the command prefix.
 \`${settings.prefix}setuser <@user> <location name>\` - Set the timezone for a user in the server.
 \`${settings.prefix}removeuser <@user>\` - Remove the timezone for a user in the server.
+\`${settings.prefix}format\` - Toggles between 12 and 24-hour format.
 \`${settings.prefix}autorespond\` - Toggles auto-responses on/off.
 \`${settings.prefix}adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 \`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.
@@ -101,6 +102,9 @@ module.exports = {
       )
     }
 
+    const footer = `Bugs: https://github.com/midblue/timezone-bot/issues
+Support: https://discord.gg/9MKpMCV`
+
     const richEmbed1 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       // .setTitle('TimezoneBot')
@@ -109,6 +113,7 @@ module.exports = {
         `Hi! I'm TimezoneBot. I let users set their timezone, then passively note timezones when appropriate.`,
       )
       .addFields(...fields1)
+      .setFooter(footer)
 
     const richEmbed2 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
@@ -121,17 +126,6 @@ module.exports = {
     const richEmbed4 = new Discord.MessageEmbed()
       .setColor('#7B6FE5')
       .addFields(...fields4)
-
-    if (fields4.length)
-      richEmbed4.setFooter(
-        `Made by jasp#8169.
-Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
-      )
-    else
-      richEmbed3.setFooter(
-        `Made by jasp#8169.
-Feedback/Bugs: https://github.com/midblue/timezone-bot/issues`,
-      )
 
     send(msg, richEmbed1, false, settings)
     send(msg, richEmbed2, false, settings)

@@ -8,7 +8,6 @@ module.exports = {
   },
   async action({ msg, settings, match }) {
     const turnOff = settings.suppressWarnings === true
-    console.log(settings.suppressWarnings, turnOff)
     console.log(
       `${
         msg.guild ? msg.guild.name : 'Private Message'

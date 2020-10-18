@@ -40,6 +40,8 @@ module.exports = {
       msg,
       `It's ${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
+        false,
+        settings.format24,
       )} in ${match[2]}. (${standardizeTimezoneName(
         foundTimezone.timezoneName,
       )})`,
