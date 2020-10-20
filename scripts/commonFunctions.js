@@ -5,11 +5,12 @@ const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
+let client
 const fuse = require('fuse.js')
 const fuseOptions = {
   shouldSort: true,
   location: 0,
-  threshold: 0.18, // was .3 for a long time
+  threshold: 0.18,
   distance: 1000,
   maxPatternLength: 20,
   minMatchCharLength: 2,
@@ -17,6 +18,11 @@ const fuseOptions = {
 }
 
 module.exports = {
+  setup(theCient) {
+    client = theCient
+    // not currently used
+  },
+
   standardizeTimezoneName(name) {
     return name.replace(
       /(Standard |Daylight |Summer |Winter |Spring |Fall )/gi,

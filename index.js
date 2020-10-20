@@ -12,7 +12,13 @@ set times for non-users
 
 require('dotenv').config()
 const Discord = require('discord.js')
-const client = new Discord.Client()
+const client = new Discord.Client({
+  messageCacheMaxSize: 2,
+  messageCacheLifetime: 30,
+  messageSweepInterval: 60,
+})
+const commonFunctions = require('./scripts/commonFunctions')
+commonFunctions.setup(client)
 const addedToServer = require('./events/addedToServer')
 const kickedFromServer = require('./events/kickedFromServer')
 const privateMessage = require('./events/receivePrivateMessage')
