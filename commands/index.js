@@ -23,7 +23,7 @@ module.exports = async function (msg, settings, client) {
       const senderIsAdmin =
         msg.guild &&
         msg.guild.member(msg.author) &&
-        msg.guild.member(msg.author).permissions.has('KICK_MEMBERS') // was 'ADMINISTRATOR'
+        msg.guild.member(msg.author).permissions.has('BAN_MEMBERS') // was 'ADMINISTRATOR'
       if (
         settings.adminOnly === true &&
         !command.ignoreAdminOnly &&
