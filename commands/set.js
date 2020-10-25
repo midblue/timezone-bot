@@ -6,6 +6,7 @@ const {
   getLightEmoji,
   currentTimeAt,
   getLabelFromUser,
+  standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
 const allCommands = require('./index')
 
@@ -62,17 +63,20 @@ module.exports = {
     const authorInGuild = await getUserInGuildFromId(msg.guild, msg.author.id)
     send(
       msg,
-      `Timezone for ${getLabelFromUser(authorInGuild)} set to ${
-        foundTimezone.timezoneName
-      }. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
+      `Timezone for ${getLabelFromUser(
+        authorInGuild,
+      )} set to ${standardizeTimezoneName(
+        foundTimezone.timezoneName,
+      )}. (${getLightEmoji(foundTimezone.location)}${currentTimeAt(
         foundTimezone.location,
         false,
         settings.format24,
       )})` +
         (match[1].length <= 4 ||
         (match[1].length <= 7 && match[1].indexOf('+') > -1) ||
-        (match[1].length <= 7 && match[1].indexOf('-') > -1)
-          ? `\nBy the way, location names always work better than timezone codes!`
+        (match[1].length <= 7 && match[1].indexOf('-') > -1) ||
+        match[1].toLowerCase().indexOf(' time') > -1
+          ? `\nBy the way, location names always work better than timezone codes/names!`
           : ''),
       false,
       settings,
