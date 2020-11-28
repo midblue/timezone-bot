@@ -3,7 +3,7 @@ const memo = require('../scripts/memo')
 
 const memoedGuildData = memo(100)
 
-module.exports = function(firestore) {
+module.exports = function (firestore) {
   return {
     async hasGuild({ guildId }) {
       const document = firestore.doc(`guilds/${guildId}`)
@@ -69,22 +69,10 @@ module.exports = function(firestore) {
       await document.update({ settings: newSettings })
     },
 
-    async getGuildUsers(guildId) {
-      const memoed = memoedGuildData.get(guildId)
-      if (memoed) return memoed.users
-
-      const guildDocRef = firestore.doc(`guilds/${guildId}`)
-      const doc = await guildDocRef.get()
-      const data = doc.data() || {}
-
-      memoedGuildData.set(guildId, data)
-
-      const users = data.users || {}
-      return users
-    },
+    getGuildUsers,
 
     async getUserInGuildFromId({ guildId, userId }) {
-      const users = await this.getGuildUsers(guildId)
+      const users = await getGuildUsers(guildId)
       return users[userId]
     },
 
@@ -121,4 +109,18 @@ module.exports = function(firestore) {
       // console.log(`Removed user ${userId} from guild ${guildId}`)
     },
   }
+}
+
+async function getGuildUsers(guildId) {
+  const memoed = memoedGuildData.get(guildId)
+  if (memoed) return memoed.users
+
+  const guildDocRef = firestore.doc(`guilds/${guildId}`)
+  const doc = await guildDocRef.get()
+  const data = doc.data() || {}
+
+  memoedGuildData.set(guildId, data)
+
+  const users = data.users || {}
+  return users
 }

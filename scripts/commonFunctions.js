@@ -35,7 +35,7 @@ module.exports = {
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     const usersInGuild = await getGuildMembers({ msg })
-    const usersInGuildWithSearchString = usersInGuild.map(user => ({
+    const usersInGuildWithSearchString = usersInGuild.map((user) => ({
       ...user,
       searchString: `${user.user.username} ${user.user.username}#${
         user.user.discriminator
@@ -56,7 +56,7 @@ module.exports = {
     usersToContact = await getUserInGuildFromId(guild, guild.ownerID)
     if (usersToContact) return [usersToContact]
     // at this point, we just look for an admin of any kind
-    usersToContact = (await getGuildMembers({ guild })).filter(member =>
+    usersToContact = (await getGuildMembers({ guild })).filter((member) =>
       member.permissions.has('ADMINISTRATOR'),
     )
     if (usersToContact && usersToContact.length > 0) return usersToContact
@@ -65,8 +65,9 @@ module.exports = {
 
   getLabelFromUser(user) {
     if (!user) return
-    return `${user.nickname ? user.nickname + ' (' : ''}${user.username ||
-      user.user.username}#${user.discriminator || user.user.discriminator}${
+    return `${user.nickname ? user.nickname + ' (' : ''}${
+      user.username || user.user.username
+    }#${user.discriminator || user.user.discriminator}${
       user.nickname ? ')' : ''
     }`
   },
@@ -82,7 +83,7 @@ module.exports = {
     })
     if (leadingZero) return localeString
     const twoDigitHourRegex = /[0-9]{2}:/
-    return localeString.replace(twoDigitHourRegex, match => {
+    return localeString.replace(twoDigitHourRegex, (match) => {
       if (match && match.substring(0, 1) === '0') return match.substring(1)
       return match
     })
@@ -143,7 +144,7 @@ module.exports = {
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
   const usersInGuild = await getGuildMembers({ guild, ids: [id] })
-  return usersInGuild.find(user => user.user.id == id)
+  return usersInGuild.find((user) => user.user.id == id)
 }
 
 async function getGuildMembers({ msg, guild, ids }) {
@@ -151,9 +152,11 @@ async function getGuildMembers({ msg, guild, ids }) {
   let members = []
   if (!ids) {
     // just get everything
+    // todo currently broken
+    console.error('THIS WILL BREAK, attempting to access all members')
     try {
       members = (
-        await guild.members.fetch().catch(e => {
+        await guild.members.fetch().catch((e) => {
           console.log(e)
           return
         })

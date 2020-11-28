@@ -45,6 +45,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
+    console.log(-1)
+
     let dayOfWeek = /^(?:mon|tues?|wedn?e?s?|thur?s?|fri|satu?r?|sun)d?a?y?/gi.exec(
       timeString.toLowerCase(),
     )
@@ -52,7 +54,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       dayOfWeek = dayOfWeek[0]
       timeString = timeString.substring(dayOfWeek.length + 1)
       dayOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].findIndex(
-        d => dayOfWeek.substring(0, 3) === d,
+        (d) => dayOfWeek.substring(0, 3) === d,
       )
     }
 
@@ -91,10 +93,27 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
+    console.log(0)
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
 
-    let targetUser = await getUserInGuildFromText(msg, userOrLocation)
+    console.log(0.5)
+    let targetUser
+
+    //* awaiting discord fix, this is disabled...
+    const mentionedUserIds = msg.mentions.members.array()
+    if (mentionedUserIds.length)
+      targetUser = {
+        ...(await getUserInGuildFromId({
+          guildId: msg.guild.id,
+          userId: mentionedUserIds[0].id,
+        })),
+        nickname:
+          mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
+        user: mentionedUserIds[0].user,
+      }
+    // = await getUserInGuildFromText(msg, userOrLocation)
+    // console.log(targetUser)
     if (targetUser) {
       username = targetUser.nickname || targetUser.user.username
       knownTimezoneDataForEnteredUserOrLocation = await db.getUserInGuildFromId(
@@ -103,6 +122,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           userId: targetUser.user.id,
         },
       )
+
+      console.log(knownTimezoneDataForEnteredUserOrLocation)
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
           msg,
@@ -115,6 +136,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         userOrLocation,
       )
 
+      console.log(knownTimezoneDataForEnteredUserOrLocation)
+
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
           msg,
@@ -123,6 +146,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           settings,
         )
     }
+    console.log(1)
     // console.log(knownTimezoneDataForEnteredUserOrLocation)
 
     let enteredDateAsObject = dayjs()
@@ -155,8 +179,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
+    console.log(2)
     const timezonesWithUsers = await Object.keys(allUsers)
-      .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
+      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
@@ -186,6 +211,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
     )
+    console.log(3)
 
     send(
       msg,
@@ -208,7 +234,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     let outputStrings = [''],
       currentString = 0
 
-    timezonesWithUsersAsSortedArray.forEach(timezone => {
+    timezonesWithUsersAsSortedArray.forEach((timezone) => {
       // ========= handle batching =========
       if (outputStrings[currentString].length >= 1500) {
         outputStrings[currentString] = outputStrings[currentString].substring(
@@ -246,6 +272,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       outputStrings[currentString].length - 1,
     )
 
-    outputStrings.forEach(s => send(msg, s, true, settings))
+    outputStrings.forEach((s) => send(msg, s, true, settings))
   },
 }

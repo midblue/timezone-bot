@@ -7,8 +7,6 @@ const {
   standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
-const time = require('./time')
-const Discord = require('discord.js')
 
 module.exports = {
   regex(settings) {
@@ -42,7 +40,7 @@ module.exports = {
       )
 
     const timezonesWithUsers = await Object.keys(allUsers)
-      .filter(id => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
+      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
         const userStub = allUsers[id]
@@ -80,7 +78,7 @@ module.exports = {
       )
     let outputStrings = [''],
       currentString = 0
-    timezonesWithUsersAsSortedArray.forEach(timezone => {
+    timezonesWithUsersAsSortedArray.forEach((timezone) => {
       if (outputStrings[currentString].length >= 1500) {
         outputStrings[currentString] = outputStrings[currentString].substring(
           0,
@@ -107,6 +105,6 @@ module.exports = {
       outputStrings[currentString].length - 2,
     )
 
-    outputStrings.forEach(s => send(msg, s, true, settings))
+    outputStrings.forEach((s) => send(msg, s, true, settings))
   },
 }

@@ -6,6 +6,7 @@ const contactGuildAdmin = require('../actions/contactGuildAdmin')
 
 // get all commands from files
 const fs = require('fs')
+const { getUserInGuildFromId } = require('../db/firestore')
 const commands = []
 fs.readdir('./commands', (err, files) => {
   files.forEach((file) => {
@@ -23,7 +24,7 @@ module.exports = async function (msg, settings, client) {
       const senderIsAdmin =
         msg.guild &&
         msg.guild.member(msg.author) &&
-        msg.guild.member(msg.author).permissions.has('BAN_MEMBERS') // was 'ADMINISTRATOR'
+        msg.guild.member(msg.author).permissions.has('BAN_MEMBERS') // was 'ADMINISTRATOR', sneakily switched
       if (
         settings.adminOnly === true &&
         !command.ignoreAdminOnly &&
@@ -47,15 +48,29 @@ module.exports = async function (msg, settings, client) {
         return true
       }
 
-      // embedded user check
+      //* This section is currently changed to @s only because of discord permissions issue
       let typedUser
-      if (
-        command.expectsUserInRegexSlot &&
-        match[command.expectsUserInRegexSlot]
-      ) {
-        const usernameInPlainText = match[command.expectsUserInRegexSlot]
-        typedUser = await getUserInGuildFromText(msg, usernameInPlainText)
-      }
+      const mentionedUserIds = msg.mentions.members.array()
+      if (mentionedUserIds.length)
+        typedUser = {
+          ...(await getUserInGuildFromId({
+            guildId: msg.guild.id,
+            userId: mentionedUserIds[0].id,
+          })),
+          nickname:
+            mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
+          user: mentionedUserIds[0].user,
+        }
+      console.log('index', typedUser, mentionedUserIds)
+      // // embedded user check
+      // let typedUser
+      // if (
+      //   command.expectsUserInRegexSlot &&
+      //   match[command.expectsUserInRegexSlot]
+      // ) {
+      //   const usernameInPlainText = match[command.expectsUserInRegexSlot]
+      //   typedUser = await getUserInGuildFromText(msg, usernameInPlainText)
+      // }
 
       // execute command
       await command.action({
