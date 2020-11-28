@@ -45,8 +45,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    console.log(-1)
-
     let dayOfWeek = /^(?:mon|tues?|wedn?e?s?|thur?s?|fri|satu?r?|sun)d?a?y?/gi.exec(
       timeString.toLowerCase(),
     )
@@ -93,11 +91,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    console.log(0)
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
 
-    console.log(0.5)
     let targetUser
 
     //* awaiting discord fix, this is disabled...
@@ -146,7 +142,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           settings,
         )
     }
-    console.log(1)
     // console.log(knownTimezoneDataForEnteredUserOrLocation)
 
     let enteredDateAsObject = dayjs()
@@ -179,7 +174,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    console.log(2)
     const timezonesWithUsers = await Object.keys(allUsers)
       .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
       .reduce(async (acc, id) => {
@@ -211,7 +205,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
     )
-    console.log(3)
 
     send(
       msg,

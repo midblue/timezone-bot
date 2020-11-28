@@ -61,7 +61,6 @@ module.exports = async function (msg, settings, client) {
             mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
           user: mentionedUserIds[0].user,
         }
-      console.log('index', typedUser, mentionedUserIds)
       // // embedded user check
       // let typedUser
       // if (
