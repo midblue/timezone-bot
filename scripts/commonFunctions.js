@@ -121,7 +121,7 @@ module.exports = {
           }),
         ).getHours()
       } catch (e) {
-        console.log(e)
+        console.log('failed to get light emoji for', location, e.message)
         return ''
       }
     }
