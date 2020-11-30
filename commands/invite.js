@@ -14,7 +14,7 @@ module.exports = {
 
     send(
       msg,
-      `The bot invite link is https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+      `The bot invite link is <https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot>`,
       'none',
       settings,
     )
