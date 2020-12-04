@@ -49,27 +49,27 @@ module.exports = async function (msg, settings, client) {
       }
 
       //* This section is currently changed to @s only because of discord permissions issue
-      let typedUser
-      const mentionedUserIds = msg.mentions.members.array()
-      if (mentionedUserIds.length)
-        typedUser = {
-          ...(await getUserInGuildFromId({
-            guildId: msg.guild.id,
-            userId: mentionedUserIds[0].id,
-          })),
-          nickname:
-            mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
-          user: mentionedUserIds[0].user,
-        }
-      // // embedded user check
       // let typedUser
-      // if (
-      //   command.expectsUserInRegexSlot &&
-      //   match[command.expectsUserInRegexSlot]
-      // ) {
-      //   const usernameInPlainText = match[command.expectsUserInRegexSlot]
-      //   typedUser = await getUserInGuildFromText(msg, usernameInPlainText)
-      // }
+      // const mentionedUserIds = msg.mentions.members.array()
+      // if (mentionedUserIds.length)
+      //   typedUser = {
+      //     ...(await getUserInGuildFromId({
+      //       guildId: msg.guild.id,
+      //       userId: mentionedUserIds[0].id,
+      //     })),
+      //     nickname:
+      //       mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
+      //     user: mentionedUserIds[0].user,
+      //   }
+      // embedded user check
+      let typedUser
+      if (
+        command.expectsUserInRegexSlot &&
+        match[command.expectsUserInRegexSlot]
+      ) {
+        const usernameInPlainText = match[command.expectsUserInRegexSlot]
+        typedUser = await getUserInGuildFromText(msg, usernameInPlainText)
+      }
 
       // execute command
       await command.action({

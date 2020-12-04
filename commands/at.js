@@ -94,22 +94,22 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
 
-    let targetUser
-
-    //* awaiting discord fix, this is disabled...
-    const mentionedUserIds = msg.mentions.members.array()
-    if (mentionedUserIds.length)
-      targetUser = {
-        ...(await getUserInGuildFromId({
-          guildId: msg.guild.id,
-          userId: mentionedUserIds[0].id,
-        })),
-        nickname:
-          mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
-        user: mentionedUserIds[0].user,
-      }
-    // = await getUserInGuildFromText(msg, userOrLocation)
+    //* awaiting discord fix, this is disabled... (re-enabled now!)
+    // let targetUser
+    // const mentionedUserIds = msg.mentions.members.array()
+    // if (mentionedUserIds.length)
+    //   targetUser = {
+    //     ...(await getUserInGuildFromId({
+    //       guildId: msg.guild.id,
+    //       userId: mentionedUserIds[0].id,
+    //     })),
+    //     nickname:
+    //       mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
+    //     user: mentionedUserIds[0].user,
+    //   }
+    const targetUser = await getUserInGuildFromText(msg, userOrLocation)
     // console.log(targetUser)
+
     if (targetUser) {
       username = targetUser.nickname || targetUser.user.username
       knownTimezoneDataForEnteredUserOrLocation = await db.getUserInGuildFromId(

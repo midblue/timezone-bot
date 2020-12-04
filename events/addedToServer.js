@@ -17,6 +17,6 @@ module.exports = async (guild) => {
     '> > > > > >           Was added to a new guild:',
     guild.name,
     guild.id,
-    // `(${(await getGuildMembers({ guild })).length} users)`,
+    `(${(await getGuildMembers({ guild })).length} users)`,
   )
 }

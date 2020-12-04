@@ -152,8 +152,6 @@ async function getGuildMembers({ msg, guild, ids }) {
   let members = []
   if (!ids) {
     // just get everything
-    // todo currently broken
-    console.error('THIS WILL BREAK, attempting to access all members')
     try {
       members = (
         await guild.members.fetch().catch((e) => {
