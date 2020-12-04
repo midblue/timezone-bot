@@ -47,6 +47,7 @@ module.exports = {
 
     await db.updateUserInGuild({
       guildId: msg.guild.id,
+      guildName: msg.guild.name,
       userId: typedUser.id || typedUser.user.id,
       updatedInfo: foundTimezone,
     })

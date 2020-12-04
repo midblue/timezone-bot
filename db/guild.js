@@ -24,6 +24,7 @@ module.exports = function (passedFirestore) {
       }
       memoedGuildData.set(guildId, newData)
       await document.set(newData)
+      return newData
       // console.log(`Added guild ${guildId}`)
     },
 
@@ -78,10 +79,14 @@ module.exports = function (passedFirestore) {
       return users[userId]
     },
 
-    async updateUserInGuild({ guildId, userId, updatedInfo }) {
+    async updateUserInGuild({ guildId, guildName, userId, updatedInfo }) {
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
-      const data = doc.data()
+      let data = doc.data()
+
+      // * had a bug where this was returning nothing
+      if (!data) data = await this.addGuild({ guildId, guildName })
+
       const users = data.users
       users[userId] = updatedInfo
 

@@ -119,7 +119,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         },
       )
 
-      console.log(knownTimezoneDataForEnteredUserOrLocation)
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
           msg,
