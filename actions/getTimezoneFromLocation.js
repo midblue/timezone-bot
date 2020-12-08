@@ -18,19 +18,18 @@ module.exports = (location) => {
   const UTCMatch = /^(?:utc|gmt) ?(\+|-)? ?(\d*)/gi.exec(location)
   if (UTCMatch) {
     // todo fix "UTC8" bug
+    const offset = UTCMatch[2]
+      ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area (swapped back now because people seemed to be having issues)
+      : 0
+    const offsetInverted = offset * -1
     const locationData = {
-      timezoneName: UTCMatch[0].toUpperCase(),
-      offset: UTCMatch[2]
-        ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area (swapped back now because people seemed to be having issues)
-        : 0,
-      location: `Etc/${UTCMatch[0]
-        .toUpperCase()
-        .replace('UTC', 'GMT')
-        .replace(/\s/g, '')
-        .replace('+', '.')
-        .replace('-', '+')
-        .replace('.', '-')}`, // swap + and -
+      timezoneName: `UTC${offset < 0 ? offset : '+' + offset}`,
+      offset,
+      location: `Etc/GMT${
+        offsetInverted < 0 ? offsetInverted : '+' + offsetInverted
+      }`,
     }
+    console.log(locationData)
     if (locationData.offset > 14 || locationData.offset < -12) return
     return locationData
   }

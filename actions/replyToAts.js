@@ -108,6 +108,8 @@ module.exports = async (msg, settings) => {
     const isNextToLast = index === usersToList.length - 2
     outputString += `${getLightEmoji(user.location)}${currentTimeAt(
       user.location,
+      false,
+      settings.format24,
     )} for ${user.displayName} (${standardizeTimezoneName(user.timezoneName)})`
     if (!isLast && usersToList.length > 2) outputString += ', '
     if (isNextToLast) outputString += ' and '
