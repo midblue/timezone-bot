@@ -48,7 +48,7 @@ module.exports = async function (msg, settings, client) {
         return true
       }
 
-      //* This section is currently changed to @s only because of discord permissions issue
+      //* This section is currently changed to @s only because of discord permissions issue (changed back now!)
       // let typedUser
       // const mentionedUserIds = msg.mentions.members.array()
       // if (mentionedUserIds.length)

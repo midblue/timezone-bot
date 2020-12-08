@@ -17,7 +17,9 @@ module.exports = {
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
         msg.guild ? ` (${msg.guild.id})` : ''
-      } - Admin set user ${match[1]} > ${match[2]} (${msg.author.username})`,
+      } - Admin set user ${
+        typedUser ? getLabelFromUser(typedUser) : match[1]
+      } > ${match[2]} (${msg.author.username})`,
     )
     if (!match[1] || !match[2]) {
       return send(

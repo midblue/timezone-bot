@@ -108,7 +108,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     //     user: mentionedUserIds[0].user,
     //   }
     const targetUser = await getUserInGuildFromText(msg, userOrLocation)
-    // console.log(targetUser)
 
     if (targetUser) {
       username = targetUser.nickname || targetUser.user.username
@@ -131,8 +130,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         userOrLocation,
       )
 
-      console.log(knownTimezoneDataForEnteredUserOrLocation)
-
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
           msg,
@@ -141,7 +138,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           settings,
         )
     }
-    // console.log(knownTimezoneDataForEnteredUserOrLocation)
 
     let enteredDateAsObject = dayjs()
       .minute(parseInt(minutes))
@@ -173,7 +169,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    const timezonesWithUsers = await Object.keys(allUsers)
+    const entries = await Object.keys(allUsers)
       .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
       .reduce(async (acc, id) => {
         acc = await acc
@@ -182,24 +178,33 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
         if (userObject) {
           const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-          if (!acc[timezoneName]) {
-            acc[timezoneName] = {
-              timezoneName,
+
+          // ========= determine local time =========
+          let dateObjectInTimezone = dayjs(dateObjectAt(userStub.location))
+          if (dayOfWeek !== null)
+            dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
+          dateObjectInTimezone = dateObjectInTimezone
+            .second(0)
+            .add(minutesFromNow, 'minute')
+            .add(hoursFromNow, 'hour')
+
+          const textEntry = dateObjectInTimezone.format()
+
+          if (!acc[textEntry])
+            acc[textEntry] = {
+              names: [timezoneName],
               locale: userStub.location,
-              usernames: [],
-              offset: userStub.offset,
+              localTimeAt: dateObjectInTimezone,
             }
-          }
-          acc[timezoneName].usernames.push(
-            userObject.nickname || userObject.user.username,
-          )
+          else acc[textEntry].names.push(timezoneName)
         }
+
         return acc
       }, {})
 
-    const timezonesWithUsersAsSortedArray = Object.values(
-      await timezonesWithUsers,
-    ).sort((a, b) => a.offset - b.offset)
+    const entriesAsSortedArray = Object.values(await entries).sort(
+      (a, b) => a.localTimeAt - b.localTimeAt,
+    )
 
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
@@ -226,7 +231,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     let outputStrings = [''],
       currentString = 0
 
-    timezonesWithUsersAsSortedArray.forEach((timezone) => {
+    entriesAsSortedArray.forEach((timezone) => {
       // ========= handle batching =========
       if (outputStrings[currentString].length >= 1500) {
         outputStrings[currentString] = outputStrings[currentString].substring(
@@ -237,25 +242,16 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         outputStrings[currentString] = ''
       }
 
-      // ========= determine local time =========
-      let dateObjectInTimezone = dayjs(dateObjectAt(timezone.locale))
-      if (dayOfWeek !== null)
-        dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
-      dateObjectInTimezone = dateObjectInTimezone
-        .second(0)
-        .add(minutesFromNow, 'minute')
-        .add(hoursFromNow, 'hour')
-
       // ========= add to string =========
       const timeString = toTimeString(
-        new Date(dateObjectInTimezone.format()),
+        new Date(timezone.localTimeAt.format()),
         timezone.locale,
         false,
         settings.format24,
       )
       const header = `${getLightEmoji(
-        dateObjectInTimezone.hour(),
-      )}${timeString} - ${timezone.timezoneName}`
+        timezone.localTimeAt.hour(),
+      )}${timeString} - ${timezone.names.join(', ')}`
       return (outputStrings[currentString] += header + '\n')
     }, '')
 

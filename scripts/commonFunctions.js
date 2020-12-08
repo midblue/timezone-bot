@@ -30,7 +30,6 @@ module.exports = {
     )
   },
 
-  // todo find a way to do this where we don't get EVERY guild member
   // * looks like {query} param does some sort of fuzzy search?
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
