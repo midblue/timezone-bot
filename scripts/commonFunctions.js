@@ -88,7 +88,7 @@ module.exports = {
     })
   },
 
-  toTimeString(date, location, leadingZero, format24) {
+  toTimeString(date, leadingZero, format24) {
     let formatString = 'ddd '
     if (format24) formatString += 'H'
     else formatString += 'h'

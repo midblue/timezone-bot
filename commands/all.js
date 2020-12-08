@@ -2,6 +2,8 @@ const db = require('../db/firestore')
 
 const {
   currentTimeAt,
+  toTimeString,
+  dateObjectAt,
   getUserInGuildFromId,
   getLightEmoji,
   standardizeTimezoneName,
@@ -53,6 +55,11 @@ module.exports = {
             acc[timezoneName] = {
               timezoneName,
               locale: userStub.location,
+              currentTime: dateObjectAt(
+                userStub.location,
+                true,
+                settings.format24,
+              ),
               usernames: [],
               offset: userStub.offset,
             }
@@ -66,7 +73,7 @@ module.exports = {
 
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,
-    ).sort((a, b) => a.offset - b.offset)
+    ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
 
     //  character limit is 2000, so, batching.
     if (onlyHere)
@@ -88,8 +95,8 @@ module.exports = {
         outputStrings[currentString] = ''
       }
 
-      const header = `${getLightEmoji(timezone.locale)}${currentTimeAt(
-        timezone.locale,
+      const header = `${getLightEmoji(timezone.locale)}${toTimeString(
+        timezone.currentTime,
         true,
         settings.format24,
       )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})

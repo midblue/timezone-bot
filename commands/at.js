@@ -193,7 +193,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           if (!acc[textEntry])
             acc[textEntry] = {
               names: [timezoneName],
-              locale: userStub.location,
               localTimeAt: dateObjectInTimezone,
             }
           else acc[textEntry].names.push(timezoneName)
@@ -245,7 +244,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       // ========= add to string =========
       const timeString = toTimeString(
         new Date(timezone.localTimeAt.format()),
-        timezone.locale,
         false,
         settings.format24,
       )
