@@ -195,7 +195,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
               names: [timezoneName],
               localTimeAt: dateObjectInTimezone,
             }
-          else acc[textEntry].names.push(timezoneName)
+          else if (!acc[textEntry].includes(timezoneName))
+            acc[textEntry].names.push(timezoneName)
         }
 
         return acc
@@ -244,7 +245,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       // ========= add to string =========
       const timeString = toTimeString(
         new Date(timezone.localTimeAt.format()),
-        false,
+        true,
         settings.format24,
       )
       const header = `${getLightEmoji(
