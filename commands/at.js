@@ -195,7 +195,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
               names: [timezoneName],
               localTimeAt: dateObjectInTimezone,
             }
-          else if (!acc[textEntry].includes(timezoneName))
+          else if (!acc[textEntry].names.includes(timezoneName))
             acc[textEntry].names.push(timezoneName)
         }
 
