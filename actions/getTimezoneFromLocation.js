@@ -29,7 +29,6 @@ module.exports = (location) => {
         offsetInverted < 0 ? offsetInverted : '+' + offsetInverted
       }`,
     }
-    console.log(locationData)
     if (locationData.offset > 14 || locationData.offset < -12) return
     return locationData
   }

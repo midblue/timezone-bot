@@ -34,6 +34,8 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
       ']',
       '(',
       ')',
+      '<',
+      '>',
       ':',
       '*',
       '|',
