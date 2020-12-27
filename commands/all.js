@@ -47,6 +47,7 @@ module.exports = {
       .map(async (id) => {
         const userStub = allUsers[id]
         const userObject = await getUserInGuildFromId(msg.guild, id)
+        console.log(!!userObject)
 
         if (userObject) {
           const timezoneName = standardizeTimezoneName(userStub.timezoneName)
