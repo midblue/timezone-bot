@@ -110,7 +110,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     const targetUser = await getUserInGuildFromText(msg, userOrLocation)
 
-    console.log(targetUser)
     if (targetUser) {
       username = targetUser.nickname || targetUser.user.username
       knownTimezoneDataForEnteredUserOrLocation = await db.getUserInGuildFromId(

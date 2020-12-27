@@ -142,8 +142,12 @@ module.exports = {
 
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
-  const userInGuild = await guild.members.fetch({ user: id })
-  return userInGuild
+  try {
+    const userInGuild = await guild.members.fetch({ user: id })
+    return userInGuild
+  } catch (e) {
+    return false
+  }
 }
 
 async function getGuildMembers({ msg, guild, ids }) {
