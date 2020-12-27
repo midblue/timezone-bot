@@ -41,18 +41,17 @@ module.exports = {
         settings,
       )
 
-    const timezonesWithUsers = await Object.keys(allUsers)
+    const timezonesWithUsers = {}
+    const promises = await Object.keys(allUsers)
       .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
-      .reduce(async (acc, id) => {
-        acc = await acc
+      .map(async (id) => {
         const userStub = allUsers[id]
-        // todo we could do them all at once
         const userObject = await getUserInGuildFromId(msg.guild, id)
 
         if (userObject) {
           const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-          if (!acc[timezoneName]) {
-            acc[timezoneName] = {
+          if (!timezonesWithUsers[timezoneName]) {
+            timezonesWithUsers[timezoneName] = {
               timezoneName,
               locale: userStub.location,
               currentTime: dateObjectAt(
@@ -64,12 +63,12 @@ module.exports = {
               offset: userStub.offset,
             }
           }
-          acc[timezoneName].usernames.push(
+          timezonesWithUsers[timezoneName].usernames.push(
             userObject.nickname || userObject.user.username,
           )
         }
-        return acc
-      }, {})
+      })
+    await Promise.all(promises)
 
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,

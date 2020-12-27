@@ -107,8 +107,10 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     //       mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
     //     user: mentionedUserIds[0].user,
     //   }
+
     const targetUser = await getUserInGuildFromText(msg, userOrLocation)
 
+    console.log(targetUser)
     if (targetUser) {
       username = targetUser.nickname || targetUser.user.username
       knownTimezoneDataForEnteredUserOrLocation = await db.getUserInGuildFromId(
@@ -169,10 +171,10 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    const entries = await Object.keys(allUsers)
+    const entries = {}
+    const promises = await Object.keys(allUsers)
       .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
-      .reduce(async (acc, id) => {
-        acc = await acc
+      .map(async (id) => {
         const userStub = allUsers[id]
         const userObject = await getUserInGuildFromId(msg.guild, id)
 
@@ -190,17 +192,16 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
           const textEntry = dateObjectInTimezone.format()
 
-          if (!acc[textEntry])
-            acc[textEntry] = {
+          if (!entries[textEntry])
+            entries[textEntry] = {
               names: [timezoneName],
               localTimeAt: dateObjectInTimezone,
             }
-          else if (!acc[textEntry].names.includes(timezoneName))
-            acc[textEntry].names.push(timezoneName)
+          else if (!entries[textEntry].names.includes(timezoneName))
+            entries[textEntry].names.push(timezoneName)
         }
-
-        return acc
-      }, {})
+      })
+    await Promise.all(promises)
 
     const entriesAsSortedArray = Object.values(await entries).sort(
       (a, b) => a.localTimeAt - b.localTimeAt,
