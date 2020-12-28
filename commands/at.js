@@ -171,9 +171,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    /*
-
-const timezonesWithUsers = {}
+    const entries = {}
     const guildMembers = (await getGuildMembers({ msg })).filter(
       (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
     )
@@ -186,39 +184,6 @@ const timezonesWithUsers = {}
       }
 
       const userStub = allUsers[id]
-      const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-      if (!timezonesWithUsers[timezoneName]) {
-        timezonesWithUsers[timezoneName] = {
-          timezoneName,
-          locale: userStub.location,
-          currentTime: dateObjectAt(userStub.location, true, settings.format24),
-          usernames: [],
-          offset: userStub.offset,
-        }
-      }
-      timezonesWithUsers[timezoneName].usernames.push(
-        userObject.nickname || userObject.user.username,
-      )
-    }
-
-    const timezonesWithUsersAsSortedArray = Object.values(
-      timezonesWithUsers,
-    ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
-
-
-			*/
-
-    const entries = {}
-    const guildMembers = (await getGuildMembers({ msg })).filter(
-      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
-    )
-
-    for (let id of Object.keys(allUsers)) {
-      const userObject = guildMembers.find((m) => m.user.id === id)
-      if (!userObject) {
-        db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
-        continue
-      }
       const timezoneName = standardizeTimezoneName(userStub.timezoneName)
 
       // ========= determine local time =========
