@@ -44,36 +44,42 @@ module.exports = {
     const timezonesWithUsers = {}
     const promises = await Object.keys(allUsers)
       .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
-      .map(async (id) => {
-        const userStub = allUsers[id]
-        const userObject = await getUserInGuildFromId(msg.guild, id)
-        console.log(!!userObject)
+      .map((id) => {
+        return new Promise(async (resolve) => {
+          const userStub = allUsers[id]
+          const userObject = await getUserInGuildFromId(msg.guild, id)
+          console.log(!!userObject)
 
-        if (userObject) {
-          const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-          if (!timezonesWithUsers[timezoneName]) {
-            timezonesWithUsers[timezoneName] = {
-              timezoneName,
-              locale: userStub.location,
-              currentTime: dateObjectAt(
-                userStub.location,
-                true,
-                settings.format24,
-              ),
-              usernames: [],
-              offset: userStub.offset,
+          if (userObject) {
+            const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+            if (!timezonesWithUsers[timezoneName]) {
+              timezonesWithUsers[timezoneName] = {
+                timezoneName,
+                locale: userStub.location,
+                currentTime: dateObjectAt(
+                  userStub.location,
+                  true,
+                  settings.format24,
+                ),
+                usernames: [],
+                offset: userStub.offset,
+              }
             }
+            timezonesWithUsers[timezoneName].usernames.push(
+              userObject.nickname || userObject.user.username,
+            )
+            console.log(userObject.nickname || userObject.user.username)
           }
-          timezonesWithUsers[timezoneName].usernames.push(
-            userObject.nickname || userObject.user.username,
-          )
-        }
+
+          return resolve()
+        })
       })
     await Promise.all(promises)
 
     const timezonesWithUsersAsSortedArray = Object.values(
       await timezonesWithUsers,
     ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
+    console.log(timezonesWithUsersAsSortedArray.length)
 
     //  character limit is 2000, so, batching.
     if (onlyHere)
