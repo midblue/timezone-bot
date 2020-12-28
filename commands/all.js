@@ -48,7 +48,6 @@ module.exports = {
         return new Promise(async (resolve) => {
           const userStub = allUsers[id]
           const userObject = await getUserInGuildFromId(msg.guild, id)
-          console.log(!!userObject)
 
           if (userObject) {
             const timezoneName = standardizeTimezoneName(userStub.timezoneName)
@@ -69,7 +68,8 @@ module.exports = {
               userObject.nickname || userObject.user.username,
             )
             console.log(userObject.nickname || userObject.user.username)
-          }
+          } else
+            console.log('failed to get user in guild by id', id, allUsers[id])
 
           return resolve()
         })
