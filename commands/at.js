@@ -170,37 +170,75 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    const entries = {}
-    const promises = await Object.keys(allUsers)
-      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // if "here", only members in this channel
-      .map(async (id) => {
-        const userStub = allUsers[id]
-        const userObject = await getUserInGuildFromId(msg.guild, id)
+    /*
 
-        if (userObject) {
-          const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+const timezonesWithUsers = {}
+    const guildMembers = (await getGuildMembers({ msg })).filter(
+      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
+    )
 
-          // ========= determine local time =========
-          let dateObjectInTimezone = dayjs(dateObjectAt(userStub.location))
-          if (dayOfWeek !== null)
-            dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
-          dateObjectInTimezone = dateObjectInTimezone
-            .second(0)
-            .add(minutesFromNow, 'minute')
-            .add(hoursFromNow, 'hour')
+    for (let id of Object.keys(allUsers)) {
+      const userObject = guildMembers.find((m) => m.user.id === id)
+      if (!userObject) {
+        db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
+        continue
+      }
 
-          const textEntry = dateObjectInTimezone.format()
-
-          if (!entries[textEntry])
-            entries[textEntry] = {
-              names: [timezoneName],
-              localTimeAt: dateObjectInTimezone,
-            }
-          else if (!entries[textEntry].names.includes(timezoneName))
-            entries[textEntry].names.push(timezoneName)
+      const userStub = allUsers[id]
+      const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+      if (!timezonesWithUsers[timezoneName]) {
+        timezonesWithUsers[timezoneName] = {
+          timezoneName,
+          locale: userStub.location,
+          currentTime: dateObjectAt(userStub.location, true, settings.format24),
+          usernames: [],
+          offset: userStub.offset,
         }
-      })
-    await Promise.all(promises)
+      }
+      timezonesWithUsers[timezoneName].usernames.push(
+        userObject.nickname || userObject.user.username,
+      )
+    }
+
+    const timezonesWithUsersAsSortedArray = Object.values(
+      timezonesWithUsers,
+    ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
+
+
+			*/
+
+    const entries = {}
+    const guildMembers = (await getGuildMembers({ msg })).filter(
+      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
+    )
+
+    for (let id of Object.keys(allUsers)) {
+      const userObject = guildMembers.find((m) => m.user.id === id)
+      if (!userObject) {
+        db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
+        continue
+      }
+      const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+
+      // ========= determine local time =========
+      let dateObjectInTimezone = dayjs(dateObjectAt(userStub.location))
+      if (dayOfWeek !== null)
+        dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
+      dateObjectInTimezone = dateObjectInTimezone
+        .second(0)
+        .add(minutesFromNow, 'minute')
+        .add(hoursFromNow, 'hour')
+
+      const textEntry = dateObjectInTimezone.format()
+
+      if (!entries[textEntry])
+        entries[textEntry] = {
+          names: [timezoneName],
+          localTimeAt: dateObjectInTimezone,
+        }
+      else if (!entries[textEntry].names.includes(timezoneName))
+        entries[textEntry].names.push(timezoneName)
+    }
 
     const entriesAsSortedArray = Object.values(await entries).sort(
       (a, b) => a.localTimeAt - b.localTimeAt,

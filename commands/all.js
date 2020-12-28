@@ -46,16 +46,11 @@ module.exports = {
     const guildMembers = (await getGuildMembers({ msg })).filter(
       (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
     )
-    console.log(
-      Object.keys(allUsers).length,
-      'users saved, guild has total members of',
-      guildMembers.length,
-    )
 
     for (let id of Object.keys(allUsers)) {
       const userObject = guildMembers.find((m) => m.user.id === id)
       if (!userObject) {
-        console.log('failed to find user in guild by id', id)
+        db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
         continue
       }
 
@@ -76,9 +71,8 @@ module.exports = {
     }
 
     const timezonesWithUsersAsSortedArray = Object.values(
-      await timezonesWithUsers,
+      timezonesWithUsers,
     ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
-    console.log(timezonesWithUsersAsSortedArray.length, 'unique timezones')
 
     //  character limit is 2000, so, batching.
     if (onlyHere)
