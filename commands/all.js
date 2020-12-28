@@ -70,13 +70,13 @@ module.exports = {
             timezonesWithUsers[timezoneName].usernames.push(
               userObject.nickname || userObject.user.username,
             )
-            console.log(userObject.nickname || userObject.user.username)
-          } else
-            console.log('failed to get user in guild by id', id, allUsers[id])
+          } else console.log('failed to get user in guild by id', id)
 
-          return resolve()
+          resolve()
         }),
       )
+
+    console.log(promises.length)
     await Promise.all(promises)
 
     const timezonesWithUsersAsSortedArray = Object.values(
