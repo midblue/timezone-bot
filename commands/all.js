@@ -42,10 +42,13 @@ module.exports = {
       )
 
     const timezonesWithUsers = {}
-    const promises = await Object.keys(allUsers)
-      .filter((id) => (onlyHere ? msg.channel.members.get(id) : true)) // only members in this channel
-      .map((id) => {
-        return new Promise(async (resolve) => {
+    const promises = []
+    console.log(Object.keys(allUsers).length, 'users total')
+    for (let id of Object.keys(allUsers).filter(
+      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
+    ))
+      promises.push(
+        new Promise(async (resolve) => {
           const userStub = allUsers[id]
           const userObject = await getUserInGuildFromId(msg.guild, id)
 
@@ -72,8 +75,8 @@ module.exports = {
             console.log('failed to get user in guild by id', id, allUsers[id])
 
           return resolve()
-        })
-      })
+        }),
+      )
     await Promise.all(promises)
 
     const timezonesWithUsersAsSortedArray = Object.values(
