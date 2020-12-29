@@ -173,7 +173,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     const entries = {}
     const guildMembers = (await getGuildMembers({ msg })).filter(
-      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
+      (guildMember) =>
+        onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
     )
 
     for (let id of Object.keys(allUsers)) {

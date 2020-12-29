@@ -44,7 +44,8 @@ module.exports = {
 
     const timezonesWithUsers = {}
     const guildMembers = (await getGuildMembers({ msg })).filter(
-      (id) => (onlyHere ? msg.channel.members.get(id) : true), // only members in this channel
+      (guildMember) =>
+        onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
     )
 
     for (let id of Object.keys(allUsers)) {
