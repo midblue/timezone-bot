@@ -180,7 +180,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     for (let id of Object.keys(allUsers)) {
       const userObject = guildMembers.find((m) => m.user.id === id)
       if (!userObject) {
-        db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
+        // db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
         continue
       }
 
