@@ -14,6 +14,7 @@ module.exports = {
       } - Role (${roleId})`,
     )
     const role = await (await msg.guild.roles).fetch(roleId)
+    console.log((await msg.guild.members.fetch()).array().length)
     const members = await role.members.array()
     console.log(members.length)
 
