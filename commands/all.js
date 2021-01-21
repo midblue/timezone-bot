@@ -18,7 +18,7 @@ module.exports = {
       'gi',
     )
   },
-  async action({ msg, settings, match, here = false }) {
+  async action({ msg, settings, match, here = false, users }) {
     const onlyHere =
       here ||
       (match[1] || '').toLowerCase() === 'here' ||
@@ -43,7 +43,7 @@ module.exports = {
       )
 
     const timezonesWithUsers = {}
-    const guildMembers = (await getGuildMembers({ msg })).filter(
+    const guildMembers = (users || (await getGuildMembers({ msg }))).filter(
       (guildMember) =>
         onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
     )
