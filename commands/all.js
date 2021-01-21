@@ -76,6 +76,14 @@ module.exports = {
       timezonesWithUsers,
     ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
 
+    if (!timezonesWithUsersAsSortedArray.length)
+      return send(
+        msg,
+        `No users with that criteria have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`,
+        'none',
+        settings,
+      )
+
     //  character limit is 2000, so, batching.
     if (onlyHere)
       send(

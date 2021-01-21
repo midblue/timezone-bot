@@ -5,7 +5,7 @@ const { getLabelFromUser } = require('../scripts/commonFunctions')
 module.exports = {
   admin: true,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:removeuser|r) (.*)`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:removeuser|ru) (.*)`, 'gi')
   },
   expectsUserInRegexSlot: 1,
   async action({ msg, match, typedUser, settings }) {

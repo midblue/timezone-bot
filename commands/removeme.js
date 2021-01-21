@@ -5,7 +5,7 @@ const { send } = require('../actions/replyInChannel')
 module.exports = {
   ignoreAdminOnly: true,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:removeme)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:removeme|rm)$`, 'gi')
   },
   async action({ msg, settings }) {
     console.log(
