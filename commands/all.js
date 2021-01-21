@@ -47,7 +47,6 @@ module.exports = {
       (guildMember) =>
         onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
     )
-    console.log('a', guildMembers.length)
 
     for (let id of Object.keys(allUsers)) {
       const userObject = guildMembers.find((m) => m.user.id === id)
@@ -57,7 +56,6 @@ module.exports = {
       }
 
       const userStub = allUsers[id]
-      console.log('b', userObject.user.username, userStub)
 
       const timezoneName = standardizeTimezoneName(userStub.timezoneName)
       if (!timezonesWithUsers[timezoneName]) {
