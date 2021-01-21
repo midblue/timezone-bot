@@ -3,7 +3,7 @@ const { send } = require('../actions/replyInChannel')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:role) (.*)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:role|r) (.*)$`, 'gi')
   },
   async action({ msg, match, settings }) {
     const roleId = match[1].substring(3, match[1].length - 1)
@@ -14,9 +14,22 @@ module.exports = {
       } - Role (${roleId})`,
     )
     const role = await (await msg.guild.roles).fetch(roleId)
-    console.log((await msg.guild.members.fetch()).array().length)
+    if (!role)
+      return send(
+        msg,
+        `The 'role' command lists the time for everyone in a certain role. I couldn't find a role by the name you entered.`,
+        false,
+        settings,
+      )
+
     const members = await role.members.array()
-    console.log(members.length)
+    if (!members.length)
+      return send(
+        msg,
+        `I couldn't find any members in that role.`,
+        false,
+        settings,
+      )
 
     send(
       msg,
