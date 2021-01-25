@@ -15,6 +15,7 @@ module.exports = {
       } - Role (${roleId})`,
     )
     const role = await (await msg.guild.roles).fetch(roleId)
+    console.log(roleId, role)
     if (!role)
       return send(
         msg,
