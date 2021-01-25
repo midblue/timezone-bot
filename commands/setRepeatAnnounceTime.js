@@ -6,15 +6,15 @@ module.exports = {
   admin: true,
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:repeatannouncetime|rat)[^\d]*(\d+)?`,
+      `^${settings.prefix}(?:repeatannouncetime|rat)( )?(.*)?$`,
       'gi',
     )
   },
   async action({ msg, settings, match }) {
     const currentRepeatAnnounceTime =
       settings.repeatAnnounceTime || defaultServerSettings.repeatAnnounceTime
-    let newTime = match[1]
-    if (!newTime) {
+    let newTime = match[2]
+    if (!newTime && newTime !== 0 && newTime !== '0') {
       return send(
         msg,
         `The current minimum time span for announcing the same user's timezone is ${currentRepeatAnnounceTime} minutes. Use \`${settings.prefix}repeatannouncetime <# of minutes>\` to change it.`,
@@ -23,12 +23,29 @@ module.exports = {
       )
     }
 
-    newTime = parseInt(newTime)
     console.log(
       `${
         msg.guild ? msg.guild.name : 'Private Message'
       } - Set repeat announce time > ${newTime} (${msg.author.username}) `,
     )
+
+    try {
+      newTime = parseInt(newTime)
+    } catch (e) {
+      return send(
+        msg,
+        `Use \`${settings.prefix}repeatannouncetime <# of minutes>\` to change the minimum time span for announcing the same user's timezone.`,
+        false,
+        settings,
+      )
+    }
+    if (isNaN(newTime))
+      return send(
+        msg,
+        `Use \`${settings.prefix}repeatannouncetime <# of minutes>\` to change the minimum time span for announcing the same user's timezone.`,
+        false,
+        settings,
+      )
 
     await db.setGuildSettings({
       guildId: msg.guild.id,
