@@ -7,6 +7,7 @@ const {
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 const all = require('./all')
+const role = require('./role')
 const me = require('./me')
 
 module.exports = {
@@ -42,6 +43,10 @@ module.exports = {
     // some people type "me" here expecting their own timezone. let's oblige them.
     if (match[2].toLowerCase() === 'me')
       return me.action({ msg, settings, senderIsAdmin })
+
+    // escape hatch to role command
+    if (match[2].substring(0, 3) === '<@&')
+      return role.action({ msg, settings, match })
 
     // if they typed a username
     if (typedUser) {

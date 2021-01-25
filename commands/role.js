@@ -23,7 +23,7 @@ module.exports = {
         settings,
       )
 
-    // this is just to prime the cache — if we don't, the cache doesn't have all users in it.
+    // this is just to prime the cache — if we don't, the cache doesn't necessarily have all users in it when we check for role members.
     await getGuildMembers({ msg })
 
     const members = await role.members.array()
