@@ -17,6 +17,7 @@ Allows users to set their timezone, then passively notes timezones when appropri
 - `t!timein <location name>` to see the current time in a specific place.
 - `t!set <city or country name>` to set your own timezone. (UTC codes also work, e.g. 'UTC+3', 'UTC-8')
 - `t!users` or `t!all` to see all users' set timezones. (use `t!here` to restrict to the current channel)
+- `t!role <@role>`to see the timezones for all users in a role.
 - `t!at <time> <user or location>` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. `t!at Mon 5PM Cairo`. Use `t!at here <time> <user or location>` to restrict to the current channel.)
 - `t!me` to see your set timezone.
 - `t!removeme` to delete your set timezone.

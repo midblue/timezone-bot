@@ -22,6 +22,9 @@ module.exports = {
         settings,
       )
 
+    // this is just to prime the cache — if we don't, the cache doesn't have all users in it.
+    await db.getGuildUsers(msg.guild.id)
+
     const members = await role.members.array()
     if (!members.length)
       return send(

@@ -99,5 +99,5 @@ module.exports = async function (msg, settings, client) {
     }
   }
 
-  if (settings.autoRespond !== false) await replyToAts(msg, settings)
+  if (settings.autoRespond !== false) await replyToAts(msg, settings) // had an unhandledpromiserejection here once?
 }
