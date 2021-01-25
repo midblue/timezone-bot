@@ -1,5 +1,6 @@
 const all = require('./all')
 const { send } = require('../actions/replyInChannel')
+const db = require('../db/firestore')
 
 module.exports = {
   regex(settings) {
