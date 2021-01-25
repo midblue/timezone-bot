@@ -18,7 +18,7 @@ module.exports = {
     )
     settings = settings || defaultServerSettings
 
-    const publicCommands = `\`${settings.prefix}time <user or location name>\` - See the current time for a specific user or in a specific place. (Semantic names work fine, i.e. 'lisbon')
+    const publicCommands = `\`${settings.prefix}time <user, role, or location name>\` - See the current time for a specific user, role, or in a specific place. (Semantic names work fine, i.e. 'lisbon')
 \`${settings.prefix}timein <location name>\` - See the current time in a specific place.
 \`${settings.prefix}set <location name>\` - Set your own timezone. (UTC+/- codes work too)
 \`${settings.prefix}users\` or \`${settings.prefix}all\` - See timezones for all users.

@@ -25,7 +25,7 @@ module.exports = {
     if (!match[1] || !match[2])
       return send(
         msg,
-        `Use this command in the format \`${settings.prefix}time <user, city, or country name>\` to see the time in a specific location or for a specific user.`,
+        `Use this command in the format \`${settings.prefix}time <user, role, city, or country name>\` to see the time in a specific location or for a specific user.`,
         'none',
         settings,
       )
