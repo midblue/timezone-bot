@@ -4,11 +4,10 @@ const { getGuildMembers } = require('../scripts/commonFunctions')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:role|r) (.*)$`, 'gi')
+    return new RegExp(`^${settings.prefix}(?:role|r)( )(.*)$`, 'gi')
   },
   async action({ msg, match, settings }) {
-    console.log(match)
-    const roleId = match[1].substring(3, match[1].length - 1)
+    const roleId = match[2].substring(3, match[2].length - 1)
 
     console.log(
       `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
