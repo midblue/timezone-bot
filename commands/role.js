@@ -1,6 +1,6 @@
 const all = require('./all')
 const { send } = require('../actions/replyInChannel')
-const db = require('../db/firestore')
+const { getGuildMembers } = require('../scripts/commonFunctions')
 
 module.exports = {
   regex(settings) {
@@ -24,7 +24,7 @@ module.exports = {
       )
 
     // this is just to prime the cache — if we don't, the cache doesn't have all users in it.
-    await db.getGuildUsers(msg.guild.id)
+    await getGuildMembers({ msg })
 
     const members = await role.members.array()
     if (!members.length)
