@@ -7,6 +7,7 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:role|r) (.*)$`, 'gi')
   },
   async action({ msg, match, settings }) {
+    console.log(match)
     const roleId = match[1].substring(3, match[1].length - 1)
 
     console.log(
@@ -15,7 +16,6 @@ module.exports = {
       } - Role (${roleId})`,
     )
     const role = await (await msg.guild.roles).fetch(roleId)
-    console.log(roleId, role)
     if (!role)
       return send(
         msg,
