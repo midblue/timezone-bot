@@ -17,7 +17,7 @@ module.exports = {
     if (!newTime) {
       return send(
         msg,
-        `The current minimum time span for announcing the same user's timezone is ${currentRepeatAnnounceTime} minutes. Use \`${settings.prefix}replytime <# of minutes>\` to change it.`,
+        `The current minimum time span for announcing the same user's timezone is ${currentRepeatAnnounceTime} minutes. Use \`${settings.prefix}repeatannouncetime <# of minutes>\` to change it.`,
         false,
         settings,
       )
