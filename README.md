@@ -7,9 +7,11 @@ A simple timezone bot for Discord servers.
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.
 
-> Read more about this project [here](https://www.jasperstephenson.com/posts/timezonebot).
+> [Read more about this project](https://www.jasperstephenson.com/posts/timezonebot)  
 
-> [Support server invite link](https://discord.gg/9MKpMCV)
+> [Donate to help with server costs](https://www.patreon.com/midblue)  
+
+> [Support server invite link](https://discord.gg/9MKpMCV)  
 
 ## Commands:
 
