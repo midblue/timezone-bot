@@ -54,6 +54,7 @@ module.exports = function (passedFirestore) {
       deleteResponse,
       suppressWarnings,
       format24,
+      repeatAnnounceTime,
     }) {
       const document = firestore.doc(`guilds/${guildId}`)
       const existingSettings = await this.getGuildSettings({ guildId })
