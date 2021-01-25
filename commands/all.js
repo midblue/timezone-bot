@@ -111,7 +111,7 @@ module.exports = {
       )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
       const body =
         '\n     ' +
-        timezone.usernames.sort((a, b) => (b > a ? -1 : 1)).join('\n     ') +
+        timezone.usernames.sort((a, b) => b - a).join('\n     ') +
         '\n\n'
       return (outputStrings[currentString] += header + body)
     }, '')
