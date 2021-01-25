@@ -112,12 +112,14 @@ module.exports = {
       console.log(
         timezone.usernames,
         timezone.usernames.sort((a, b) =>
-          b.toLowerCase() > a.toLowerCase() ? 1 : -1,
+          a.toLowerCase() > b.toLowerCase() ? 1 : -1,
         ),
       )
       const body =
         '\n     ' +
-        timezone.usernames.sort((a, b) => b - a).join('\n     ') +
+        timezone.usernames
+          .sort((a, b) => (a.toLowerCase() > b.toLowerCase() ? 1 : -1))
+          .join('\n     ') +
         '\n\n'
       return (outputStrings[currentString] += header + body)
     }, '')
