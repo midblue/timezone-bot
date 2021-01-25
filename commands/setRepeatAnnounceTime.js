@@ -6,7 +6,7 @@ module.exports = {
   admin: true,
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:repeatannouncetime|rat)[^\d]*(\d+)`,
+      `^${settings.prefix}(?:repeatannouncetime|rat)[^\d]*(\d+)?`,
       'gi',
     )
   },

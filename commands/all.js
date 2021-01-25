@@ -109,12 +109,6 @@ module.exports = {
         true,
         settings.format24,
       )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
-      console.log(
-        timezone.usernames,
-        timezone.usernames.sort((a, b) =>
-          a.toLowerCase() > b.toLowerCase() ? 1 : -1,
-        ),
-      )
       const body =
         '\n     ' +
         timezone.usernames

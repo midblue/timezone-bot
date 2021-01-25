@@ -101,18 +101,23 @@ module.exports = function (passedFirestore) {
       if (!data) return
       const users = data.users
 
-      if (!userId)
-        return console.log(
+      if (!userId) {
+        console.log(
           `Failed to remove user ${userId} from guild ${guildId}: No user ID supplied`,
         )
-      if (!users[userId])
-        return console.log(
+        return
+      }
+      if (!users[userId]) {
+        console.log(
           `Failed to remove user ${userId} from guild ${guildId}: No user found by that ID`,
         )
+        return 'No user found by that id.'
+      }
 
       delete users[userId]
       memoedGuildData.updateProp(guildId, 'users', users)
       await guildDocRef.update({ users })
+      return true
       // console.log(`Removed user ${userId} from guild ${guildId}`)
     },
   }

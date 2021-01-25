@@ -30,15 +30,18 @@ module.exports = {
         settings,
       )
     }
-    db.removeUserFromGuild({
+    const success = await db.removeUserFromGuild({
       guildId: msg.guild.id,
       userId: typedUser.id || typedUser.user.id,
     })
-    return send(
-      msg,
-      `Removed ${await getLabelFromUser(typedUser)} from timezone tracking.`,
-      false,
-      settings,
-    )
+    if (success === true)
+      return send(
+        msg,
+        `Removed ${await getLabelFromUser(typedUser)} from timezone tracking.`,
+        false,
+        settings,
+      )
+    else if (success) return send(msg, success, false, settings)
+    else return send(msg, `An unknown error occurred.`, false, settings)
   },
 }
