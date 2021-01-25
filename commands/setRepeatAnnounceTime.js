@@ -24,8 +24,8 @@ module.exports = {
     }
 
     console.log(
-      `${
-        msg.guild ? msg.guild.name : 'Private Message'
+      `${msg.guild ? msg.guild.name : 'Private Message'}${
+        msg.guild ? ` (${msg.guild.id})` : ''
       } - Set repeat announce time > ${newTime} (${msg.author.username}) `,
     )
 

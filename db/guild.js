@@ -63,6 +63,8 @@ module.exports = function (passedFirestore) {
       if (adminOnly !== undefined) newSettings.adminOnly = adminOnly
       if (deleteCommand !== undefined) newSettings.deleteCommand = deleteCommand
       if (format24 !== undefined) newSettings.format24 = format24
+      if (repeatAnnounceTime !== undefined)
+        newSettings.repeatAnnounceTime = repeatAnnounceTime
       if (deleteResponse !== undefined)
         newSettings.deleteResponse = deleteResponse
       if (suppressWarnings !== undefined)
