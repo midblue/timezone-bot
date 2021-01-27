@@ -192,6 +192,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       entriesAsSortedArray[0].localTimeAt.isBefore(
         entriesAsSortedArray[1].localTimeAt,
       ),
+      entriesAsSortedArray[1].localTimeAt.isBefore(
+        entriesAsSortedArray[0].localTimeAt,
+      ),
     )
 
     const typedTime = enteredDateAsObject.format(
