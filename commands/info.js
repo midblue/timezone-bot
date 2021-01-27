@@ -37,7 +37,7 @@ module.exports = {
 \`${settings.prefix}autorespond\` - Toggles auto-responses on/off.
 \`${settings.prefix}adminonly\` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 \`${settings.prefix}deletecommand\` - Toggles bot command deletion on/off.
-\`${settings.prefix}deleteresponse\` - Toggles bot response deletion (after 5 minutes) on/off.
+\`${settings.prefix}deleteresponse <number of seconds (optional)>\` - Sets bot response deletion time. Don't add a number to turn off.
 \`${settings.prefix}suppresswarnings\` - Toggles bot admin warnings on/off.`
 
     const fields1 = []

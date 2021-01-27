@@ -7,11 +7,11 @@ A simple timezone bot for Discord servers.
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.
 
-> [Read more about this project](https://www.jasperstephenson.com/posts/timezonebot)  
+> [Read more about this project](https://www.jasperstephenson.com/posts/timezonebot)
 
-> [Donate to help with server costs](https://www.patreon.com/midblue)  
+> [Donate to help with server costs](https://www.patreon.com/midblue)
 
-> [Support server invite link](https://discord.gg/9MKpMCV)  
+> [Support server invite link](https://discord.gg/9MKpMCV)
 
 ## Commands:
 
@@ -34,7 +34,7 @@ Allows users to set their timezone, then passively notes timezones when appropri
 - `t!autorespond` - Toggles auto-responses on/off.
 - `t!adminonly` - Toggles admin mode on/off. (Only server admins can invoke most commands)
 - `t!deletecommand` - Toggles bot command deletion on/off.
-- `t!deleteresponse` - Toggles bot response deletion (after 5 minutes) on/off.
+- `t!deleteresponse <number of seconds (optional)>` - Sets bot response deletion time. Don't add a number to turn off.
 - `t!suppresswarnings` - Toggles bot admin warnings on/off.
 
 (Most commands can be run by using the first letter of the command, e.g. 't!s Chicago' to set. 't!time' becomes 't!t'.)
