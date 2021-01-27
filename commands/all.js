@@ -4,6 +4,7 @@ const {
   currentTimeAt,
   toTimeString,
   dateObjectAt,
+  getOffset,
   getUserInGuildFromId,
   getGuildMembers,
   getLightEmoji,
@@ -111,7 +112,9 @@ module.exports = {
         timezone.currentTime,
         true,
         settings.format24,
-      )} - ${timezone.timezoneName}`
+      )} - ${timezone.timezoneName} (UTC${day()
+        .tz(timezone.locale)
+        .format('Z')})`
       const body =
         '\n     ' +
         timezone.usernames
