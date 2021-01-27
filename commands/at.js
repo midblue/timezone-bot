@@ -11,6 +11,7 @@ const {
   toTimeString,
   dateObjectAt,
   getUserInGuildFromId,
+  getOffset,
   getGuildMembers,
   getUserInGuildFromText,
   getLightEmoji,
@@ -185,20 +186,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         entries[textEntry].names.push(timezoneName)
     }
 
-    const entriesAsSortedArray = Object.values(entries).sort((a, b) => {
-      console.log(
-        a.localTimeObject.format(),
-        b.localTimeObject.format(),
-        a.localTimeObject.tz('America/Toronto', true).valueOf(),
-        b.localTimeObject.tz('America/Toronto', true).valueOf(),
-        a.localTimeObject.valueOf(),
-        b.localTimeObject.valueOf(),
-      )
-      return (
-        a.localTimeObject.tz('America/Toronto', true).valueOf() -
-        b.localTimeObject.tz('America/Toronto', true).valueOf()
-      )
-    })
+    const entriesAsSortedArray = Object.values(entries).sort(
+      (a, b) => getOffset(a.localTimeObject) - getOffset(b.localTimeObject),
+    )
 
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
