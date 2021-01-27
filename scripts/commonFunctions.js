@@ -30,7 +30,7 @@ module.exports = {
     try {
       if (typeof locale === 'object') date = locale
       else {
-        locale = locale.replace(/ /g, '_')
+        locale = locale.replace(/ /g, '_').replace(/UTC/gi, 'Etc/GMT')
         date = dayjs().tz(locale)
       }
       const offsetString = date.format('ZZ')
@@ -120,7 +120,10 @@ module.exports = {
         timeZone: location.replace(/UTC/gi, 'Etc/GMT'),
       }),
     )
-  },
+	},
+	dayDateObjectAt(location) {
+
+	}
 
   getLightEmoji(location) {
     let hour

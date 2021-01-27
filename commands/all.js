@@ -47,6 +47,7 @@ module.exports = {
       (guildMember) =>
         onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
     )
+    let foundUsersCount = 0
 
     for (let id of Object.keys(allUsers)) {
       const userObject = guildMembers.find((m) => m.user.id === id)
@@ -54,6 +55,7 @@ module.exports = {
         // db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
         continue
       }
+      foundUsersCount++
 
       const userStub = allUsers[id]
 
@@ -83,14 +85,16 @@ module.exports = {
         settings,
       )
 
+    send(
+      msg,
+      `${foundUsersCount} users with saved timezones${
+        onlyHere ? ` in <#${msg.channel.id}>` : ''
+      }:`,
+      'none',
+      settings,
+    )
+
     //  character limit is 2000, so, batching.
-    if (onlyHere)
-      send(
-        msg,
-        `Users with saved timezones in <#${msg.channel.id}>:`,
-        'none',
-        settings,
-      )
     let outputStrings = [''],
       currentString = 0
     timezonesWithUsersAsSortedArray.forEach((timezone) => {

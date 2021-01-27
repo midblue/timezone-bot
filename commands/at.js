@@ -9,8 +9,6 @@ dayjs.extend(relativeTime)
 
 const {
   toTimeString,
-  dateObjectAt,
-  getUserInGuildFromId,
   getOffset,
   getGuildMembers,
   getUserInGuildFromText,
@@ -141,6 +139,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         )
     }
 
+    // knownTimezoneDataForEnteredUserOrLocation.currentDateObject = day().tz(knownTimezoneDataForEnteredUserOrLocation.location)
+
     let enteredDateAsObject = dayjs()
       .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
       .minute(parseInt(minutes))
@@ -170,7 +170,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       const userStub = allUsers[id]
       const timezoneName = standardizeTimezoneName(userStub.timezoneName)
 
-      // ========= determine local time =========
+      // ========= determine local time at the entered time =========
       let dateObjectInTimezone = dayjs(enteredDateAsObject).tz(
         userStub.location,
       )
