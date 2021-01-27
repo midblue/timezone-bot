@@ -186,9 +186,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     }
 
     const entriesAsSortedArray = Object.values(await entries).sort(
-      (a, b) => a.localTimeAt.format() - b.localTimeAt.format(),
+      (a, b) => a.localTimeAt.valueOf() - b.localTimeAt.valueOf(),
     )
-    console.log(entriesAsSortedArray)
 
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
