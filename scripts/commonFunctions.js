@@ -120,10 +120,7 @@ module.exports = {
         timeZone: location.replace(/UTC/gi, 'Etc/GMT'),
       }),
     )
-	},
-	dayDateObjectAt(location) {
-
-	}
+  },
 
   getLightEmoji(location) {
     let hour
