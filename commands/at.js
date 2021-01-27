@@ -146,6 +146,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
     if (dayOfWeek !== null)
       enteredDateAsObject = enteredDateAsObject.day(dayOfWeek)
+    console.log('e', enteredDateAsObject.format())
 
     // const currentTimeAtThatLocation = dayjs().tz(
     //   knownTimezoneDataForEnteredUserOrLocation.location,
@@ -186,6 +187,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       let dateObjectInTimezone = dayjs(enteredDateAsObject).tz(
         userStub.location,
       )
+      console.log('a', dateObjectInTimezone.format(), userStub.location)
       // if (dayOfWeek !== null)
       //   dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
       // dateObjectInTimezone = dateObjectInTimezone
