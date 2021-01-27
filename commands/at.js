@@ -179,22 +179,31 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       if (!entries[textEntry])
         entries[textEntry] = {
           names: [timezoneName],
-          localTimeAt: dateObjectInTimezone,
+          localTimeObject: dateObjectInTimezone,
         }
       else if (!entries[textEntry].names.includes(timezoneName))
         entries[textEntry].names.push(timezoneName)
     }
 
     const entriesAsSortedArray = Object.values(await entries).sort((a, b) =>
-      a.localTimeAt.isBefore(b.localTimeAt) ? 1 : -1,
+      a.localTimeObject.isBefore(b.localTimeObject) ? 1 : -1,
     )
     console.log(
-      entriesAsSortedArray[0].localTimeAt.isBefore(
-        entriesAsSortedArray[1].localTimeAt,
+      entriesAsSortedArray[0].localTimeObject.isBefore(
+        entriesAsSortedArray[1].localTimeObject,
       ),
-      entriesAsSortedArray[1].localTimeAt.isBefore(
-        entriesAsSortedArray[0].localTimeAt,
+      entriesAsSortedArray[1].localTimeObject.isBefore(
+        entriesAsSortedArray[0].localTimeObject,
       ),
+      entriesAsSortedArray[1].localTimeObject.isBefore(
+        entriesAsSortedArray[2].localTimeObject,
+      ),
+      entriesAsSortedArray[1].localTimeObject.isBefore(
+        entriesAsSortedArray[2].localTimeObject,
+      ),
+      entriesAsSortedArray[0].localTimeObject.valueOf(),
+      entriesAsSortedArray[1].localTimeObject.valueOf(),
+      typeof entriesAsSortedArray[1].localTimeObject.valueOf(),
     )
 
     const typedTime = enteredDateAsObject.format(
@@ -235,12 +244,12 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
       // ========= add to string =========
       const timeString = toTimeString(
-        timezone.localTimeAt,
+        timezone.localTimeObject,
         true,
         settings.format24,
       )
       const header = `${getLightEmoji(
-        timezone.localTimeAt.hour(),
+        timezone.localTimeObject.hour(),
       )}${timeString} - ${timezone.names.join(', ')}`
       return (outputStrings[currentString] += header + '\n')
     }, '')
