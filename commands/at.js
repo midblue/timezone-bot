@@ -27,11 +27,13 @@ module.exports = {
     let timeString = match[2]
 
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - Time at ${timeString} ${onlyHere ? `in #${msg.channel.name} ` : ''}(${
-        msg.author.username
-      })`,
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - Time at ${timeString} ${
+        onlyHere ? `in #${msg.channel.name} ` : ''
+      }(${msg.author.username})`,
     )
 
     if (!timeString)

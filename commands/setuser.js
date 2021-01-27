@@ -15,9 +15,11 @@ module.exports = {
   expectsUserInRegexSlot: 1,
   async action({ msg, match, settings, typedUser }) {
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - Admin set user ${
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - Admin set user ${
         typedUser ? getLabelFromUser(typedUser) : match[1]
       } > ${match[2]} (${msg.author.username})`,
     )

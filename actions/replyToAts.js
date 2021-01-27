@@ -17,7 +17,7 @@ let recentlyAnnounced = []
 module.exports = async (msg, settings) => {
   if (msg.author.bot) return
 
-  const mentionedUserIds = msg.mentions.members.array().map((u) => u.id) // todo maybe this needs a cache check too
+  const mentionedUserIds = msg.mentions.members.array().map((u) => u.id)
   if (mentionedUserIds.length === 0) return
 
   const authorId = msg.author.id

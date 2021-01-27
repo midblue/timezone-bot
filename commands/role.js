@@ -10,9 +10,11 @@ module.exports = {
     const roleId = match[2].substring(3, match[2].length - 1)
 
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - Role (${roleId})`,
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - Role (${roleId})`,
     )
     const role = await (await msg.guild.roles).fetch(roleId)
     if (!role)

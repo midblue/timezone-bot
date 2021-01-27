@@ -17,9 +17,13 @@ module.exports = {
   },
   async action({ msg, settings, match, typedUser, senderIsAdmin }) {
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - Time for ${match[2]} (${msg.author.username})`,
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - Time for ${match[2]} (${
+        msg.author.username
+      })`,
     )
 
     if (!match[1] || !match[2])

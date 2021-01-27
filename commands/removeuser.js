@@ -10,9 +10,13 @@ module.exports = {
   expectsUserInRegexSlot: 1,
   async action({ msg, match, typedUser, settings }) {
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - Admin remove user ${match[1]} (${msg.author.username})`,
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - Admin remove user ${
+        match[1]
+      } (${msg.author.username})`,
     )
     if (!match[1]) {
       return send(

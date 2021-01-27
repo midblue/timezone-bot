@@ -42,9 +42,13 @@ module.exports = {
       )
 
     console.log(
-      `${msg.guild ? msg.guild.name.substring(0, 20) : 'Private Message'}${
-        msg.guild ? ` (${msg.guild.id})` : ''
-      } - ${msg.author.username} > set to ${match[1]}`,
+      `${
+        msg.guild
+          ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
+          : 'Private Message'
+      }${msg.guild ? ` (${msg.guild.id})` : ''} - ${
+        msg.author.username
+      } > set to ${match[1]}`,
     )
 
     const foundTimezone = await getTimezoneFromLocation(match[1])

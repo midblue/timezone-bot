@@ -1,0 +1,6 @@
+**Upgrades**
+- Added a "seconds" parameter to the `t!deleteresponse` command — use `t!deleteresponse 30` to delete responses after 30 seconds, and so on
+- Added total user count and UTC offsets to `t!all` command
+
+**Bugfixes**
+- Fixed a bug where the suppresswarnings option interfered with response deletion
