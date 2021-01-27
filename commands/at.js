@@ -185,25 +185,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         entries[textEntry].names.push(timezoneName)
     }
 
-    const entriesAsSortedArray = Object.values(await entries).sort((a, b) =>
-      a.localTimeObject.isBefore(b.localTimeObject) ? 1 : -1,
-    )
-    console.log(
-      entriesAsSortedArray[0].localTimeObject.isBefore(
-        entriesAsSortedArray[1].localTimeObject,
-      ),
-      entriesAsSortedArray[1].localTimeObject.isBefore(
-        entriesAsSortedArray[0].localTimeObject,
-      ),
-      entriesAsSortedArray[1].localTimeObject.isBefore(
-        entriesAsSortedArray[2].localTimeObject,
-      ),
-      entriesAsSortedArray[1].localTimeObject.isBefore(
-        entriesAsSortedArray[2].localTimeObject,
-      ),
-      entriesAsSortedArray[0].localTimeObject.valueOf(),
-      entriesAsSortedArray[1].localTimeObject.valueOf(),
-      typeof entriesAsSortedArray[1].localTimeObject.valueOf(),
+    const entriesAsSortedArray = Object.values(await entries).sort(
+      (a, b) => a.localTimeObject.valueOf() - b.localTimeObject.valueOf(),
     )
 
     const typedTime = enteredDateAsObject.format(
