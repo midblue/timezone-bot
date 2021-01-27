@@ -146,20 +146,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       .hour(parseInt(hours))
     if (dayOfWeek !== null)
       enteredDateAsObject = enteredDateAsObject.day(dayOfWeek)
-    console.log('e', enteredDateAsObject.format(), hours, minutes)
-
-    // const currentTimeAtThatLocation = dayjs().tz(
-    //   knownTimezoneDataForEnteredUserOrLocation.location,
-    // )
-    // let hoursFromNow = hours - currentTimeAtThatLocation.getHours()
-
-    // let minutesFromNow =
-    //   parseInt(minutes) - currentTimeAtThatLocation.getMinutes()
-
-    // if (dayOfWeek === null && hoursFromNow < 0) {
-    //   hoursFromNow += 24 // no checking into the past
-    //   enteredDateAsObject = enteredDateAsObject.add(1, 'day')
-    // }
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
     if ((await Object.keys(allUsers)).length === 0)
@@ -187,13 +173,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       let dateObjectInTimezone = dayjs(enteredDateAsObject).tz(
         userStub.location,
       )
-      console.log('a', dateObjectInTimezone.format(), userStub.location)
-      // if (dayOfWeek !== null)
-      //   dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
-      // dateObjectInTimezone = dateObjectInTimezone
-      //   .second(0)
-      //   .add(minutesFromNow, 'minute')
-      //   .add(hoursFromNow, 'hour')
 
       const textEntry = dateObjectInTimezone.format()
 
@@ -207,7 +186,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     }
 
     const entriesAsSortedArray = Object.values(await entries).sort(
-      (a, b) => a.localTimeAt - b.localTimeAt,
+      (a, b) => a.localTimeAt.format() - b.localTimeAt.format(),
     )
     console.log(entriesAsSortedArray)
 
