@@ -117,7 +117,7 @@ module.exports = {
         timezone.currentTime,
         true,
         settings.format24,
-      )} - ${timezone.timezoneName} (UTC${day()
+      )} - ${timezone.timezoneName} (UTC${dayjs()
         .tz(timezone.locale)
         .format('Z')})`
       const body =
