@@ -141,12 +141,12 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     }
 
     let enteredDateAsObject = dayjs()
+      .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
       .minute(parseInt(minutes))
       .hour(parseInt(hours))
-      .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
     if (dayOfWeek !== null)
       enteredDateAsObject = enteredDateAsObject.day(dayOfWeek)
-    console.log('e', enteredDateAsObject.format())
+    console.log('e', enteredDateAsObject.format(), hours, minutes)
 
     // const currentTimeAtThatLocation = dayjs().tz(
     //   knownTimezoneDataForEnteredUserOrLocation.location,
@@ -209,6 +209,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     const entriesAsSortedArray = Object.values(await entries).sort(
       (a, b) => a.localTimeAt - b.localTimeAt,
     )
+    console.log(entriesAsSortedArray)
 
     const typedTime = enteredDateAsObject.format(
       settings.format24 ? 'ddd H:mm' : 'ddd h:mm A',
@@ -248,7 +249,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
       // ========= add to string =========
       const timeString = toTimeString(
-        new Date(timezone.localTimeAt.format()),
+        timezone.localTimeAt,
         true,
         settings.format24,
       )
