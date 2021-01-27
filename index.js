@@ -1,9 +1,6 @@
 // todo
 /*
-moment
-put back accurate UTC codes
 save server counts/dates
-t!at 10pm -> all @ time
 set times for non-users
 */
 
@@ -17,9 +14,9 @@ const client = new Discord.Client({
   messageCacheLifetime: 30,
   messageSweepInterval: 60,
   disabledEvents: [
-    'GUILD_ROLE_CREATE',
-    'GUILD_ROLE_DELETE',
-    'GUILD_ROLE_UPDATE',
+    // 'GUILD_ROLE_CREATE',
+    // 'GUILD_ROLE_DELETE',
+    // 'GUILD_ROLE_UPDATE',
     'GUILD_BAN_ADD',
     'GUILD_BAN_REMOVE',
     'GUILD_EMOJIS_UPDATE',
@@ -31,8 +28,7 @@ const client = new Discord.Client({
     'VOICE_SERVER_UPDATE',
   ],
 })
-const commonFunctions = require('./scripts/commonFunctions')
-commonFunctions.setup(client)
+// const commonFunctions = require('./scripts/commonFunctions')
 const addedToServer = require('./events/addedToServer')
 const kickedFromServer = require('./events/kickedFromServer')
 const privateMessage = require('./events/receivePrivateMessage')

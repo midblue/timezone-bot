@@ -5,7 +5,6 @@ const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
-let client
 const fuse = require('fuse.js')
 const fuseOptions = {
   shouldSort: true,
@@ -18,16 +17,27 @@ const fuseOptions = {
 }
 
 module.exports = {
-  setup(theCient) {
-    client = theCient
-    // not currently used
-  },
-
   standardizeTimezoneName(name) {
     return name.replace(
       /(Standard |Daylight |Summer |Winter |Spring |Fall )/gi,
       '',
     )
+  },
+
+  getOffset(locale) {
+    if (!locale) return 0
+    locale = locale.replace(/ /g, '_')
+    try {
+      const date = dayjs().tz(locale)
+      console.log(date.format())
+      const offsetString = date.format('ZZ')
+      const negativeMultiplier = offsetString.substring(0, 1) === '-' ? -1 : 1
+      const value = parseInt(offsetString.substring(1, 3))
+      return value * negativeMultiplier
+    } catch (e) {
+      console.log(e.message)
+      return 0
+    }
   },
 
   // * looks like {query} param does some sort of fuzzy search?

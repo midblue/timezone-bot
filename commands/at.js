@@ -92,9 +92,6 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    let knownTimezoneDataForEnteredUserOrLocation,
-      username = false
-
     //* awaiting discord fix, this is disabled... (re-enabled now!)
     // let targetUser
     // const mentionedUserIds = msg.mentions.members.array()
@@ -109,6 +106,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     //     user: mentionedUserIds[0].user,
     //   }
 
+    let knownTimezoneDataForEnteredUserOrLocation,
+      username = false
     const targetUser = await getUserInGuildFromText(msg, userOrLocation)
 
     if (targetUser) {
@@ -144,23 +143,22 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     let enteredDateAsObject = dayjs()
       .minute(parseInt(minutes))
       .hour(parseInt(hours))
-
-    if (dayOfWeek !== null) {
+      .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
+    if (dayOfWeek !== null)
       enteredDateAsObject = enteredDateAsObject.day(dayOfWeek)
-    }
 
-    const currentTimeAtThatLocation = dateObjectAt(
-      knownTimezoneDataForEnteredUserOrLocation.location,
-    )
-    let hoursFromNow = hours - currentTimeAtThatLocation.getHours()
+    // const currentTimeAtThatLocation = dayjs().tz(
+    //   knownTimezoneDataForEnteredUserOrLocation.location,
+    // )
+    // let hoursFromNow = hours - currentTimeAtThatLocation.getHours()
 
-    let minutesFromNow =
-      parseInt(minutes) - currentTimeAtThatLocation.getMinutes()
+    // let minutesFromNow =
+    //   parseInt(minutes) - currentTimeAtThatLocation.getMinutes()
 
-    if (dayOfWeek === null && hoursFromNow < 0) {
-      hoursFromNow += 24 // no checking into the past
-      enteredDateAsObject = enteredDateAsObject.add(1, 'day')
-    }
+    // if (dayOfWeek === null && hoursFromNow < 0) {
+    //   hoursFromNow += 24 // no checking into the past
+    //   enteredDateAsObject = enteredDateAsObject.add(1, 'day')
+    // }
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
     if ((await Object.keys(allUsers)).length === 0)
@@ -179,22 +177,21 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     for (let id of Object.keys(allUsers)) {
       const userObject = guildMembers.find((m) => m.user.id === id)
-      if (!userObject) {
-        // db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
-        continue
-      }
+      if (!userObject) continue
 
       const userStub = allUsers[id]
       const timezoneName = standardizeTimezoneName(userStub.timezoneName)
 
       // ========= determine local time =========
-      let dateObjectInTimezone = dayjs(dateObjectAt(userStub.location))
-      if (dayOfWeek !== null)
-        dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
-      dateObjectInTimezone = dateObjectInTimezone
-        .second(0)
-        .add(minutesFromNow, 'minute')
-        .add(hoursFromNow, 'hour')
+      let dateObjectInTimezone = dayjs(enteredDateAsObject).tz(
+        userStub.location,
+      )
+      // if (dayOfWeek !== null)
+      //   dateObjectInTimezone = dateObjectInTimezone.day(dayOfWeek)
+      // dateObjectInTimezone = dateObjectInTimezone
+      //   .second(0)
+      //   .add(minutesFromNow, 'minute')
+      //   .add(hoursFromNow, 'hour')
 
       const textEntry = dateObjectInTimezone.format()
 

@@ -64,7 +64,6 @@ module.exports = {
           locale: userStub.location,
           currentTime: dateObjectAt(userStub.location, true, settings.format24),
           usernames: [],
-          offset: userStub.offset,
         }
       }
       timezonesWithUsers[timezoneName].usernames.push(
@@ -108,7 +107,7 @@ module.exports = {
         timezone.currentTime,
         true,
         settings.format24,
-      )} - ${timezone.timezoneName}` // (UTC${timezone.offset >= 0 ? '+' : ''}${timezone.offset})
+      )} - ${timezone.timezoneName}`
       const body =
         '\n     ' +
         timezone.usernames

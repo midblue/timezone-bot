@@ -21,15 +21,15 @@ module.exports = (location) => {
     const offset = UTCMatch[2]
       ? parseInt(UTCMatch[2]) * (UTCMatch[1] === '-' ? -1 : 1) // signs on these are intentionally inverted because this world is hell: https://en.wikipedia.org/wiki/Tz_database#Area (swapped back now because people seemed to be having issues)
       : 0
+    if (offset > 14 || offset < -12) return
+
     const offsetInverted = offset * -1
     const locationData = {
       timezoneName: `UTC${offset < 0 ? offset : '+' + offset}`,
-      offset,
       location: `Etc/GMT${
         offsetInverted < 0 ? offsetInverted : '+' + offsetInverted
       }`,
     }
-    if (locationData.offset > 14 || locationData.offset < -12) return
     return locationData
   }
 
@@ -39,7 +39,6 @@ module.exports = (location) => {
   if (foundTimezoneCode !== undefined) {
     const locationData = {
       timezoneName: timezoneCodeName,
-      offset: foundTimezoneCode,
       location: `Etc/GMT${
         foundTimezoneCode >= 0 ? '+' : ''
       }${foundTimezoneCode}`
@@ -73,7 +72,6 @@ module.exports = (location) => {
       if (foundTimezone.status === 'OK') {
         const result = {
           timezoneName: standardizeTimezoneName(foundTimezone.timeZoneName),
-          offset: foundTimezone.rawOffset / 60 / 60,
           location: foundTimezone.timeZoneId,
         }
         db.setLocation({ locationName: location, locationSettings: result })
