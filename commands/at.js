@@ -187,11 +187,17 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     const entriesAsSortedArray = Object.values(entries).sort((a, b) => {
       console.log(
-        a.localTimeObject.valueOf() - b.localTimeObject.valueOf(),
+        a.localTimeObject.format(),
+        b.localTimeObject.format(),
+        a.localTimeObject.tz('America/Toronto').valueOf(),
+        b.localTimeObject.tz('America/Toronto').valueOf(),
         a.localTimeObject.valueOf(),
         b.localTimeObject.valueOf(),
       )
-      return a.localTimeObject.valueOf() - b.localTimeObject.valueOf()
+      return (
+        a.localTimeObject.tz('America/Toronto').valueOf() -
+        b.localTimeObject.tz('America/Toronto').valueOf()
+      )
     })
 
     const typedTime = enteredDateAsObject.format(
