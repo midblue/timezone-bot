@@ -123,7 +123,7 @@ module.exports = async (msg, settings) => {
   console.log(
     `${
       msg.guild && msg.guild.name
-        ? msg.guild.name.substring(0, 20)
+        ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
         : 'Private Message'
     }${msg.guild ? ` (${msg.guild.id})` : ''} - ${usersToList.length} @${
       usersToList.length === 1 ? '' : 's'
