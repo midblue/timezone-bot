@@ -16,6 +16,11 @@ module.exports = {
       msg.channel
         .send(message)
         .then((sentMsg) => {
+          // console.log(
+          //   msg.guild.name,
+          //   settings && typeof settings.deleteResponse,
+          //   settings && settings.deleteResponse,
+          // )
           if (settings && settings.deleteResponse) {
             setTimeout(
               async () => {
@@ -31,7 +36,9 @@ module.exports = {
                       })
                     console.error('Failed to delete!', err.message)
                   })
-                } catch (e) {}
+                } catch (e) {
+                  console.error('Failed to delete!!', e.message)
+                }
               },
               typeof settings.deleteResponse === 'number'
                 ? settings.deleteResponse * 1000

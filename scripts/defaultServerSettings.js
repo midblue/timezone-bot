@@ -5,4 +5,5 @@ module.exports = {
   deleteCommand: false,
   deleteResponse: false,
   repeatAnnounceTime: 30,
+  format24: true,
 }

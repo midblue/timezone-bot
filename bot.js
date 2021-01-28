@@ -7,7 +7,6 @@ set times for non-users
 // test realm is 605053799404666880
 // https://discord.com/api/oauth2/authorize?client_id=723017262369472603&permissions=75840&scope=bot
 
-require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client({
   messageCacheMaxSize: 2,
