@@ -45,7 +45,7 @@ module.exports = {
       settings,
       match,
       users: members,
-      prependText: `in \`@${role.name}\`:`,
+      prependText: `in \`@${role.name}\``,
     })
   },
 }
