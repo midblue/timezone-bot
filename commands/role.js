@@ -8,7 +8,7 @@ module.exports = {
   },
   async action({ msg, match, settings }) {
     let roleId = match[2]
-    if (roleId.indexOf('<@&' === 0))
+    if (roleId.indexOf('<@&') === 0)
       roleId = roleId.substring(3, roleId.length - 1)
 
     console.log(
@@ -18,9 +18,7 @@ module.exports = {
           : 'Private Message'
       }${msg.guild ? ` (${msg.guild.id})` : ''} - Role (${roleId})`,
     )
-    const roles = (await msg.guild.roles.fetch()).cache
-      .array()
-      .map((r) => ({ id: r.id, name: r.name }))
+    const roles = (await msg.guild.roles.fetch()).cache.array()
     const role = roles.find((r) => r.id === roleId || r.name === roleId)
     if (!role)
       return send(
