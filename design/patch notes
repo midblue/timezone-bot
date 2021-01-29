@@ -1,3 +1,7 @@
+**New Feature**
+- PMing the bot will now function just like the `t!timein` command! Just send it a location, i.e. 'india', and it'll give you the time.
+- Added a `t!support` command to paste the support server link
+
 **Upgrades**
 - Added a "seconds" parameter to the `t!deleteresponse` command — use `t!deleteresponse 30` to delete responses after 30 seconds, and so on
 - Added total user count and UTC offsets to `t!all` command

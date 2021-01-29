@@ -7,7 +7,9 @@ module.exports = {
     return new RegExp(`^${settings.prefix}(?:role|r)( )(.*)$`, 'gi')
   },
   async action({ msg, match, settings }) {
-    const roleId = match[2].substring(3, match[2].length - 1)
+    let roleId = match[2]
+    if (roleId.indexOf('<@&' === 0))
+      roleId = roleId.substring(3, roleId.length - 1)
 
     console.log(
       `${
