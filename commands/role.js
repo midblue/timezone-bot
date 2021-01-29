@@ -18,7 +18,10 @@ module.exports = {
           : 'Private Message'
       }${msg.guild ? ` (${msg.guild.id})` : ''} - Role (${roleId})`,
     )
-    const role = await (await msg.guild.roles).fetch(roleId)
+    const roles = (await msg.guild.roles.fetch()).cache
+      .array()
+      .map((r) => ({ id: r.id, name: r.name }))
+    const role = roles.find((r) => r.id === roleId || r.name === roleId)
     if (!role)
       return send(
         msg,
