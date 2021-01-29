@@ -24,7 +24,7 @@ module.exports = {
       'gi',
     )
   },
-  async action({ msg, settings, match, here = false, users }) {
+  async action({ msg, settings, match, here = false, users, prependText }) {
     const onlyHere =
       here ||
       (match[1] || '').toLowerCase() === 'here' ||
@@ -96,8 +96,8 @@ module.exports = {
     send(
       msg,
       `${foundUsersCount} users with saved timezones${
-        onlyHere ? ` in <#${msg.channel.id}>` : ''
-      }:`,
+        prependText ? ' ' + prependText : ''
+      }${onlyHere ? ` in <#${msg.channel.id}>` : ''}:`,
       'none',
       settings,
     )

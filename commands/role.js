@@ -40,13 +40,12 @@ module.exports = {
         settings,
       )
 
-    send(
+    all.action({
       msg,
-      `Users with saved timezones in \`@${role.name}\`:`,
-      'none',
       settings,
-    )
-
-    all.action({ msg, settings, match, users: members })
+      match,
+      users: members,
+      prependText: `in \`@${role.name}\`:`,
+    })
   },
 }
