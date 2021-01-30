@@ -28,7 +28,7 @@ module.exports = {
 \`${settings.prefix}users\` or \`${settings.prefix}all\` - See timezones for all users.
 \`${settings.prefix}at <time> <user or location>\` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. \`${settings.prefix}at Mon 5PM Cairo\`. Use \`${settings.prefix}at here <time> <user or location>\` to restrict to the current channel.)
 \`${settings.prefix}here\` - See timezones for all users in the current channel.
-\`${settings.prefix}role <@role>\` - See timezones for all users in a role.`
+\`${settings.prefix}role <@role or role name>\` - See timezones for all users in a role.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
 \`${settings.prefix}removeme\` - Delete your set timezone.

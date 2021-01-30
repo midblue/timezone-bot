@@ -3,6 +3,7 @@
 - Added a `t!support` command to paste the support server link
 
 **Upgrades**
+- `t!role` command now doesn't require @ing the entire role! The text search is not fuzzy, however, so be sure to type the exact role name.
 - Added a "seconds" parameter to the `t!deleteresponse` command — use `t!deleteresponse 30` to delete responses after 30 seconds, and so on
 - Added total user count and UTC offsets to `t!all` command
 

@@ -82,17 +82,14 @@ module.exports = async function (msg, settings, client) {
         client,
       })
 
-      if (
-        settings.deleteCommand &&
-        !settings.suppressWarnings &&
-        !command.doNotDelete
-      )
+      if (settings.deleteCommand && !command.doNotDelete)
         msg.delete().catch((e) => {
           console.log('failed to delete message:', e.code)
-          contactGuildAdmin({
-            guild: msg.guild,
-            message: `I don't have permission to delete messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
-          })
+          if (!settings.suppressWarnings)
+            contactGuildAdmin({
+              guild: msg.guild,
+              message: `I don't have permission to delete messages on your server. Kick TimezoneBot and use this link to re-add with proper permissions. (Your settings and saved timezones will be saved) https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot`,
+            })
         })
 
       return true
