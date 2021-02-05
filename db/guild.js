@@ -1,7 +1,7 @@
 const defaultServerSettings = require('../scripts/defaultServerSettings')
 const memo = require('../scripts/memo')
 
-const memoedGuildData = memo(100)
+const memoedGuildData = memo(500)
 let firestore
 
 module.exports = function (passedFirestore) {
