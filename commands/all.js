@@ -67,16 +67,18 @@ module.exports = {
 
       const userStub = allUsers[id]
 
-      const timezoneName = standardizeTimezoneName(userStub.timezoneName)
-      if (!timezonesWithUsers[timezoneName]) {
-        timezonesWithUsers[timezoneName] = {
-          timezoneName,
+      const timezoneUID =
+        standardizeTimezoneName(userStub.timezoneName) +
+        dayjs().tz(userStub.location).format('Z')
+      if (!timezonesWithUsers[timezoneUID]) {
+        timezonesWithUsers[timezoneUID] = {
+          timezoneName: standardizeTimezoneName(userStub.timezoneName),
           locale: userStub.location,
           currentTime: dateObjectAt(userStub.location, true, settings.format24),
           usernames: [],
         }
       }
-      timezonesWithUsers[timezoneName].usernames.push(
+      timezonesWithUsers[timezoneUID].usernames.push(
         userObject.nickname || userObject.user.username,
       )
     }
