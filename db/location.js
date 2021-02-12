@@ -1,6 +1,6 @@
 const memo = require('../scripts/memo')
 
-const memoedLocationData = memo(3000)
+const memoedLocationData = memo(1500)
 
 module.exports = function (firestore) {
   return {
