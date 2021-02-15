@@ -85,14 +85,16 @@ module.exports = {
   },
 
   currentTimeAt(location, leadingZero = false, format24) {
-    // todo does not support .5s in UTC codes
-    const localeString = new Date().toLocaleTimeString(undefined, {
-      timeZone: location.replace('UTC', 'Etc/GMT'),
-      weekday: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: !format24,
-    })
+    // todo use day.js here
+    const localeString = new Date()
+      .toLocaleTimeString(undefined, {
+        timeZone: location.replace('UTC', 'Etc/GMT'),
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: !format24,
+      })
+      .replace('24:', '00:') // lolol hacky as hell
     if (leadingZero) return localeString
     const twoDigitHourRegex = /[0-9]{2}:/
     return localeString.replace(twoDigitHourRegex, (match) => {

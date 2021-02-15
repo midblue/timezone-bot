@@ -55,6 +55,7 @@ module.exports = function (passedFirestore) {
       suppressWarnings,
       format24,
       repeatAnnounceTime,
+      verboseAll,
     }) {
       const document = firestore.doc(`guilds/${guildId}`)
       const existingSettings = await this.getGuildSettings({ guildId })
@@ -70,6 +71,7 @@ module.exports = function (passedFirestore) {
         newSettings.deleteResponse = deleteResponse
       if (suppressWarnings !== undefined)
         newSettings.suppressWarnings = suppressWarnings
+      if (verboseAll !== undefined) newSettings.verboseAll = verboseAll
 
       memoedGuildData.updateProp(guildId, 'settings', newSettings)
       await document.update({ settings: newSettings })

@@ -78,8 +78,12 @@ module.exports = {
           usernames: [],
         }
       }
+
+      let context = ''
+      if (settings.verboseAll) context = userObject.roles.highest.name
+
       timezonesWithUsers[timezoneUID].usernames.push(
-        userObject.nickname || userObject.user.username,
+        (userObject.nickname || userObject.user.username) + ' ' + context,
       )
     }
 
