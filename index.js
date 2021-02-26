@@ -8,4 +8,6 @@ manager.on('shardCreate', (shard) => {
   console.log(`Launched shard ${shard.id}`)
 })
 
-manager.spawn(10, 10000, false)
+const shards = 10
+console.log('Launching with', shards, 'shards')
+manager.spawn(shards, 10000, 100000)
