@@ -178,7 +178,10 @@ module.exports = {
 
     outputStrings[currentString] = outputStrings[
       currentString
-    ].substring(0, outputStrings[currentString].length - 2)
+    ].substring(
+      0,
+      outputStrings[currentString].length - (count ? 1 : 2),
+    )
 
     outputStrings.forEach((s) =>
       send(msg, s, true, settings),
