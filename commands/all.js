@@ -24,7 +24,15 @@ module.exports = {
       'gi',
     )
   },
-  async action({ msg, settings, match, here = false, users, prependText }) {
+  async action({
+    msg,
+    settings,
+    match,
+    here = false,
+    users,
+    prependText,
+    count,
+  }) {
     const onlyHere =
       here ||
       (match[1] || '').toLowerCase() === 'here' ||
@@ -35,7 +43,9 @@ module.exports = {
         msg.guild
           ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
           : 'Private Message'
-      }${msg.guild ? ` (${msg.guild.id})` : ''} - All users ${
+      }${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - All users ${
         onlyHere ? `in #${msg.channel.name} ` : ''
       }(${msg.author.username})`,
     )
@@ -51,14 +61,20 @@ module.exports = {
       )
 
     const timezonesWithUsers = {}
-    const guildMembers = (users || (await getGuildMembers({ msg }))).filter(
+    const guildMembers = (
+      users || (await getGuildMembers({ msg }))
+    ).filter(
       (guildMember) =>
-        onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
+        onlyHere
+          ? msg.channel.members.get(guildMember.user.id)
+          : true, // only members in this channel
     )
     let foundUsersCount = 0
 
     for (let id of Object.keys(allUsers)) {
-      const userObject = guildMembers.find((m) => m.user.id === id)
+      const userObject = guildMembers.find(
+        (m) => m.user.id === id,
+      )
       if (!userObject) {
         // db.removeUserFromGuild({ guildId: msg.guild.id, userId: id })
         continue
@@ -72,15 +88,22 @@ module.exports = {
         dayjs().tz(userStub.location).format('Z')
       if (!timezonesWithUsers[timezoneUID]) {
         timezonesWithUsers[timezoneUID] = {
-          timezoneName: standardizeTimezoneName(userStub.timezoneName),
+          timezoneName: standardizeTimezoneName(
+            userStub.timezoneName,
+          ),
           locale: userStub.location,
-          currentTime: dateObjectAt(userStub.location, true, settings.format24),
+          currentTime: dateObjectAt(
+            userStub.location,
+            true,
+            settings.format24,
+          ),
           usernames: [],
         }
       }
 
       let context = ''
-      if (settings.verboseAll) context = userObject.roles.highest.name
+      if (settings.verboseAll)
+        context = userObject.roles.highest.name
       if (context === '@everyone') context = ''
 
       timezonesWithUsers[timezoneUID].usernames.push(
@@ -91,7 +114,10 @@ module.exports = {
 
     const timezonesWithUsersAsSortedArray = Object.values(
       timezonesWithUsers,
-    ).sort((a, b) => a.currentTime.getTime() - b.currentTime.getTime())
+    ).sort(
+      (a, b) =>
+        a.currentTime.getTime() - b.currentTime.getTime(),
+    )
 
     if (!timezonesWithUsersAsSortedArray.length)
       return send(
@@ -115,7 +141,9 @@ module.exports = {
       currentString = 0
     timezonesWithUsersAsSortedArray.forEach((timezone) => {
       if (outputStrings[currentString].length >= 1500) {
-        outputStrings[currentString] = outputStrings[currentString].substring(
+        outputStrings[currentString] = outputStrings[
+          currentString
+        ].substring(
           0,
           outputStrings[currentString].length - 2,
         )
@@ -123,27 +151,33 @@ module.exports = {
         outputStrings[currentString] = ''
       }
 
-      const header = `${getLightEmoji(timezone.locale)}${toTimeString(
+      const header = `${getLightEmoji(
+        timezone.locale,
+      )}${toTimeString(
         timezone.currentTime,
         true,
         settings.format24,
       )} - ${timezone.timezoneName} (UTC${dayjs()
         .tz(timezone.locale)
         .format('Z')})`
-      const body =
-        '\n     ' +
-        timezone.usernames
-          .sort((a, b) => (a.toLowerCase() > b.toLowerCase() ? 1 : -1))
-          .join('\n     ') +
-        '\n\n'
+      const body = count
+        ? ' - ' + timezone.usernames.length + 'users\n'
+        : '\n     ' +
+          timezone.usernames
+            .sort((a, b) =>
+              a.toLowerCase() > b.toLowerCase() ? 1 : -1,
+            )
+            .join('\n     ') +
+          '\n\n'
       return (outputStrings[currentString] += header + body)
     }, '')
 
-    outputStrings[currentString] = outputStrings[currentString].substring(
-      0,
-      outputStrings[currentString].length - 2,
-    )
+    outputStrings[currentString] = outputStrings[
+      currentString
+    ].substring(0, outputStrings[currentString].length - 2)
 
-    outputStrings.forEach((s) => send(msg, s, true, settings))
+    outputStrings.forEach((s) =>
+      send(msg, s, true, settings),
+    )
   },
 }
