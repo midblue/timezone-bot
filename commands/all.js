@@ -161,7 +161,11 @@ module.exports = {
         .tz(timezone.locale)
         .format('Z')})`
       const body = count
-        ? ' - ' + timezone.usernames.length + 'users\n'
+        ? ' - ' +
+          timezone.usernames.length +
+          ` user${
+            timezone.usernames.length === 1 ? '' : 's'
+          }\n`
         : '\n     ' +
           timezone.usernames
             .sort((a, b) =>
