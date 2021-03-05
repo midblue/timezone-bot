@@ -25,9 +25,9 @@ module.exports = {
     const publicCommands = `\`${settings.prefix}time <user, role, or location name>\` - See the current time for a specific user, role, or in a specific place. (Semantic names work fine, i.e. 'lisbon')
 \`${settings.prefix}timein <location name>\` - See the current time in a specific place.
 \`${settings.prefix}set <location name>\` - Set your own timezone. (UTC+/- codes work too)
-\`${settings.prefix}users\` or \`${settings.prefix}all\` - See timezones for all users.
+\`${settings.prefix}all\` - See timezones for all users. (\`${settings.prefix}here\` to restrict to the current channel)
+\`${settings.prefix}count\` - See timezone counts. (\`${settings.prefix}count here\` works)
 \`${settings.prefix}at <time> <user or location>\` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. \`${settings.prefix}at Mon 5PM Cairo\`. Use \`${settings.prefix}at here <time> <user or location>\` to restrict to the current channel.)
-\`${settings.prefix}here\` - See timezones for all users in the current channel.
 \`${settings.prefix}role <@role or role name>\` - See timezones for all users in a role.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
@@ -66,7 +66,8 @@ module.exports = {
     if (!settings.adminOnly)
       fields2.push({
         name: `**Public commands:**`,
-        value: publicCommands + '\n' + alwaysAvailableCommands,
+        value:
+          publicCommands + '\n' + alwaysAvailableCommands,
       })
     else {
       fields1.push({
