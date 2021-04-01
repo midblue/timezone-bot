@@ -4,7 +4,10 @@ const { send } = require('../actions/replyInChannel')
 module.exports = {
   admin: true,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:prefix|setprefix|p)( ?)(.*)`, 'gi')
+    return new RegExp(
+      `^${settings.prefix}(?:prefix|setprefix|p)( ?)(.*)`,
+      'gi',
+    )
   },
   async action({ msg, settings, match }) {
     console.log(
@@ -12,9 +15,9 @@ module.exports = {
         msg.guild
           ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
           : 'Private Message'
-      }${msg.guild ? ` (${msg.guild.id})` : ''} - Prefix > ${match[2]} (${
-        msg.author.username
-      })`,
+      }${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Prefix > ${match[2]} (${msg.author.username})`,
     )
     const previousPrefix = settings.prefix
     let newPrefix = match[2]
@@ -32,6 +35,8 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
       '\\',
       '^',
       '$',
+      '@',
+      '#',
       '{',
       '}',
       '[',
@@ -49,7 +54,8 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
     ]
     let foundIllegalCharacter = false
     for (let char of illegalCharacters)
-      if (newPrefix.indexOf(char) > -1) foundIllegalCharacter = char
+      if (newPrefix.indexOf(char) > -1)
+        foundIllegalCharacter = char
     if (foundIllegalCharacter === '`')
       return send(
         msg,
@@ -72,7 +78,10 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
       )
 
     newPrefix = newPrefix.substring(0, 12)
-    await db.setGuildSettings({ guildId: msg.guild.id, prefix: newPrefix })
+    await db.setGuildSettings({
+      guildId: msg.guild.id,
+      prefix: newPrefix,
+    })
 
     send(
       msg,
