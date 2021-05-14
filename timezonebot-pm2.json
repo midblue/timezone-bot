@@ -1,0 +1,7 @@
+{
+    "apps": [{
+        "name": "Timezone Bot",
+        "cwd": "./",
+        "script": "src/index.js"
+    }]
+}
