@@ -5,7 +5,7 @@ module.exports = {
   admin: true,
   regex(settings) {
     return new RegExp(
-      `^${settings.prefix}(?:prefix|setprefix|p)( ?)(.*)`,
+      `^(?:${settings.prefix}|t!)(?:prefix|setprefix|p)( ?)(.*)`,
       'gi',
     )
   },
