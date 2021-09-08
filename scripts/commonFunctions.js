@@ -132,7 +132,7 @@ module.exports = {
     )
   },
 
-  toTimeString(date, leadingZero, format24) {
+  toTimeString(dayObject, leadingZero, format24) {
     let formatString = 'ddd '
     if (format24) formatString += 'H'
     else formatString += 'h'
@@ -142,15 +142,21 @@ module.exports = {
     }
     formatString += ':mm'
     if (!format24) formatString += ' A'
-    return dayjs(date).format(formatString)
+    return dayObject.format(formatString)
   },
 
   dateObjectAt(location) {
-    return new Date(
-      new Date().toLocaleString(undefined, {
-        timeZone: location.replace(/UTC/gi, 'Etc/GMT'),
-      }),
-    )
+    const utcOffset =
+      location.toLowerCase().indexOf('utc') === 0 ||
+      location.toLowerCase().indexOf('gmt') === 0 ||
+      location.toLowerCase().indexOf('etc/gmt') === 0
+        ? /.*([+-].*)/gi.exec(location)?.[1]
+        : undefined
+    let dayObject = dayjs()
+    if (utcOffset !== undefined)
+      dayObject = dayObject.utcOffset(utcOffset)
+    else dayObject = dayObject.tz(location)
+    return dayObject
   },
 
   getLightEmoji(location) {

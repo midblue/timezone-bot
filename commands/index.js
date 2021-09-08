@@ -1,4 +1,6 @@
-const { getUserInGuildFromText } = require('../scripts/commonFunctions')
+const {
+  getUserInGuildFromText,
+} = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const defaultServerSettings = require('../scripts/defaultServerSettings')
 const replyToAts = require('../actions/replyToAts')
@@ -24,7 +26,9 @@ module.exports = async function (msg, settings, client) {
       const senderIsAdmin =
         msg.guild &&
         msg.guild.member(msg.author) &&
-        msg.guild.member(msg.author).permissions.has('BAN_MEMBERS') // was 'ADMINISTRATOR', sneakily switched
+        msg.guild
+          .member(msg.author)
+          .permissions.has('BAN_MEMBERS') // was 'ADMINISTRATOR', sneakily switched
       if (
         settings.adminOnly === true &&
         !command.ignoreAdminOnly &&
@@ -48,27 +52,18 @@ module.exports = async function (msg, settings, client) {
         return true
       }
 
-      //* This section is currently changed to @s only because of discord permissions issue (changed back now!)
-      // let typedUser
-      // const mentionedUserIds = msg.mentions.members.array()
-      // if (mentionedUserIds.length)
-      //   typedUser = {
-      //     ...(await getUserInGuildFromId({
-      //       guildId: msg.guild.id,
-      //       userId: mentionedUserIds[0].id,
-      //     })),
-      //     nickname:
-      //       mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
-      //     user: mentionedUserIds[0].user,
-      //   }
       // embedded user check
       let typedUser
       if (
         command.expectsUserInRegexSlot &&
         match[command.expectsUserInRegexSlot]
       ) {
-        const usernameInPlainText = match[command.expectsUserInRegexSlot]
-        typedUser = await getUserInGuildFromText(msg, usernameInPlainText)
+        const usernameInPlainText =
+          match[command.expectsUserInRegexSlot]
+        typedUser = await getUserInGuildFromText(
+          msg,
+          usernameInPlainText,
+        )
       }
 
       // execute command
@@ -96,5 +91,6 @@ module.exports = async function (msg, settings, client) {
     }
   }
 
-  if (settings.autoRespond !== false) await replyToAts(msg, settings) // had an unhandledpromiserejection here once?
+  if (settings.autoRespond !== false)
+    await replyToAts(msg, settings)
 }

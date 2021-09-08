@@ -6,7 +6,7 @@ const {
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
-const timezoneCodeToLocation = require('../actions/timezoneCodeToLocationData')
+const timezoneCodeToLocation = require('../scripts/timezoneCodeToLocationData')
 const all = require('./all')
 const role = require('./role')
 const me = require('./me')

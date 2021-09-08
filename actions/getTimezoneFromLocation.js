@@ -3,7 +3,7 @@ const db = require('../db/firestore')
 const {
   standardizeTimezoneName,
 } = require('../scripts/commonFunctions')
-const timezoneCodeToLocation = require('./timezoneCodeToLocationData')
+const timezoneCodeToLocation = require('../scripts/timezoneCodeToLocationData')
 
 const geocodeUrlBase = `https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}`
 const timezoneUrlBase = `https://maps.googleapis.com/maps/api/timezone/json?key=${process.env.GOOGLE_API_KEY}`
