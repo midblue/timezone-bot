@@ -8,7 +8,8 @@ const {
 } = require('../scripts/commonFunctions')
 const { send } = require('./replyInChannel')
 
-const onlyRespondIfLastSeenIsOlderThanMs = 2 * 60 * 60 * 1000
+const onlyRespondIfLastSeenIsOlderThanMs =
+  2 * 60 * 60 * 1000
 const onlyRespondIfNotAnnouncedInMs = 30 * 60 * 1000
 const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 1.5
 
@@ -17,15 +18,20 @@ let recentlyAnnounced = []
 module.exports = async (msg, settings) => {
   if (msg.author.bot) return
 
-  const mentionedUserIds = msg.mentions.members.array().map((u) => u.id)
+  const mentionedUserIds = msg.mentions.members
+    .array()
+    .map((u) => u.id)
   if (mentionedUserIds.length === 0) return
 
   const authorId = msg.author.id
 
-  const savedUsers = (await db.getGuildUsers(msg.guild.id)) || []
+  const savedUsers =
+    (await db.getGuildUsers(msg.guild.id)) || []
   const authorTimezoneData = savedUsers[authorId]
   const matchedUsers = mentionedUserIds
-    .map((id) => (savedUsers[id] ? { ...savedUsers[id], id } : null))
+    .map((id) =>
+      savedUsers[id] ? { ...savedUsers[id], id } : null,
+    )
     .filter((u) => u)
 
   const userDataWithLastMessageTime = (
@@ -39,9 +45,15 @@ module.exports = async (msg, settings) => {
     if (!found) return
     if (fullMember.lastMessageID) {
       try {
-        lastMessage = await msg.channel.messages.fetch(fullMember.lastMessageID)
+        lastMessage = await msg.channel.messages.fetch(
+          fullMember.lastMessageID,
+        )
       } catch (e) {
-        if (e.code !== 500 && e.code !== 10008 && e.code !== 50001) {
+        if (
+          e.code !== 500 &&
+          e.code !== 10008 &&
+          e.code !== 50001
+        ) {
           // ignoring 500 'Internal Server Error' error
           // ignoring 10008 'Unknown Message' error, seems to be cropping up a lot tbh. maybe it's looking at other guilds??
           // ignoring 50001 'Missing Permissions' error
@@ -53,18 +65,27 @@ module.exports = async (msg, settings) => {
         }
       }
     }
+
+    // * falls back to online/offline status if last message cannot be accessed
+    // status will be available if presence intent is available on bot, will always be 'offline' otherwise
+    else if (fullMember.presence?.status === 'online') {
+      lastMessage = { createdAt: Date.now() }
+      // console.log('status:', fullMember.presence?.status)
+    }
+
     return {
       ...found,
-      displayName: fullMember.nickname || fullMember.user.username,
+      displayName:
+        fullMember.nickname || fullMember.user.username,
       lastMessageTime: lastMessage
         ? lastMessage.editedAt || lastMessage.createdAt
         : 0,
     }
   })
 
-  let usersToList = (await Promise.all(userDataWithLastMessageTime)).filter(
-    (u) => u,
-  )
+  let usersToList = (
+    await Promise.all(userDataWithLastMessageTime)
+  ).filter((u) => u)
 
   // filter out the author themselves
   usersToList = usersToList.filter((u) => u.id !== authorId)
@@ -86,8 +107,10 @@ module.exports = async (msg, settings) => {
     (u) =>
       !authorTimezoneData ||
       Math.abs(
-        getOffset(authorTimezoneData.location) - getOffset(u.location),
-      ) >= onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo,
+        getOffset(authorTimezoneData.location) -
+          getOffset(u.location),
+      ) >=
+        onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo,
   )
 
   if (!usersToList.length) return
@@ -109,14 +132,20 @@ module.exports = async (msg, settings) => {
     const user = usersToList[index]
     const isLast = index === usersToList.length - 1
     const isNextToLast = index === usersToList.length - 2
-    outputString += `${getLightEmoji(user.location)}${currentTimeAt(
+    outputString += `${getLightEmoji(
+      user.location,
+    )}${currentTimeAt(
       user.location,
       false,
       settings.format24,
-    )} for ${user.displayName} (${standardizeTimezoneName(user.timezoneName)})`
-    if (!isLast && usersToList.length > 2) outputString += ', '
+    )} for ${user.displayName} (${standardizeTimezoneName(
+      user.timezoneName,
+    )})`
+    if (!isLast && usersToList.length > 2)
+      outputString += ', '
     if (isNextToLast) outputString += ' and '
-    if (!isLast && usersToList.length > 2) outputString += '\n'
+    if (!isLast && usersToList.length > 2)
+      outputString += '\n'
   }
   outputString += '.'
 
@@ -125,9 +154,11 @@ module.exports = async (msg, settings) => {
       msg.guild && msg.guild.name
         ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
         : 'Private Message'
-    }${msg.guild ? ` (${msg.guild.id})` : ''} - ${usersToList.length} @${
-      usersToList.length === 1 ? '' : 's'
-    } (${msg.author.username} > ${usersToList
+    }${msg.guild ? ` (${msg.guild.id})` : ''} - ${
+      usersToList.length
+    } @${usersToList.length === 1 ? '' : 's'} (${
+      msg.author.username
+    } > ${usersToList
       .map((u) => u.displayName)
       .join(', ')})`,
   )

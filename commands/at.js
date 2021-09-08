@@ -20,10 +20,14 @@ const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
 
 module.exports = {
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:at) ?(he?r?e?)? ?(.*)?$`, 'gi')
+    return new RegExp(
+      `^${settings.prefix}(?:at) ?(he?r?e?)? ?(.*)?$`,
+      'gi',
+    )
   },
   async action({ msg, settings, match }) {
-    const onlyHere = (match[1] || '').toLowerCase().indexOf('h') === 0
+    const onlyHere =
+      (match[1] || '').toLowerCase().indexOf('h') === 0
     let timeString = match[2]
 
     console.log(
@@ -31,7 +35,9 @@ module.exports = {
         msg.guild
           ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
           : 'Private Message'
-      }${msg.guild ? ` (${msg.guild.id})` : ''} - Time at ${timeString} ${
+      }${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Time at ${timeString} ${
         onlyHere ? `in #${msg.channel.name} ` : ''
       }(${msg.author.username})`,
     )
@@ -47,21 +53,32 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    let dayOfWeek = /^(?:mon|tues?|wedn?e?s?|thur?s?|fri|satu?r?|sun)d?a?y?/gi.exec(
-      timeString.toLowerCase(),
-    )
+    let dayOfWeek =
+      /^(?:mon|tues?|wedn?e?s?|thur?s?|fri|satu?r?|sun)d?a?y?/gi.exec(
+        timeString.toLowerCase(),
+      )
     if (dayOfWeek) {
       dayOfWeek = dayOfWeek[0]
-      timeString = timeString.substring(dayOfWeek.length + 1)
-      dayOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].findIndex(
-        (d) => dayOfWeek.substring(0, 3) === d,
+      timeString = timeString.substring(
+        dayOfWeek.length + 1,
       )
+      dayOfWeek = [
+        'sun',
+        'mon',
+        'tue',
+        'wed',
+        'thu',
+        'fri',
+        'sat',
+      ].findIndex((d) => dayOfWeek.substring(0, 3) === d)
     }
 
-    let tsMatch = /(\d+):?(\d+)?\s*?(pm|am)?\s?(.*)?$/gi.exec(
-      timeString.toLowerCase(),
-    )
-    let [unused, hours, minutes, pmAm, userOrLocation] = tsMatch || []
+    let tsMatch =
+      /(\d{1,2}):?(\d{2})?\s*?(pm|am)?\s?(.*)?$/gi.exec(
+        timeString.toLowerCase(),
+      )
+    let [unused, hours, minutes, pmAm, userOrLocation] =
+      tsMatch || []
 
     if (!userOrLocation)
       return send(
@@ -109,16 +126,19 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
-    const targetUser = await getUserInGuildFromText(msg, userOrLocation)
+    const targetUser = await getUserInGuildFromText(
+      msg,
+      userOrLocation,
+    )
 
     if (targetUser) {
-      username = targetUser.nickname || targetUser.user.username
-      knownTimezoneDataForEnteredUserOrLocation = await db.getUserInGuildFromId(
-        {
+      username =
+        targetUser.nickname || targetUser.user.username
+      knownTimezoneDataForEnteredUserOrLocation =
+        await db.getUserInGuildFromId({
           guildId: msg.guild.id,
           userId: targetUser.user.id,
-        },
-      )
+        })
 
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
@@ -128,9 +148,8 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           settings,
         )
     } else {
-      knownTimezoneDataForEnteredUserOrLocation = await getTimezoneFromLocation(
-        userOrLocation,
-      )
+      knownTimezoneDataForEnteredUserOrLocation =
+        await getTimezoneFromLocation(userOrLocation)
 
       if (!knownTimezoneDataForEnteredUserOrLocation)
         return send(
@@ -144,11 +163,15 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     // knownTimezoneDataForEnteredUserOrLocation.currentDateObject = day().tz(knownTimezoneDataForEnteredUserOrLocation.location)
 
     let enteredDateAsObject = dayjs()
-      .tz(knownTimezoneDataForEnteredUserOrLocation.location, true)
+      .tz(
+        knownTimezoneDataForEnteredUserOrLocation.location,
+        true,
+      )
       .minute(parseInt(minutes))
       .hour(parseInt(hours))
     if (dayOfWeek !== null)
-      enteredDateAsObject = enteredDateAsObject.day(dayOfWeek)
+      enteredDateAsObject =
+        enteredDateAsObject.day(dayOfWeek)
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
     if ((await Object.keys(allUsers)).length === 0)
@@ -160,22 +183,30 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       )
 
     const entries = {}
-    const guildMembers = (await getGuildMembers({ msg })).filter(
+    const guildMembers = (
+      await getGuildMembers({ msg })
+    ).filter(
       (guildMember) =>
-        onlyHere ? msg.channel.members.get(guildMember.user.id) : true, // only members in this channel
+        onlyHere
+          ? msg.channel.members.get(guildMember.user.id)
+          : true, // only members in this channel
     )
 
     for (let id of Object.keys(allUsers)) {
-      const userObject = guildMembers.find((m) => m.user.id === id)
+      const userObject = guildMembers.find(
+        (m) => m.user.id === id,
+      )
       if (!userObject) continue
 
       const userStub = allUsers[id]
-      const timezoneName = standardizeTimezoneName(userStub.timezoneName)
+      const timezoneName = standardizeTimezoneName(
+        userStub.timezoneName,
+      )
 
       // ========= determine local time at the entered time =========
-      let dateObjectInTimezone = dayjs(enteredDateAsObject).tz(
-        userStub.location,
-      )
+      let dateObjectInTimezone = dayjs(
+        enteredDateAsObject,
+      ).tz(userStub.location)
 
       const textEntry = dateObjectInTimezone.format()
 
@@ -184,12 +215,18 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           names: [timezoneName],
           localTimeObject: dateObjectInTimezone,
         }
-      else if (!entries[textEntry].names.includes(timezoneName))
+      else if (
+        !entries[textEntry].names.includes(timezoneName)
+      )
         entries[textEntry].names.push(timezoneName)
     }
 
-    const entriesAsSortedArray = Object.values(entries).sort(
-      (a, b) => getOffset(a.localTimeObject) - getOffset(b.localTimeObject),
+    const entriesAsSortedArray = Object.values(
+      entries,
+    ).sort(
+      (a, b) =>
+        getOffset(a.localTimeObject) -
+        getOffset(b.localTimeObject),
     )
 
     const typedTime = enteredDateAsObject.format(
@@ -207,7 +244,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           : userOrLocation.substring(0, 1).toUpperCase() +
             userOrLocation.substring(1)
       }, it will be... ${
-        onlyHere ? ` (for users in <#${msg.channel.id}>)` : ''
+        onlyHere
+          ? ` (for users in <#${msg.channel.id}>)`
+          : ''
       }`,
       'none',
       settings,
@@ -220,7 +259,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     entriesAsSortedArray.forEach((timezone) => {
       // ========= handle batching =========
       if (outputStrings[currentString].length >= 1500) {
-        outputStrings[currentString] = outputStrings[currentString].substring(
+        outputStrings[currentString] = outputStrings[
+          currentString
+        ].substring(
           0,
           outputStrings[currentString].length - 2,
         )
@@ -240,11 +281,12 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
       return (outputStrings[currentString] += header + '\n')
     }, '')
 
-    outputStrings[currentString] = outputStrings[currentString].substring(
-      0,
-      outputStrings[currentString].length - 1,
-    )
+    outputStrings[currentString] = outputStrings[
+      currentString
+    ].substring(0, outputStrings[currentString].length - 1)
 
-    outputStrings.forEach((s) => send(msg, s, true, settings))
+    outputStrings.forEach((s) =>
+      send(msg, s, true, settings),
+    )
   },
 }

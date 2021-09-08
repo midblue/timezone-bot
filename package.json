@@ -9,7 +9,7 @@
     "hdown": "heroku dyno:scale worker=0",
     "l": "heroku logs --tail",
     "logs": "heroku logs --tail",
-    "dev": "nodemon .",
+    "dev": "nodemon ./bot.js",
     "start": "node --optimize_for_size --max_old_space_size=460 ."
   },
   "author": "",
