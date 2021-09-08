@@ -75,7 +75,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     }
 
     let tsMatch =
-      /(\d{1,2}|now):?(\d{2})?\s*?(pm|am)?\s?(.*)?$/gi.exec(
+      /(\d{1,2}|now)?:?(\d{2})?\s*?(pm|am)?\s?(.*)?$/gi.exec(
         timeString.toLowerCase(),
       )
     let [unused, hours, minutes, pmAm, userOrLocation] =
@@ -91,7 +91,7 @@ Use \`${settings.prefix}at <time> <location/user>\` to see other users' times at
       )
 
     let now = false
-    if (hours === 'now') now = true
+    if (!hours || hours === 'now') now = true
 
     if (!now) {
       if (!minutes) minutes = '00'
