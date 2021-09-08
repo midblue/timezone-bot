@@ -75,7 +75,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
     }
 
     let tsMatch =
-      /(\d{1,2}):?(\d{2})?\s*?(pm|am)?\s?(.*)?$/gi.exec(
+      /(\d{1,2}|now):?(\d{2})?\s*?(pm|am)?\s?(.*)?$/gi.exec(
         timeString.toLowerCase(),
       )
     let [unused, hours, minutes, pmAm, userOrLocation] =
@@ -90,26 +90,31 @@ Use \`${settings.prefix}at <time> <location/user>\` to see other users' times at
         settings,
       )
 
-    if (!minutes) minutes = '00'
-    minutes = parseInt(minutes) || 0
-    if (minutes > 59) minutes = 59
-    if (minutes < 0) minutes = 0
-    if (minutes <= 9) minutes = `0${minutes}`
+    let now = false
+    if (hours === 'now') now = true
 
-    hours = parseInt(hours || -1)
-    if (pmAm === 'am' && hours === 12) hours = 0
-    if (pmAm === 'pm' && hours < 12) hours += 12 // since 12pm is already correct
+    if (!now) {
+      if (!minutes) minutes = '00'
+      minutes = parseInt(minutes) || 0
+      if (minutes > 59) minutes = 59
+      if (minutes < 0) minutes = 0
+      if (minutes <= 9) minutes = `0${minutes}`
 
-    if (hours > 24 || hours < 0)
-      return send(
-        msg,
-        `The 'at' command lists everyone's time at a certain time & location.
+      hours = parseInt(hours || -1)
+      if (pmAm === 'am' && hours === 12) hours = 0
+      if (pmAm === 'pm' && hours < 12) hours += 12 // since 12pm is already correct
+
+      if (hours > 24 || hours < 0)
+        return send(
+          msg,
+          `The 'at' command lists everyone's time at a certain time & location.
 Use \`${settings.prefix}at <time> <location/user>\` to see other users' times at a certain time.
 Times can be in 12-hour or 24-hour format, and can include days of the week: i.e. "10PM Los Angeles" or "tuesday 18:00 Cairo".
 (Use \`${settings.prefix}at here <time> <location/user>\` to restrict the command to users in the current channel.)`,
-        'none',
-        settings,
-      )
+          'none',
+          settings,
+        )
+    }
 
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
@@ -160,16 +165,18 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     // knownTimezoneDataForEnteredUserOrLocation.currentDateObject = day().tz(knownTimezoneDataForEnteredUserOrLocation.location)
 
-    let enteredDateAsObject = dayjs()
-      .tz(
-        knownTimezoneDataForEnteredUserOrLocation.location,
-        true,
-      )
-      .minute(parseInt(minutes))
-      .hour(parseInt(hours))
-    if (dayOfWeek !== null)
-      enteredDateAsObject =
-        enteredDateAsObject.day(dayOfWeek)
+    let enteredDateAsObject = dayjs().tz(
+      knownTimezoneDataForEnteredUserOrLocation.location,
+      true,
+    )
+    if (!now) {
+      enteredDateAsObject = enteredDateAsObject
+        .minute(parseInt(minutes))
+        .hour(parseInt(hours))
+      if (dayOfWeek !== null)
+        enteredDateAsObject =
+          enteredDateAsObject.day(dayOfWeek)
+    }
 
     const allUsers = await db.getGuildUsers(msg.guild.id)
     if ((await Object.keys(allUsers)).length === 0)
@@ -233,7 +240,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
 
     send(
       msg,
-      `At ${typedTime} ${username ? 'for' : 'in'} ${
+      `At ${typedTime} ${now ? '(now) ' : ''}${
+        username ? 'for' : 'in'
+      } ${
         username
           ? username +
             ` (${standardizeTimezoneName(
@@ -241,7 +250,7 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
             )})`
           : userOrLocation.substring(0, 1).toUpperCase() +
             userOrLocation.substring(1)
-      }, it will be... ${
+      }, it ${now ? 'is' : 'will be'}... ${
         onlyHere
           ? ` (for users in <#${msg.channel.id}>)`
           : ''
