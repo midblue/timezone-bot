@@ -33,7 +33,6 @@ module.exports = {
     prependText,
     count,
   }) {
-    send(msg, `<t:1631074920:t>`, 'none', settings)
     const onlyHere =
       here ||
       (match[1] || '').toLowerCase() === 'here' ||
