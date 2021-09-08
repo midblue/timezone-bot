@@ -32,9 +32,12 @@ module.exports = function (passedFirestore) {
       const memoed = memoedGuildData.get(guildId)
       if (memoed) return memoed.settings
 
-      const document = firestore.doc(`guilds/${guildId}`)
-      const doc = await document.get()
-      const data = doc.data()
+      let data
+      try {
+        const document = firestore.doc(`guilds/${guildId}`)
+        const doc = await document.get()
+        data = doc.data()
+      } catch (e) {}
       if (!data) return defaultServerSettings
 
       const settings = {
@@ -58,22 +61,33 @@ module.exports = function (passedFirestore) {
       verboseAll,
     }) {
       const document = firestore.doc(`guilds/${guildId}`)
-      const existingSettings = await this.getGuildSettings({ guildId })
+      const existingSettings = await this.getGuildSettings({
+        guildId,
+      })
       const newSettings = existingSettings
       if (prefix !== undefined) newSettings.prefix = prefix
-      if (autoRespond !== undefined) newSettings.autoRespond = autoRespond
-      if (adminOnly !== undefined) newSettings.adminOnly = adminOnly
-      if (deleteCommand !== undefined) newSettings.deleteCommand = deleteCommand
-      if (format24 !== undefined) newSettings.format24 = format24
+      if (autoRespond !== undefined)
+        newSettings.autoRespond = autoRespond
+      if (adminOnly !== undefined)
+        newSettings.adminOnly = adminOnly
+      if (deleteCommand !== undefined)
+        newSettings.deleteCommand = deleteCommand
+      if (format24 !== undefined)
+        newSettings.format24 = format24
       if (repeatAnnounceTime !== undefined)
         newSettings.repeatAnnounceTime = repeatAnnounceTime
       if (deleteResponse !== undefined)
         newSettings.deleteResponse = deleteResponse
       if (suppressWarnings !== undefined)
         newSettings.suppressWarnings = suppressWarnings
-      if (verboseAll !== undefined) newSettings.verboseAll = verboseAll
+      if (verboseAll !== undefined)
+        newSettings.verboseAll = verboseAll
 
-      memoedGuildData.updateProp(guildId, 'settings', newSettings)
+      memoedGuildData.updateProp(
+        guildId,
+        'settings',
+        newSettings,
+      )
       await document.update({ settings: newSettings })
     },
 
@@ -84,13 +98,19 @@ module.exports = function (passedFirestore) {
       return users[userId]
     },
 
-    async updateUserInGuild({ guildId, guildName, userId, updatedInfo }) {
+    async updateUserInGuild({
+      guildId,
+      guildName,
+      userId,
+      updatedInfo,
+    }) {
       const guildDocRef = firestore.doc(`guilds/${guildId}`)
       const doc = await guildDocRef.get()
       let data = doc.data()
 
       // * had a bug where this was returning nothing
-      if (!data) data = await this.addGuild({ guildId, guildName })
+      if (!data)
+        data = await this.addGuild({ guildId, guildName })
 
       const users = data.users
       users[userId] = updatedInfo
