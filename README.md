@@ -24,6 +24,7 @@ Allows users to set their timezone, then passively notes timezones when appropri
 - `t!at <time> <user or location>` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. `t!at Mon 5PM Cairo`. Use `t!at here <time> <user or location>` to restrict to the current channel.)
 - `t!me` to see your set timezone.
 - `t!removeme` to delete your set timezone.
+- `t!stamp <time> <user or location>` - Generate copyable Discord timestamps.
 - `t!info` or `t!help` to show a message listing all commands.
 
 #### Admin-only commands:

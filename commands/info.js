@@ -28,7 +28,8 @@ module.exports = {
 \`${settings.prefix}all\` - See timezones for all users. (\`${settings.prefix}here\` to restrict to the current channel)
 \`${settings.prefix}count\` - See timezone counts. (\`${settings.prefix}count here\` works)
 \`${settings.prefix}at <time> <user or location>\` to see all users' times from the viewpoint of a specific time and place. Day of the week is optional. (i.e. \`${settings.prefix}at Mon 5PM Cairo\`. Use \`${settings.prefix}at here <time> <user or location>\` to restrict to the current channel.)
-\`${settings.prefix}role <@role or role name>\` - See timezones for all users in a role.`
+\`${settings.prefix}role <@role or role name>\` - See timezones for all users in a role.
+\`${settings.prefix}stamp <time> <user or location>\` - Generate copyable Discord timestamps.`
 
     const alwaysAvailableCommands = `\`${settings.prefix}me\` - See your set timezone.
 \`${settings.prefix}removeme\` - Delete your set timezone.
