@@ -30,11 +30,14 @@ module.exports = {
     try {
       if (typeof locale === 'object') date = locale
       else {
-        locale = locale.replace(/ /g, '_').replace(/UTC/gi, 'Etc/GMT')
+        locale = locale
+          .replace(/ /g, '_')
+          .replace(/UTC/gi, 'Etc/GMT')
         date = dayjs().tz(locale)
       }
       const offsetString = date.format('ZZ')
-      const negativeMultiplier = offsetString.substring(0, 1) === '-' ? -1 : 1
+      const negativeMultiplier =
+        offsetString.substring(0, 1) === '-' ? -1 : 1
       const value = parseInt(offsetString.substring(1, 3))
       return value * negativeMultiplier
     } catch (e) {
@@ -47,13 +50,20 @@ module.exports = {
   async getUserInGuildFromText(msg, searchText) {
     if (searchText.length < 2) return
     const usersInGuild = await getGuildMembers({ msg })
-    const usersInGuildWithSearchString = usersInGuild.map((user) => ({
-      ...user,
-      searchString: `${user.user.username} ${user.user.username}#${
-        user.user.discriminator
-      } ${user.nickname ? user.nickname : ''} <@!${user.id}> <@${user.id}>`,
-    }))
-    const fuzzySearch = new fuse(usersInGuildWithSearchString, fuseOptions)
+    const usersInGuildWithSearchString = usersInGuild.map(
+      (user) => ({
+        ...user,
+        searchString: `${user.user.username} ${
+          user.user.username
+        }#${user.user.discriminator} ${
+          user.nickname ? user.nickname : ''
+        } <@!${user.id}> <@${user.id}>`,
+      }),
+    )
+    const fuzzySearch = new fuse(
+      usersInGuildWithSearchString,
+      fuseOptions,
+    )
     const fuzzySearchResult = fuzzySearch.search(searchText)
     if (fuzzySearchResult[0]) return fuzzySearchResult[0]
   },
@@ -65,13 +75,19 @@ module.exports = {
   async getContactsOrOwnerOrModerator({ guild }) {
     let usersToContact
     // check guild.owner
-    usersToContact = await getUserInGuildFromId(guild, guild.ownerID)
+    usersToContact = await getUserInGuildFromId(
+      guild,
+      guild.ownerID,
+    )
     if (usersToContact) return [usersToContact]
     // at this point, we just look for an admin of any kind
-    usersToContact = (await getGuildMembers({ guild })).filter((member) =>
+    usersToContact = (
+      await getGuildMembers({ guild })
+    ).filter((member) =>
       member.permissions.has('ADMINISTRATOR'),
     )
-    if (usersToContact && usersToContact.length > 0) return usersToContact
+    if (usersToContact && usersToContact.length > 0)
+      return usersToContact
     return []
   },
 
@@ -85,22 +101,35 @@ module.exports = {
   },
 
   currentTimeAt(location, leadingZero = false, format24) {
-    // todo use day.js here
-    const localeString = new Date()
-      .toLocaleTimeString(undefined, {
-        timeZone: location.replace('UTC', 'Etc/GMT'),
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: !format24,
-      })
+    location = location.replace('UTC', 'Etc/GMT')
+
+    const utcOffset =
+      location.toLowerCase().indexOf('gmt') === 0 ||
+      location.toLowerCase().indexOf('etc/gmt') === 0
+        ? /.*([+-].*)/gi.exec(location)?.[1]
+        : undefined
+    let dayObject = dayjs()
+    if (utcOffset !== undefined)
+      dayObject = dayObject.utcOffset(utcOffset)
+    else dayObject = dayObject.tz(location)
+    const localeString = dayObject
+      .format(
+        format24
+          ? 'HH:MM on dddd, MMMM D'
+          : 'h:mm A on dddd, MMMM D',
+      )
       .replace('24:', '00:') // lolol hacky as hell
+
     if (leadingZero) return localeString
     const twoDigitHourRegex = /[0-9]{2}:/
-    return localeString.replace(twoDigitHourRegex, (match) => {
-      if (match && match.substring(0, 1) === '0') return match.substring(1)
-      return match
-    })
+    return localeString.replace(
+      twoDigitHourRegex,
+      (match) => {
+        if (match && match.substring(0, 1) === '0')
+          return match.substring(1)
+        return match
+      },
+    )
   },
 
   toTimeString(date, leadingZero, format24) {
@@ -129,13 +158,23 @@ module.exports = {
     if (typeof location === 'number') hour = location
     else {
       try {
-        hour = new Date(
-          new Date().toLocaleString(undefined, {
-            timeZone: location.replace(/UTC/gi, 'Etc/GMT').replace(/\s*/g, ''),
-          }),
-        ).getHours()
+        const utcOffset =
+          location.toLowerCase().indexOf('utc') === 0 ||
+          location.toLowerCase().indexOf('gmt') === 0 ||
+          location.toLowerCase().indexOf('etc/gmt') === 0
+            ? /.*([+-].*)/gi.exec(location)?.[1]
+            : undefined
+        let dayObject = dayjs()
+        if (utcOffset !== undefined)
+          dayObject = dayObject.utcOffset(utcOffset)
+        else dayObject = dayObject.tz(location)
+        hour = dayObject.hour()
       } catch (e) {
-        console.log('failed to get light emoji for', location, e.message)
+        console.log(
+          'failed to get light emoji for',
+          location,
+          e.message,
+        )
         return ''
       }
     }
@@ -149,8 +188,8 @@ module.exports = {
   async getAuthorDisplayName(msg) {
     const isGuild = msg.guild !== undefined
     return isGuild
-      ? (await msg.guild.members.fetch(msg.author.id)).nickname ||
-          msg.author.username
+      ? (await msg.guild.members.fetch(msg.author.id))
+          .nickname || msg.author.username
       : msg.author.username
   },
 }
@@ -158,7 +197,9 @@ module.exports = {
 async function getUserInGuildFromId(guild, id) {
   if (!guild || !id) return
   try {
-    const userInGuild = await guild.members.fetch({ user: id })
+    const userInGuild = await guild.members.fetch({
+      user: id,
+    })
     return userInGuild
   } catch (e) {
     return false

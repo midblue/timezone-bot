@@ -1,4 +1,4 @@
-const timezoneCodes = require('../scripts/timezoneCodes')
+const timezoneCodes = require('../scripts/timezoneCodesWithPointFives')
 
 module.exports = (location) => {
   if (!location) return
