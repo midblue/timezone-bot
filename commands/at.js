@@ -17,6 +17,7 @@ const {
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
+const timezoneCodeToLocation = require('../actions/timezoneCodeToLocationData')
 
 module.exports = {
   regex(settings) {
@@ -110,27 +111,22 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
         settings,
       )
 
-    //* awaiting discord fix, this is disabled... (re-enabled now!)
-    // let targetUser
-    // const mentionedUserIds = msg.mentions.members.array()
-    // if (mentionedUserIds.length)
-    //   targetUser = {
-    //     ...(await getUserInGuildFromId({
-    //       guildId: msg.guild.id,
-    //       userId: mentionedUserIds[0].id,
-    //     })),
-    //     nickname:
-    //       mentionedUserIds[0].nickname || mentionedUserIds[0].user.username,
-    //     user: mentionedUserIds[0].user,
-    //   }
-
     let knownTimezoneDataForEnteredUserOrLocation,
       username = false
-    const targetUser = await getUserInGuildFromText(
-      msg,
-      userOrLocation,
-    )
 
+    // * first, check for a timezone code
+    const timezoneCodeLocationData =
+      timezoneCodeToLocation(userOrLocation)
+
+    let targetUser
+    if (!timezoneCodeLocationData) {
+      // * if it wasn't a timezone code, check for a username
+      targetUser = await getUserInGuildFromText(
+        msg,
+        userOrLocation,
+      )
+    }
+    // * if it was a username, use their data
     if (targetUser) {
       username =
         targetUser.nickname || targetUser.user.username
@@ -147,7 +143,9 @@ Times can be in 12-hour or 24-hour format, and can include days of the week: i.e
           false,
           settings,
         )
-    } else {
+    }
+    // * fallback to check for a typed location name
+    else {
       knownTimezoneDataForEnteredUserOrLocation =
         await getTimezoneFromLocation(userOrLocation)
 

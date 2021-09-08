@@ -6,6 +6,7 @@ const {
 } = require('../scripts/commonFunctions')
 const { send } = require('../actions/replyInChannel')
 const getTimezoneFromLocation = require('../actions/getTimezoneFromLocation')
+const timezoneCodeToLocation = require('../actions/timezoneCodeToLocationData')
 const all = require('./all')
 const role = require('./role')
 const me = require('./me')
@@ -13,17 +14,26 @@ const me = require('./me')
 module.exports = {
   expectsUserInRegexSlot: 2,
   regex(settings) {
-    return new RegExp(`^${settings.prefix}(?:time(?!in)|t(?!i))( ?)(.*)$`, 'gi')
+    return new RegExp(
+      `^${settings.prefix}(?:time(?!in)|t(?!i))( ?)(.*)$`,
+      'gi',
+    )
   },
-  async action({ msg, settings, match, typedUser, senderIsAdmin }) {
+  async action({
+    msg,
+    settings,
+    match,
+    typedUser,
+    senderIsAdmin,
+  }) {
     console.log(
       `${
         msg.guild
           ? msg.guild.name.substring(0, 25).padEnd(25, ' ')
           : 'Private Message'
-      }${msg.guild ? ` (${msg.guild.id})` : ''} - Time for ${match[2]} (${
-        msg.author.username
-      })`,
+      }${
+        msg.guild ? ` (${msg.guild.id})` : ''
+      } - Time for ${match[2]} (${msg.author.username})`,
     )
 
     if (!match[1] || !match[2])
@@ -52,9 +62,31 @@ module.exports = {
     if (match[2].substring(0, 3) === '<@&')
       return role.action({ msg, settings, match })
 
+    // first, check for a timezone code
+    const timezoneCodeLocationData = timezoneCodeToLocation(
+      match[2],
+    )
+    if (timezoneCodeLocationData) {
+      return send(
+        msg,
+        `It's ${getLightEmoji(
+          timezoneCodeLocationData.location,
+        )}${currentTimeAt(
+          timezoneCodeLocationData.location,
+          false,
+          settings.format24,
+        )} in ${match[2]}. (${standardizeTimezoneName(
+          timezoneCodeLocationData.timezoneName,
+        )})`,
+        false,
+        settings,
+      )
+    }
+
     // if they typed a username
     if (typedUser) {
-      const username = typedUser.nickname || typedUser.user.username
+      const username =
+        typedUser.nickname || typedUser.user.username
       const foundUser = await db.getUserInGuildFromId({
         guildId: msg.guild.id,
         userId: typedUser.user.id,
@@ -69,7 +101,9 @@ module.exports = {
       else
         return send(
           msg,
-          `It's ${getLightEmoji(foundUser.location)}${currentTimeAt(
+          `It's ${getLightEmoji(
+            foundUser.location,
+          )}${currentTimeAt(
             foundUser.location,
             false,
             settings.format24,
@@ -82,7 +116,9 @@ module.exports = {
     }
 
     // otherwise, default back to assuming it's a location
-    const foundTimezone = await getTimezoneFromLocation(match[2])
+    const foundTimezone = await getTimezoneFromLocation(
+      match[2],
+    )
     if (!foundTimezone)
       return send(
         msg,
@@ -93,7 +129,9 @@ module.exports = {
 
     send(
       msg,
-      `It's ${getLightEmoji(foundTimezone.location)}${currentTimeAt(
+      `It's ${getLightEmoji(
+        foundTimezone.location,
+      )}${currentTimeAt(
         foundTimezone.location,
         false,
         settings.format24,
