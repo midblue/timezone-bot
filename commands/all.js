@@ -6,11 +6,8 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 const {
-  currentTimeAt,
   toTimeString,
   dateObjectAt,
-  getOffset,
-  getUserInGuildFromId,
   getGuildMembers,
   getLightEmoji,
   standardizeTimezoneName,
@@ -116,7 +113,8 @@ module.exports = {
       timezonesWithUsers,
     ).sort(
       (a, b) =>
-        a.currentTime.valueOf() - b.currentTime.valueOf(),
+        a.currentTime.utcOffset() -
+        b.currentTime.utcOffset(),
     )
 
     if (!timezonesWithUsersAsSortedArray.length)
