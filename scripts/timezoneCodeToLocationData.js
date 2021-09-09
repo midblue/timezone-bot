@@ -13,22 +13,18 @@ module.exports = (location) => {
     location,
   )
   if (UTCMatch) {
-    // todo fix "UTC8" bug
     const offset = UTCMatch[2]
       ? parseInt(UTCMatch[2]) *
         (UTCMatch[1] === '-' ? -1 : 1)
       : 0
     if (offset > 14 || offset < -12) return
 
-    const offsetInverted = offset * -1
     const locationData = {
       timezoneName: `UTC${
         offset < 0 ? offset : '+' + offset
       }`,
       location: `Etc/GMT${
-        offsetInverted < 0
-          ? offsetInverted
-          : '+' + offsetInverted
+        offset < 0 ? offset : '+' + offset
       }`,
     }
     return locationData
