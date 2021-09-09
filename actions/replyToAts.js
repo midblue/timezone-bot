@@ -43,6 +43,7 @@ module.exports = async (msg, settings) => {
       (matched) => matched.id === fullMember.user.id,
     )
     if (!found) return
+
     if (fullMember.lastMessageID) {
       try {
         lastMessage = await msg.channel.messages.fetch(
@@ -65,7 +66,6 @@ module.exports = async (msg, settings) => {
         }
       }
     }
-
     // * falls back to online/offline status if last message cannot be accessed
     // status will be available if presence intent is available on bot, will always be 'offline' otherwise
     else if (fullMember.presence?.status === 'online') {

@@ -66,6 +66,12 @@ module.exports = async (timeString = '', msg) => {
   // * first, check for a timezone code
   const timezoneCodeLocationData =
     timezoneCodeToLocation(userOrLocation)
+  if (timezoneCodeLocationData) {
+    timezoneCodeLocationData.location =
+      timezoneCodeLocationData.location
+    knownTimezoneDataForEnteredUserOrLocation =
+      timezoneCodeLocationData
+  }
 
   let targetUser
   if (!timezoneCodeLocationData && msg) {
@@ -97,10 +103,17 @@ module.exports = async (timeString = '', msg) => {
       return { error: 'unrecognized location' }
   }
 
-  let enteredDateAsObject = dayjs().tz(
-    knownTimezoneDataForEnteredUserOrLocation.location,
-    true,
-  )
+  let enteredDateAsObject = dayjs()
+  enteredDateAsObject =
+    knownTimezoneDataForEnteredUserOrLocation.utcOffset !==
+    undefined
+      ? enteredDateAsObject.utcOffset(
+          knownTimezoneDataForEnteredUserOrLocation.utcOffset,
+        )
+      : enteredDateAsObject.tz(
+          knownTimezoneDataForEnteredUserOrLocation.location,
+          true,
+        )
   if (!now) {
     enteredDateAsObject = enteredDateAsObject
       .minute(parseInt(minutes))

@@ -67,6 +67,7 @@ module.exports = {
       match[2],
     )
     if (timezoneCodeLocationData) {
+      console.log(timezoneCodeLocationData)
       return send(
         msg,
         `It's ${getLightEmoji(

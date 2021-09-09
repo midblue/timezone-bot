@@ -108,13 +108,11 @@ module.exports = {
     if (utcOffset !== undefined)
       dayObject = dayObject.utcOffset(utcOffset)
     else dayObject = dayObject.tz(location)
-    const localeString = dayObject
-      .format(
-        format24
-          ? 'HH:MM on dddd, MMMM D'
-          : 'h:mm A on dddd, MMMM D',
-      )
-      .replace('24:', '00:') // lolol hacky as hell
+    const localeString = dayObject.format(
+      format24
+        ? 'HH:mm on dddd, MMMM D'
+        : 'hh:mm A on dddd, MMMM D',
+    )
 
     if (leadingZero) return localeString
     const twoDigitHourRegex = /[0-9]{2}:/

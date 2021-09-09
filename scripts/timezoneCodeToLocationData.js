@@ -15,7 +15,7 @@ module.exports = (location) => {
   if (UTCMatch) {
     const offset = UTCMatch[2]
       ? parseInt(UTCMatch[2]) *
-        (UTCMatch[1] === '-' ? -1 : 1)
+        (UTCMatch[1] === '-' ? 1 : -1)
       : 0
     if (offset > 14 || offset < -12) return
 
@@ -26,6 +26,7 @@ module.exports = (location) => {
       location: `Etc/GMT${
         offset < 0 ? offset : '+' + offset
       }`,
+      utcOffset: `${offset < 0 ? offset : '+' + offset}`,
     }
     return locationData
   }
@@ -40,11 +41,12 @@ module.exports = (location) => {
       timezoneName: timezoneCodeName,
       location: `Etc/GMT${
         foundTimezoneCode >= 0 ? '+' : ''
-      }${foundTimezoneCode}`
-        .replace('+', '.')
-        .replace('-', '+')
-        .replace('.', '-'), // swap + and -,
+      }${foundTimezoneCode}`,
+      utcOffset: `${
+        foundTimezoneCode >= 0 ? '+' : ''
+      }${foundTimezoneCode}`,
     }
+
     return locationData
   }
 }

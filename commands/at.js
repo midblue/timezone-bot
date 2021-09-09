@@ -102,9 +102,9 @@ Use \`${settings.prefix}at <time> <location/user>\` to see other users' times at
       )
 
       // ========= determine local time at the entered time =========
-      let dateObjectInTimezone = dayjs(
-        enteredDateAsObject,
-      ).tz(userStub.location)
+      let dateObjectInTimezone = enteredDateAsObject.tz(
+        userStub.location,
+      )
 
       const textEntry = dateObjectInTimezone.format()
 
