@@ -113,8 +113,8 @@ module.exports = {
       timezonesWithUsers,
     ).sort(
       (a, b) =>
-        a.currentTime.utcOffset() -
-        b.currentTime.utcOffset(),
+        b.currentTime.utcOffset() -
+        a.currentTime.utcOffset(),
     )
 
     if (!timezonesWithUsersAsSortedArray.length)

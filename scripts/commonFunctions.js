@@ -35,11 +35,7 @@ module.exports = {
           .replace(/UTC/gi, 'Etc/GMT')
         date = dayjs().tz(locale)
       }
-      const offsetString = date.format('ZZ')
-      const negativeMultiplier =
-        offsetString.substring(0, 1) === '-' ? -1 : 1
-      const value = parseInt(offsetString.substring(1, 3))
-      return value * negativeMultiplier
+      return date.utcOffset() / 60
     } catch (e) {
       console.log(e.message)
       return 0
