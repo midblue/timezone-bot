@@ -31,20 +31,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // https://discord.com/api/oauth2/authorize?client_id=723017262369472603&permissions=75840&scope=bot
 require(`dotenv`).config();
 const Discord = __importStar(require("discord.js-light"));
-// remove non-text channels and remove text channels whose last message is older than 10 minutes
-function channelFilter(channel) {
-    if (!channel.isText())
-        return false;
-    return (!channel.lastMessageId ||
-        Discord.SnowflakeUtil.deconstruct(channel.lastMessageId)
-            .timestamp <
-            Date.now() - 1000 * 60 * 10);
-}
 const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
-        GuildManager: Infinity,
-        GuildMemberManager: Infinity,
-        PresenceManager: Infinity,
+        GuildManager: { maxSize: 50 },
+        GuildMemberManager: { maxSize: 50 },
+        PresenceManager: { maxSize: 50 },
         RoleManager: {
             maxSize: 300,
             sweepInterval: 3600,
@@ -58,13 +49,9 @@ const client = new Discord.Client({
         // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
         ChannelManager: {
             maxSize: 0,
-            sweepFilter: () => channelFilter,
-            sweepInterval: 3600,
         },
         GuildChannelManager: {
             maxSize: 0,
-            sweepFilter: () => channelFilter,
-            sweepInterval: 3600,
         },
     }),
     intents: [
@@ -92,7 +79,7 @@ setInterval(async () => {
 client.on(`error`, (e) => console.log(`Discord.js error:`, e.message));
 client.on(`ready`, async () => {
     var _a, _b;
-    console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}`);
+    console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag} in ${[...(await client.guilds.fetch()).keys()].length} guilds`);
     (_b = client.user) === null || _b === void 0 ? void 0 : _b.setActivity(`t!info`, { type: `LISTENING` });
 });
 client.on(`messageCreate`, async (msg) => {

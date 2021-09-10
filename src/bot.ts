@@ -11,22 +11,11 @@ require(`dotenv`).config()
 
 import * as Discord from 'discord.js-light'
 
-// remove non-text channels and remove text channels whose last message is older than 10 minutes
-function channelFilter(channel: Discord.Channel) {
-  if (!channel.isText()) return false
-  return (
-    !channel.lastMessageId ||
-    Discord.SnowflakeUtil.deconstruct(channel.lastMessageId)
-      .timestamp <
-      Date.now() - 1000 * 60 * 10
-  )
-}
-
 const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
-    GuildManager: Infinity, // client.guilds
-    GuildMemberManager: Infinity, // guild.members
-    PresenceManager: Infinity, // guild.presences
+    GuildManager: { maxSize: 50 }, // client.guilds
+    GuildMemberManager: { maxSize: 50 }, // guild.members
+    PresenceManager: { maxSize: 50 }, // guild.presences
     RoleManager: {
       maxSize: 300,
       sweepInterval: 3600,
@@ -40,14 +29,10 @@ const client: Discord.Client = new Discord.Client({
     }, // client.users
     // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
     ChannelManager: {
-      maxSize: 0, // prevent automatic caching
-      sweepFilter: () => channelFilter, // remove manually cached channels according to the filter
-      sweepInterval: 3600,
+      maxSize: 0,
     },
     GuildChannelManager: {
-      maxSize: 0, // prevent automatic caching
-      sweepFilter: () => channelFilter, // remove manually cached channels according to the filter
-      sweepInterval: 3600,
+      maxSize: 0,
     },
   }),
   intents: [
@@ -86,10 +71,9 @@ client.on(`error`, (e) =>
 )
 client.on(`ready`, async () => {
   console.log(
-    `Logged in as ${client.user?.tag}`,
-    //  in ${
-    //   [...(await client.guilds.fetch()).keys()].length
-    // } guilds`,
+    `Logged in as ${client.user?.tag} in ${
+      [...(await client.guilds.fetch()).keys()].length
+    } guilds`,
   )
   client.user?.setActivity(`t!info`, { type: `LISTENING` })
 })
