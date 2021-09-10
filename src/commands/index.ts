@@ -109,6 +109,9 @@ module.exports = async function (
         )
       }
 
+      // preload guild
+      await msg.guild?.fetch()
+
       // execute command
       await command.action({
         msg,

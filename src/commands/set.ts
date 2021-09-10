@@ -59,7 +59,7 @@ export default {
     console.log(
       `${
         msg.guild
-          ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+          ? msg.guild.name?.substring(0, 25).padEnd(25, ` `)
           : `Private Message`
       }${msg.guild ? ` (${msg.guild.id})` : ``} - ${
         msg.author.username

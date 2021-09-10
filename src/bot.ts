@@ -13,9 +13,9 @@ import * as Discord from 'discord.js-light'
 
 const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
-    GuildManager: { maxSize: 50 }, // client.guilds
-    GuildMemberManager: { maxSize: 50 }, // guild.members
-    PresenceManager: { maxSize: 50 }, // guild.presences
+    GuildManager: { maxSize: 200 }, // client.guilds
+    GuildMemberManager: { maxSize: 200 }, // guild.members
+    PresenceManager: { maxSize: 200 }, // guild.presences
     RoleManager: {
       maxSize: 300,
       sweepInterval: 3600,

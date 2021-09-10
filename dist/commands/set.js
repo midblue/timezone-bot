@@ -13,7 +13,7 @@ exports.default = {
         return new RegExp(`^${settings.prefix}(?:set|s)(?!user) (.*)$`, `gi`);
     },
     async action({ msg, settings, match, client, }) {
-        var _a, _b;
+        var _a, _b, _c;
         if (!match[1])
             return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`, false, settings);
         // admin accidentally used this command to try to set someone
@@ -29,14 +29,14 @@ exports.default = {
                 return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`, false, settings);
         }
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - ${msg.author.username} > set to ${match[1]}`);
         const foundTimezone = await (0, getTimezoneFromLocation_1.default)(match[1]);
         if (!foundTimezone)
             return (0, replyInChannel_1.send)(msg, `Sorry, I couldn't find a timezone for ${match[1]}.`, false, settings);
         await firestore_1.default.updateUserInGuild({
-            guildId: (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id,
-            guildName: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.name,
+            guildId: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id,
+            guildName: (_c = msg.guild) === null || _c === void 0 ? void 0 : _c.name,
             userId: msg.author.id,
             updatedInfo: foundTimezone,
         });

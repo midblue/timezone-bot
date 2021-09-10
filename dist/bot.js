@@ -33,9 +33,9 @@ require(`dotenv`).config();
 const Discord = __importStar(require("discord.js-light"));
 const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
-        GuildManager: { maxSize: 50 },
-        GuildMemberManager: { maxSize: 50 },
-        PresenceManager: { maxSize: 50 },
+        GuildManager: { maxSize: 200 },
+        GuildMemberManager: { maxSize: 200 },
+        PresenceManager: { maxSize: 200 },
         RoleManager: {
             maxSize: 300,
             sweepInterval: 3600,

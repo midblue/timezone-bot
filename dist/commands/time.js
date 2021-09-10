@@ -17,9 +17,9 @@ exports.default = {
         return new RegExp(`^${settings.prefix}(?:time(?!in)|t(?!i))( ?)(.*)$`, `gi`);
     },
     async action({ msg, settings, match, typedUser, senderIsAdmin, }) {
-        var _a;
+        var _a, _b;
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time for ${match[2]} (${msg.author.username})`);
         if (!match[1] || !match[2])
             return (0, replyInChannel_1.send)(msg, `Use this command in the format \`${settings.prefix}time <user, role, city, or country name>\` to see the time in a specific location or for a specific user.`, `none`, settings);
@@ -50,7 +50,7 @@ exports.default = {
         if (typedUser) {
             const username = typedUser.nickname || typedUser.user.username;
             const foundUser = await firestore_1.default.getUserInGuildFromId({
-                guildId: (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id,
+                guildId: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id,
                 userId: typedUser.user.id,
             });
             if (!foundUser)

@@ -10,7 +10,7 @@ const onlyRespondIfNotAnnouncedInMs = 30 * 60 * 1000;
 const onlyRespondIfTimezoneOffsetDifferenceIsGreaterThanOrEqualTo = 1.5;
 let recentlyAnnounced = [];
 module.exports = async (msg, settings) => {
-    var _a, _b;
+    var _a, _b, _c;
     if (msg.author.bot)
         return;
     const mentionedUserIds = ((_a = msg.mentions.members) === null || _a === void 0 ? void 0 : _a.map((m) => m.id)) || [];
@@ -83,7 +83,7 @@ module.exports = async (msg, settings) => {
     }
     outputString += `.`;
     console.log(`${msg.guild && msg.guild.name
-        ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+        ? (_c = msg.guild.name) === null || _c === void 0 ? void 0 : _c.substring(0, 25).padEnd(25, ` `)
         : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - ${usersToList.length} @${usersToList.length === 1 ? `` : `s`} (${msg.author.username} > ${usersToList
         .map((u) => u.displayName)
         .join(`, `)})`);

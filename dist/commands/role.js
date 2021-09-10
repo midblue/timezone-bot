@@ -11,15 +11,15 @@ exports.default = {
         return new RegExp(`^${settings.prefix}(?:role)( )?(.*)$`, `gi`);
     },
     async action({ msg, match, settings }) {
-        var _a;
+        var _a, _b;
         let roleId = match[2];
         if (roleId.indexOf(`<@&`) === 0)
             roleId = roleId.substring(3, roleId.length - 1);
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Role (${roleId})`);
         const roles = [
-            ...((await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.roles.fetch())) || []).values(),
+            ...((await ((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.roles.fetch())) || []).values(),
         ];
         const role = roles.find((r) => r.id === roleId || r.name === roleId);
         if (!role)

@@ -15,9 +15,9 @@ exports.default = {
     },
     expectsUserInRegexSlot: 1,
     async action({ msg, match, settings, typedUser, }) {
-        var _a, _b;
+        var _a, _b, _c;
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Admin set user ${typedUser ? (0, commonFunctions_1.getLabelFromUser)(typedUser) : match[1]} > ${match[2]} (${msg.author.username})`);
         if (!match[1] || !match[2]) {
             return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}setuser <@user> <location name> to set that user's timezone.`, false, settings);
@@ -29,8 +29,8 @@ exports.default = {
         if (!foundTimezone)
             return (0, replyInChannel_1.send)(msg, `Sorry, I couldn't find a timezone for ${match[2]}.`, false, settings);
         await firestore_1.default.updateUserInGuild({
-            guildId: (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id,
-            guildName: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.name,
+            guildId: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id,
+            guildName: (_c = msg.guild) === null || _c === void 0 ? void 0 : _c.name,
             userId: typedUser.id || typedUser.user.id,
             updatedInfo: foundTimezone,
         });

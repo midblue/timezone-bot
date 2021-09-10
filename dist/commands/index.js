@@ -61,7 +61,7 @@ const commands = [
     verboseAll_1.default,
 ];
 module.exports = async function (msg, settings, client) {
-    var _a;
+    var _a, _b;
     if (!settings)
         settings = defaultServerSettings_1.default;
     for (let command of commands) {
@@ -88,6 +88,8 @@ module.exports = async function (msg, settings, client) {
                 const usernameInPlainText = match[command.expectsUserInRegexSlot];
                 typedUser = await (0, commonFunctions_1.getUserInGuildFromText)(msg, usernameInPlainText);
             }
+            // preload guild
+            await ((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.fetch());
             // execute command
             await command.action({
                 msg,

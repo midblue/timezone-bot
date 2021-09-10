@@ -11,9 +11,9 @@ exports.default = {
         return new RegExp(`^(?:${settings.prefix}|t!)(?:prefix|setprefix|p)( ?)(.*)`, `gi`);
     },
     async action({ msg, settings, match }) {
-        var _a;
+        var _a, _b;
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Prefix > ${match[2]} (${msg.author.username})`);
         const previousPrefix = settings.prefix;
         let newPrefix = match[2];
@@ -55,7 +55,7 @@ Type \`${settings.prefix}prefix <new prefix>\` to change the command prefix for 
         newPrefix = newPrefix.substring(0, 12);
         await firestore_1.default.setGuildSettings({
             prefix: newPrefix,
-        }, (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id);
+        }, (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id);
         (0, replyInChannel_1.send)(msg, `The timezone command prefix been changed from \`${previousPrefix}\` to \`${newPrefix}\``, `none`, settings);
     },
 };

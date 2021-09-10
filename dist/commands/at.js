@@ -19,11 +19,11 @@ exports.default = {
         return new RegExp(`^${settings.prefix}(?:at) ?(he?r?e?)? ?(.*)?$`, `gi`);
     },
     async action({ msg, settings, match }) {
-        var _a;
+        var _a, _b;
         const onlyHere = (match[1] || ``).toLowerCase().indexOf(`h`) === 0;
         let timeString = match[2];
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time at ${timeString} ${onlyHere
             ? `in #${`name` in msg.channel
                 ? msg.channel.name
@@ -49,7 +49,7 @@ Use \`${settings.prefix}at <time> <location/user>\` to see other users' times at
             return;
         }
         const { username, locationName, now, enteredDateAsObject, knownTimezoneDataForEnteredUserOrLocation, } = res;
-        const allUsers = await firestore_1.default.getGuildUsers((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id);
+        const allUsers = await firestore_1.default.getGuildUsers((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id);
         if ((await Object.keys(allUsers)).length === 0)
             return (0, replyInChannel_1.send)(msg, `No other users in this server have added their timezone yet, so there's nothing to compare to.`, false, settings);
         const entries = {};

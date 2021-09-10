@@ -13,9 +13,9 @@ exports.default = {
     },
     expectsUserInRegexSlot: 1,
     async action({ msg, match, typedUser, settings, }) {
-        var _a;
+        var _a, _b;
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Admin remove user ${match[1]} (${msg.author.username})`);
         if (!match[1]) {
             return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}removeuser <username> to remove that user's timezone.`, false, settings);
@@ -24,7 +24,7 @@ exports.default = {
             return (0, replyInChannel_1.send)(msg, `I couldn't find a user by the name ${match[1]}.`, false, settings);
         }
         const success = await firestore_1.default.removeUserFromGuild({
-            guildId: (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id,
+            guildId: (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id,
             userId: typedUser.id || typedUser.user.id,
         });
         if (success === true)

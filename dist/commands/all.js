@@ -16,19 +16,19 @@ exports.default = {
         return new RegExp(`^${settings.prefix}(?:all|users|allusers|list|u|a(?!t|ut|d)) ?(.*)?$`, `gi`);
     },
     async action({ msg, settings, match, here = false, users, prependText, count, }) {
-        var _a, _b;
+        var _a, _b, _c;
         const onlyHere = here ||
             (match[1] || ``).toLowerCase() === `here` ||
             (match[1] || ``).toLowerCase() === `h`;
         console.log(`${msg.guild
-            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
+            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - All users ${onlyHere
             ? `in #${`name` in msg.channel
                 ? msg.channel.name
                 : `unknown channel`} `
             : ``}(${msg.author.username})`);
         const allUsers = {
-            ...(await firestore_1.default.getGuildUsers((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.id)),
+            ...(await firestore_1.default.getGuildUsers((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id)),
         };
         // remove irrelevant users if we're only interested in a few
         if (users)
@@ -48,7 +48,7 @@ exports.default = {
         let foundUsersCount = 0;
         // preload roles if they will be necessary
         if (settings.verboseAll) {
-            await ((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.roles.fetch());
+            await ((_c = msg.guild) === null || _c === void 0 ? void 0 : _c.roles.fetch());
         }
         for (let id of Object.keys(allUsers)) {
             const userObject = guildMembers.find((m) => m.user.id === id);
