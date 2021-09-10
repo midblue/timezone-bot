@@ -15,7 +15,7 @@
     "watch": "tsc -w",
     "build": "tsc",
     "dev": "nodemon ./dist/bot.js",
-    "start": "node --optimize_for_size --max_old_space_size=460 ./dist"
+    "start": "node -v && node --optimize_for_size --max_old_space_size=460 ./dist"
   },
   "author": "",
   "license": "ISC",
