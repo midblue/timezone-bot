@@ -67,6 +67,8 @@ module.exports = async function (msg, settings, client) {
     for (let command of commands) {
         const match = command.regex(settings).exec(msg.content);
         if (match) {
+            // preload full message data
+            msg = await msg.fetch();
             const sender = await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.members.fetch({
                 user: msg.author,
             }));
