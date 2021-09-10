@@ -82,8 +82,8 @@ client.on(`messageCreate`, async (msg) => {
     msg.author.bot
   )
     return
-  if (!msg.guild || !msg.guild.available)
-    return privateMessage(msg)
+  console.log(Boolean(msg.guild), msg.guild?.available)
+  if (!msg.guild) return privateMessage(msg)
   return guildMessage(msg, client)
 })
 

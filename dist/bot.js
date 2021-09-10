@@ -79,12 +79,14 @@ client.on(`ready`, async () => {
     (_b = client.user) === null || _b === void 0 ? void 0 : _b.setActivity(`t!info`, { type: `LISTENING` });
 });
 client.on(`messageCreate`, async (msg) => {
+    var _a;
     messagesScannedSinceLastAnnounce++;
     if (!msg.author ||
         msg.author.id === process.env.BOT_ID ||
         msg.author.bot)
         return;
-    if (!msg.guild || !msg.guild.available)
+    console.log(Boolean(msg.guild), (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.available);
+    if (!msg.guild)
         return (0, receivePrivateMessage_1.default)(msg);
     return (0, receiveGuildMessage_1.default)(msg, client);
 });
