@@ -57,23 +57,6 @@ const client: Discord.Client = new Discord.Client({
     Discord.Intents.FLAGS.GUILD_PRESENCES,
     Discord.Intents.FLAGS.DIRECT_MESSAGES,
   ],
-  // messageCacheMaxSize: 2,
-  // messageCacheLifetime: 30,
-  // messageSweepInterval: 60,
-  // disabledEvents: [
-  //   // 'GUILD_ROLE_CREATE',
-  //   // 'GUILD_ROLE_DELETE',
-  //   // 'GUILD_ROLE_UPDATE',
-  //   'GUILD_BAN_ADD',
-  //   'GUILD_BAN_REMOVE',
-  //   'GUILD_EMOJIS_UPDATE',
-  //   'GUILD_INTEGRATIONS_UPDATE',
-  //   'CHANNEL_PINS_UPDATE',
-  //   'PRESENCE_UPDATE',
-  //   'TYPING_START',
-  //   'VOICE_STATE_UPDATE',
-  //   'VOICE_SERVER_UPDATE',
-  // ],
 })
 
 import addedToServer from './events/addedToServer'
