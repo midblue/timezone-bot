@@ -14,7 +14,7 @@ exports.default = {
         var _a;
         console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
             ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
-            : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time for ${match[2]} (${msg.author.username})`);
+            : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time in ${match[2]} (${msg.author.username})`);
         if (!match[1] || !match[2])
             return (0, replyInChannel_1.send)(msg, `Use this command in the format \`${settings.prefix}timein <city or country name>\` to see the time in a specific location.`, `none`, settings);
         // assuming it's a location

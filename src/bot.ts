@@ -28,12 +28,8 @@ const client: Discord.Client = new Discord.Client({
         value.id === client.user?.id,
     }, // client.users
     // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
-    ChannelManager: {
-      maxSize: 0,
-    },
-    GuildChannelManager: {
-      maxSize: 0,
-    },
+    ChannelManager: 300,
+    GuildChannelManager: 0,
   }),
   intents: [
     Discord.Intents.FLAGS.GUILDS,

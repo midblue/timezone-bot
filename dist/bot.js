@@ -47,12 +47,8 @@ const client = new Discord.Client({
             keepOverLimit: (value, key, collection) => { var _a; return value.id === ((_a = client.user) === null || _a === void 0 ? void 0 : _a.id); },
         },
         // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
-        ChannelManager: {
-            maxSize: 0,
-        },
-        GuildChannelManager: {
-            maxSize: 0,
-        },
+        ChannelManager: 300,
+        GuildChannelManager: 0,
     }),
     intents: [
         Discord.Intents.FLAGS.GUILDS,

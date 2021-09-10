@@ -61,20 +61,20 @@ const commands = [
     verboseAll_1.default,
 ];
 module.exports = async function (msg, settings, client) {
-    var _a, _b, _c;
+    var _a;
     if (!settings)
         settings = defaultServerSettings_1.default;
     for (let command of commands) {
         const match = command.regex(settings).exec(msg.content);
         if (match) {
-            // preload full message data
-            msg = await msg.fetch();
-            // preload guild
-            if (msg.guild) {
-                await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.fetch());
-                console.log(`message had guild`, (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.name);
-            }
-            const sender = await ((_c = msg.guild) === null || _c === void 0 ? void 0 : _c.members.fetch({
+            // // preload full message data
+            // msg = await msg.fetch()
+            // // preload guild
+            // if (msg.guild) {
+            //   await msg.guild?.fetch()
+            //   console.log(`message had guild`, msg.guild?.name)
+            // }
+            const sender = await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.members.fetch({
                 user: msg.author,
             }));
             const senderIsAdmin = sender && sender.permissions.has(`BAN_MEMBERS`); // was 'ADMINISTRATOR', sneakily switched

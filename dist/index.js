@@ -30,6 +30,6 @@ manager.on(`shardCreate`, (shard) => {
 console.log(`Launching with shards...`);
 manager.spawn({
     // amount: shards,
-    delay: 5000,
+    // delay: 5000,
     timeout: 100000,
 });

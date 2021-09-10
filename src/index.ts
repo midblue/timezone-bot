@@ -14,6 +14,6 @@ manager.on(`shardCreate`, (shard: Discord.Shard) => {
 console.log(`Launching with shards...`)
 manager.spawn({
   // amount: shards,
-  delay: 5000,
+  // delay: 5000,
   timeout: 100000,
 })
