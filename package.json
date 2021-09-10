@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=16.6.0"
+  },
   "scripts": {
     "gh": "git push heroku master && npm run l",
     "hup": "heroku dyno:scale worker=1",
