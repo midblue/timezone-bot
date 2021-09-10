@@ -61,7 +61,7 @@ const commands = [
     verboseAll_1.default,
 ];
 module.exports = async function (msg, settings, client) {
-    var _a, _b;
+    var _a, _b, _c;
     if (!settings)
         settings = defaultServerSettings_1.default;
     for (let command of commands) {
@@ -69,7 +69,12 @@ module.exports = async function (msg, settings, client) {
         if (match) {
             // preload full message data
             msg = await msg.fetch();
-            const sender = await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.members.fetch({
+            // preload guild
+            if (msg.guild) {
+                await ((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.fetch());
+                console.log(`message had guild`, (_b = msg.guild) === null || _b === void 0 ? void 0 : _b.name);
+            }
+            const sender = await ((_c = msg.guild) === null || _c === void 0 ? void 0 : _c.members.fetch({
                 user: msg.author,
             }));
             const senderIsAdmin = sender && sender.permissions.has(`BAN_MEMBERS`); // was 'ADMINISTRATOR', sneakily switched
@@ -90,8 +95,6 @@ module.exports = async function (msg, settings, client) {
                 const usernameInPlainText = match[command.expectsUserInRegexSlot];
                 typedUser = await (0, commonFunctions_1.getUserInGuildFromText)(msg, usernameInPlainText);
             }
-            // preload guild
-            await ((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.fetch());
             // execute command
             await command.action({
                 msg,

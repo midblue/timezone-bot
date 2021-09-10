@@ -15,8 +15,8 @@ exports.default = {
         let roleId = match[2];
         if (roleId.indexOf(`<@&`) === 0)
             roleId = roleId.substring(3, roleId.length - 1);
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Role (${roleId})`);
         const roles = [
             ...((await ((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.roles.fetch())) || []).values(),

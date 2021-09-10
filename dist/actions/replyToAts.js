@@ -13,6 +13,9 @@ module.exports = async (msg, settings) => {
     var _a, _b, _c;
     if (msg.author.bot)
         return;
+    if (!msg.mentions)
+        // preload full message data
+        msg = await msg.fetch();
     const mentionedUserIds = ((_a = msg.mentions.members) === null || _a === void 0 ? void 0 : _a.map((m) => m.id)) || [];
     if (mentionedUserIds.length === 0)
         return;

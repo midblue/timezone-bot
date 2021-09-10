@@ -12,8 +12,8 @@ exports.default = {
     },
     async action({ msg, settings, match }) {
         var _a, _b;
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Prefix > ${match[2]} (${msg.author.username})`);
         const previousPrefix = settings.prefix;
         let newPrefix = match[2];

@@ -18,8 +18,8 @@ exports.default = {
     },
     async action({ msg, settings, match, typedUser, senderIsAdmin, }) {
         var _a, _b;
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time for ${match[2]} (${msg.author.username})`);
         if (!match[1] || !match[2])
             return (0, replyInChannel_1.send)(msg, `Use this command in the format \`${settings.prefix}time <user, role, city, or country name>\` to see the time in a specific location or for a specific user.`, `none`, settings);

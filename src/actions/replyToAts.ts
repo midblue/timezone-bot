@@ -20,6 +20,10 @@ module.exports = async (
 ) => {
   if (msg.author.bot) return
 
+  if (!msg.mentions)
+    // preload full message data
+    msg = await msg.fetch()
+
   const mentionedUserIds =
     msg.mentions.members?.map(
       (m: Discord.GuildMember) => m.id,

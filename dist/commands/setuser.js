@@ -16,8 +16,8 @@ exports.default = {
     expectsUserInRegexSlot: 1,
     async action({ msg, match, settings, typedUser, }) {
         var _a, _b, _c;
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Admin set user ${typedUser ? (0, commonFunctions_1.getLabelFromUser)(typedUser) : match[1]} > ${match[2]} (${msg.author.username})`);
         if (!match[1] || !match[2]) {
             return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}setuser <@user> <location name> to set that user's timezone.`, false, settings);

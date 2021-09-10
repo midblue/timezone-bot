@@ -22,8 +22,8 @@ exports.default = {
         var _a, _b;
         const onlyHere = (match[1] || ``).toLowerCase().indexOf(`h`) === 0;
         let timeString = match[2];
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Time at ${timeString} ${onlyHere
             ? `in #${`name` in msg.channel
                 ? msg.channel.name

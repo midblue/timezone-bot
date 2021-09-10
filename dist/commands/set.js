@@ -28,8 +28,8 @@ exports.default = {
             else if (hasAt)
                 return (0, replyInChannel_1.send)(msg, `Use this command in the format ${settings.prefix}set <city or country name> to set your timezone.`, false, settings);
         }
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - ${msg.author.username} > set to ${match[1]}`);
         const foundTimezone = await (0, getTimezoneFromLocation_1.default)(match[1]);
         if (!foundTimezone)

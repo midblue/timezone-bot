@@ -20,8 +20,8 @@ exports.default = {
     async action({ msg, settings, match }) {
         var _a;
         const timeString = match[1];
-        console.log(`${msg.guild
-            ? (_a = msg.guild.name) === null || _a === void 0 ? void 0 : _a.substring(0, 25).padEnd(25, ` `)
+        console.log(`${((_a = msg.guild) === null || _a === void 0 ? void 0 : _a.name)
+            ? msg.guild.name.substring(0, 25).padEnd(25, ` `)
             : `Private Message`}${msg.guild ? ` (${msg.guild.id})` : ``} - Timestamp for ${timeString} (${msg.author.username})`);
         const res = await (0, timeFromString_1.default)(timeString, msg);
         if (`error` in res) {

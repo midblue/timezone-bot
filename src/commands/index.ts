@@ -69,6 +69,11 @@ module.exports = async function (
     if (match) {
       // preload full message data
       msg = await msg.fetch()
+      // preload guild
+      if (msg.guild) {
+        await msg.guild?.fetch()
+        console.log(`message had guild`, msg.guild?.name)
+      }
 
       const sender = await msg.guild?.members.fetch({
         user: msg.author,
@@ -111,9 +116,6 @@ module.exports = async function (
           usernameInPlainText,
         )
       }
-
-      // preload guild
-      await msg.guild?.fetch()
 
       // execute command
       await command.action({
