@@ -86,9 +86,10 @@ client.on(`error`, (e) =>
 )
 client.on(`ready`, async () => {
   console.log(
-    `Logged in as ${client.user?.tag} in ${
-      [...(await client.guilds.fetch()).keys()].length
-    } guilds`,
+    `Logged in as ${client.user?.tag}`,
+    //  in ${
+    //   [...(await client.guilds.fetch()).keys()].length
+    // } guilds`,
   )
   client.user?.setActivity(`t!info`, { type: `LISTENING` })
 })

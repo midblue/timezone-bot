@@ -11,10 +11,9 @@ manager.on(`shardCreate`, (shard: Discord.Shard) => {
   console.log(`Launched shard ${shard.id}`)
 })
 
-const shards = 5
-console.log(`Launching with`, shards, `shards`)
+console.log(`Launching with shards...`)
 manager.spawn({
-  amount: shards,
+  // amount: shards,
   delay: 5000,
   timeout: 100000,
 })
