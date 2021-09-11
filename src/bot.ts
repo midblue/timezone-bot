@@ -14,7 +14,7 @@ import * as Discord from 'discord.js-light'
 const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
     MessageManager: 0,
-    GuildManager: 200, // client.guilds
+    GuildManager: Infinity, // client.guilds
     GuildMemberManager: 200, // guild.members
     PresenceManager: 200, // guild.presences
     RoleManager: 200, // guild.roles

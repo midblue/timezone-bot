@@ -34,7 +34,7 @@ const Discord = __importStar(require("discord.js-light"));
 const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
         MessageManager: 0,
-        GuildManager: 200,
+        GuildManager: Infinity,
         GuildMemberManager: 200,
         PresenceManager: 200,
         RoleManager: 200,
