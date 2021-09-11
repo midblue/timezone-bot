@@ -1,4 +1,4 @@
-import Discord from 'discord.js-light'
+import Discord from 'discord.js'
 import db from '../db/firestore'
 import dayjs, { Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'

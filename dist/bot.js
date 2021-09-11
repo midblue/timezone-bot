@@ -30,25 +30,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // test realm is 605053799404666880
 // https://discord.com/api/oauth2/authorize?client_id=723017262369472603&permissions=75840&scope=bot
 require(`dotenv`).config();
-const Discord = __importStar(require("discord.js-light"));
+const Discord = __importStar(require("discord.js"));
 const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
-        GuildManager: { maxSize: 200 },
-        GuildMemberManager: { maxSize: 200 },
-        PresenceManager: { maxSize: 200 },
-        RoleManager: {
-            maxSize: 300,
-            sweepInterval: 3600,
-        },
+        MessageManager: 10,
+        // GuildManager: 200, // client.guilds
+        GuildMemberManager: 200,
+        PresenceManager: 200,
+        // RoleManager: 200, // guild.roles
         ThreadManager: 0,
         ThreadMemberManager: 0,
         UserManager: {
             maxSize: 0,
             keepOverLimit: (value, key, collection) => { var _a; return value.id === ((_a = client.user) === null || _a === void 0 ? void 0 : _a.id); },
-        },
-        // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
-        ChannelManager: 300,
-        GuildChannelManager: 0,
+        }, // client.users
+        // ChannelManager: 300,
+        // GuildChannelManager: 0,
     }),
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -60,7 +57,6 @@ const client = new Discord.Client({
 });
 const addedToServer_1 = __importDefault(require("./events/addedToServer"));
 const kickedFromServer_1 = __importDefault(require("./events/kickedFromServer"));
-const receivePrivateMessage_1 = __importDefault(require("./events/receivePrivateMessage"));
 const receiveGuildMessage_1 = __importDefault(require("./events/receiveGuildMessage"));
 const otherMemberLeaveServer_1 = __importDefault(require("./events/otherMemberLeaveServer"));
 const launchTime = Date.now();
@@ -79,15 +75,13 @@ client.on(`ready`, async () => {
     (_b = client.user) === null || _b === void 0 ? void 0 : _b.setActivity(`t!info`, { type: `LISTENING` });
 });
 client.on(`messageCreate`, async (msg) => {
-    var _a;
     messagesScannedSinceLastAnnounce++;
     if (!msg.author ||
         msg.author.id === process.env.BOT_ID ||
         msg.author.bot)
         return;
-    console.log(Boolean(msg.guild), (_a = msg.guild) === null || _a === void 0 ? void 0 : _a.available);
     if (!msg.guild)
-        return (0, receivePrivateMessage_1.default)(msg);
+        return; // privateMessage(msg)
     return (0, receiveGuildMessage_1.default)(msg, client);
 });
 // added to a server

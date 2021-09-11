@@ -9,17 +9,15 @@ set times for non-users
 
 require(`dotenv`).config()
 
-import * as Discord from 'discord.js-light'
+import * as Discord from 'discord.js'
 
 const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
-    GuildManager: { maxSize: 200 }, // client.guilds
-    GuildMemberManager: { maxSize: 200 }, // guild.members
-    PresenceManager: { maxSize: 200 }, // guild.presences
-    RoleManager: {
-      maxSize: 300,
-      sweepInterval: 3600,
-    }, // guild.roles
+    MessageManager: 10,
+    // GuildManager: 200, // client.guilds
+    GuildMemberManager: 200, // guild.members
+    PresenceManager: 200, // guild.presences
+    // RoleManager: 200, // guild.roles
     ThreadManager: 0, // channel.threads
     ThreadMemberManager: 0, // threadchannel.members
     UserManager: {
@@ -27,9 +25,8 @@ const client: Discord.Client = new Discord.Client({
       keepOverLimit: (value, key, collection) =>
         value.id === client.user?.id,
     }, // client.users
-    // PermissionOverwrites: Infinity, // cache all PermissionOverwrites. It only costs memory if the channel it belongs to is cached
-    ChannelManager: 300,
-    GuildChannelManager: 0,
+    // ChannelManager: 300,
+    // GuildChannelManager: 0,
   }),
   intents: [
     Discord.Intents.FLAGS.GUILDS,
@@ -82,8 +79,7 @@ client.on(`messageCreate`, async (msg) => {
     msg.author.bot
   )
     return
-  console.log(Boolean(msg.guild), msg.guild?.available)
-  if (!msg.guild) return privateMessage(msg)
+  if (!msg.guild) return // privateMessage(msg)
   return guildMessage(msg, client)
 })
 

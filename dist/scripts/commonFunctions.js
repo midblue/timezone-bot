@@ -215,14 +215,25 @@ async function getGuildMembers({ msg, guild, ids, }) {
         }
         catch (e) {
             members = [...(await guild.members.fetch()).values()];
-            console.log(`failed to get ${members.length} guild members, falling back to cache`);
+            console.log(`failed to get ${members.length} guild members`);
         }
     }
     // get specific ids
-    else
-        members = [
-            ...(await guild.members.fetch({ user: ids })).values(),
-        ];
+    else {
+        try {
+            members = [
+                ...(await guild.members
+                    .fetch({ user: ids })
+                    .catch((e) => {
+                    console.log(e);
+                    return [];
+                })).values(),
+            ];
+        }
+        catch (e) {
+            console.log(`failed to get ${members.length} guild members`);
+        }
+    }
     return members;
 }
 exports.getGuildMembers = getGuildMembers;

@@ -21,11 +21,6 @@ function send(msg, text, block = false, settings) {
         msg.channel
             .send(message)
             .then((sentMsg) => {
-            // console.log(
-            //   msg.guild.name,
-            //   settings && typeof settings.deleteResponse,
-            //   settings && settings.deleteResponse,
-            // )
             if (settings && settings.deleteResponse) {
                 setTimeout(async () => {
                     try {

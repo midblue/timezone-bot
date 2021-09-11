@@ -3,7 +3,7 @@ const { send } = require(`../actions/replyInChannel`)
 import defaultServerSettings from '../scripts/defaultServerSettings'
 const replyToAts = require(`../actions/replyToAts`)
 const contactGuildAdmin = require(`../actions/contactGuildAdmin`)
-import * as Discord from 'discord.js-light'
+import * as Discord from 'discord.js'
 
 import all from './all'
 import at from './at'

@@ -1,4 +1,4 @@
-import Discord from 'discord.js-light'
+import Discord from 'discord.js'
 import contactGuildAdmin from './contactGuildAdmin'
 
 export function send(
@@ -27,11 +27,6 @@ export function send(
     msg.channel
       .send(message)
       .then((sentMsg) => {
-        // console.log(
-        //   msg.guild.name,
-        //   settings && typeof settings.deleteResponse,
-        //   settings && settings.deleteResponse,
-        // )
         if (settings && settings.deleteResponse) {
           setTimeout(
             async () => {

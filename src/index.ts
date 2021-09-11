@@ -1,5 +1,5 @@
 require(`dotenv`).config()
-import * as Discord from 'discord.js-light'
+import * as Discord from 'discord.js'
 const manager = new Discord.ShardingManager(
   `./dist/bot.js`,
   {

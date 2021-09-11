@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
-import * as Discord from 'discord.js-light'
+import * as Discord from 'discord.js'
 const fuse = require(`fuse.js`)
 const fuseOptions = {
   shouldSort: true,
@@ -257,17 +257,29 @@ export async function getGuildMembers({
     } catch (e) {
       members = [...(await guild.members.fetch()).values()]
       console.log(
-        `failed to get ${members.length} guild members, falling back to cache`,
+        `failed to get ${members.length} guild members`,
       )
     }
   }
   // get specific ids
-  else
-    members = [
-      ...(
-        await guild.members.fetch({ user: ids })
-      ).values(),
-    ]
+  else {
+    try {
+      members = [
+        ...(
+          await guild.members
+            .fetch({ user: ids })
+            .catch((e) => {
+              console.log(e)
+              return []
+            })
+        ).values(),
+      ]
+    } catch (e) {
+      console.log(
+        `failed to get ${members.length} guild members`,
+      )
+    }
+  }
 
   return members
 }
