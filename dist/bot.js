@@ -90,7 +90,7 @@ client.on(`messageCreate`, async (msg) => {
         msg.author.id === process.env.BOT_ID ||
         msg.author.bot)
         return;
-    if (!msg.guild)
+    if (!msg.guild || !msg.guild.available)
         return; // privateMessage(msg)
     return (0, receiveGuildMessage_1.default)(msg, client);
 });
