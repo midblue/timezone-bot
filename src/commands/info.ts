@@ -1,6 +1,6 @@
 import { send } from '../actions/replyInChannel'
 import defaultServerSettings from '../scripts/defaultServerSettings'
-import Discord from 'discord.js'
+import Discord from 'discord.js-light'
 import type { ActionProps } from '../../@types/command'
 
 export default {

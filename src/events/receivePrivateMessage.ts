@@ -1,5 +1,5 @@
 import timeIn from '../commands/timein'
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 const defaultSettings = require(`../scripts/defaultServerSettings`)
 
 export default async (msg: Discord.Message) => {

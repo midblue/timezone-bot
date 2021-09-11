@@ -1,5 +1,5 @@
 import db from '../db/firestore'
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 
 export default async (
   member: Discord.GuildMember | Discord.PartialGuildMember,

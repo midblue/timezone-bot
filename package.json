@@ -23,7 +23,7 @@
     "@types/node": "^16.9.1",
     "axios": "^0.21.4",
     "dayjs": "^1.10.6",
-    "discord.js": "^13.1.0",
+    "discord.js-light": "^4.1.4",
     "dotenv": "^10.0.0",
     "firebase-admin": "^9.11.1",
     "fuse.js": "^6.4.6",

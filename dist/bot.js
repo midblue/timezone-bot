@@ -30,22 +30,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // test realm is 605053799404666880
 // https://discord.com/api/oauth2/authorize?client_id=723017262369472603&permissions=75840&scope=bot
 require(`dotenv`).config();
-const Discord = __importStar(require("discord.js"));
+const Discord = __importStar(require("discord.js-light"));
 const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
-        MessageManager: 10,
-        // GuildManager: 200, // client.guilds
+        MessageManager: 0,
+        GuildManager: 200,
         GuildMemberManager: 200,
         PresenceManager: 200,
-        // RoleManager: 200, // guild.roles
+        RoleManager: 200,
         ThreadManager: 0,
         ThreadMemberManager: 0,
         UserManager: {
             maxSize: 0,
             keepOverLimit: (value, key, collection) => { var _a; return value.id === ((_a = client.user) === null || _a === void 0 ? void 0 : _a.id); },
-        }, // client.users
-        // ChannelManager: 300,
-        // GuildChannelManager: 0,
+        },
+        ChannelManager: 300,
+        GuildChannelManager: 0,
+        ApplicationCommandManager: 0,
+        BaseGuildEmojiManager: 0,
+        GuildBanManager: 0,
+        GuildInviteManager: 0,
+        GuildStickerManager: 0,
+        PermissionOverwriteManager: 0,
+        ReactionManager: 0,
+        ReactionUserManager: 0,
+        StageInstanceManager: 0,
+        VoiceStateManager: 0, // guild.voiceStates
     }),
     intents: [
         Discord.Intents.FLAGS.GUILDS,

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const replyInChannel_1 = require("../actions/replyInChannel");
 const defaultServerSettings_1 = __importDefault(require("../scripts/defaultServerSettings"));
-const discord_js_1 = __importDefault(require("discord.js"));
+const discord_js_light_1 = __importDefault(require("discord.js-light"));
 exports.default = {
     ignoreAdminOnly: true,
     regex(settings) {
@@ -93,20 +93,20 @@ exports.default = {
         }
         const footer = `Bugs: https://github.com/midblue/timezone-bot/issues
 Support: https://discord.gg/9MKpMCV`;
-        const richEmbed1 = new discord_js_1.default.MessageEmbed()
+        const richEmbed1 = new discord_js_light_1.default.MessageEmbed()
             .setColor(`#7B6FE5`)
             // .setTitle('TimezoneBot')
             // .setURL('https://github.com/midblue/timezone-bot')
             .setDescription(`Hi! I'm TimezoneBot. I let users set their timezone, then passively note timezones when appropriate.`)
             .addFields(...fields1)
             .setFooter(footer);
-        const richEmbed2 = new discord_js_1.default.MessageEmbed()
+        const richEmbed2 = new discord_js_light_1.default.MessageEmbed()
             .setColor(`#7B6FE5`)
             .addFields(...fields2);
-        const richEmbed3 = new discord_js_1.default.MessageEmbed()
+        const richEmbed3 = new discord_js_light_1.default.MessageEmbed()
             .setColor(`#7B6FE5`)
             .addFields(...fields3);
-        const richEmbed4 = new discord_js_1.default.MessageEmbed()
+        const richEmbed4 = new discord_js_light_1.default.MessageEmbed()
             .setColor(`#7B6FE5`)
             .addFields(...fields4);
         const embeds = [richEmbed1, richEmbed2, richEmbed3];

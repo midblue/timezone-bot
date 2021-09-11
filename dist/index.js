@@ -20,7 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require(`dotenv`).config();
-const Discord = __importStar(require("discord.js"));
+const Discord = __importStar(require("discord.js-light"));
 const manager = new Discord.ShardingManager(`./dist/bot.js`, {
     token: process.env.DISCORD_TOKEN,
 });

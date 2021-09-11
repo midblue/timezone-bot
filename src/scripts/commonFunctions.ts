@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 const fuse = require(`fuse.js`)
 const fuseOptions = {
   shouldSort: true,

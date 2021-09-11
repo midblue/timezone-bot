@@ -1,4 +1,4 @@
-import Discord from 'discord.js'
+import Discord from 'discord.js-light'
 import contactGuildAdmin from './contactGuildAdmin'
 
 export function send(

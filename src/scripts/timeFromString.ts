@@ -1,7 +1,7 @@
 import db from '../db/firestore'
 import timezoneCodeToLocation from './timezoneCodeToLocationData'
 import { getUserInGuildFromText } from './commonFunctions'
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 import getTimezoneFromLocation from '../actions/getTimezoneFromLocation'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'

@@ -1,5 +1,5 @@
 import db from '../db/firestore'
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 import { getGuildMembers } from '../scripts/commonFunctions'
 
 export default async (guild: Discord.Guild) => {

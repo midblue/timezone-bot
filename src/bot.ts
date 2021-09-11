@@ -9,15 +9,15 @@ set times for non-users
 
 require(`dotenv`).config()
 
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js-light'
 
 const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
-    MessageManager: 10,
-    // GuildManager: 200, // client.guilds
+    MessageManager: 0,
+    GuildManager: 200, // client.guilds
     GuildMemberManager: 200, // guild.members
     PresenceManager: 200, // guild.presences
-    // RoleManager: 200, // guild.roles
+    RoleManager: 200, // guild.roles
     ThreadManager: 0, // channel.threads
     ThreadMemberManager: 0, // threadchannel.members
     UserManager: {
@@ -25,8 +25,18 @@ const client: Discord.Client = new Discord.Client({
       keepOverLimit: (value, key, collection) =>
         value.id === client.user?.id,
     }, // client.users
-    // ChannelManager: 300,
-    // GuildChannelManager: 0,
+    ChannelManager: 300,
+    GuildChannelManager: 0,
+    ApplicationCommandManager: 0, // guild.commands
+    BaseGuildEmojiManager: 0, // guild.emojis
+    GuildBanManager: 0, // guild.bans
+    GuildInviteManager: 0, // guild.invites
+    GuildStickerManager: 0, // guild.stickers
+    PermissionOverwriteManager: 0, // channel.permissionOverwrites
+    ReactionManager: 0, // message.reactions
+    ReactionUserManager: 0, // reaction.users
+    StageInstanceManager: 0, // guild.stageInstances
+    VoiceStateManager: 0, // guild.voiceStates
   }),
   intents: [
     Discord.Intents.FLAGS.GUILDS,
