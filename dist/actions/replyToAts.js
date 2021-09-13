@@ -20,7 +20,7 @@ module.exports = async (msg, settings) => {
     if (mentionedUserIds.length === 0)
         return;
     const authorId = msg.author.id;
-    const savedUsers = (await firestore_1.default.getGuildUsers((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id)) || [];
+    const savedUsers = (await firestore_1.default.getGuildUsers((_b = msg.guild) === null || _b === void 0 ? void 0 : _b.id)) || {};
     const authorTimezoneData = savedUsers[authorId];
     const matchedUsers = mentionedUserIds
         .map((id) => savedUsers[id] ? { ...savedUsers[id], id } : null)

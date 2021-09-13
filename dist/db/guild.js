@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const defaultServerSettings_1 = __importDefault(require("../scripts/defaultServerSettings"));
 const memo_1 = __importDefault(require("../scripts/memo"));
-const memoedGuildData = (0, memo_1.default)(300);
+const memoedGuildData = (0, memo_1.default)(600);
 let firestore = firebase_admin_1.default.firestore();
 exports.default = {
     async hasGuild({ guildId }) {
@@ -119,7 +119,7 @@ exports.default = {
             return;
         const users = data.users;
         if (!userId) {
-            console.log(`Failed to remove user ${userId} from guild ${guildId}: No user ID supplied`);
+            console.log(`Failed to remove user from guild ${guildId}: No user ID supplied`);
             return;
         }
         if (!users[userId]) {

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const memo_1 = __importDefault(require("../scripts/memo"));
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
-const memoedLocationData = (0, memo_1.default)(1500);
+const memoedLocationData = (0, memo_1.default)(2500);
 let firestore = firebase_admin_1.default.firestore();
 exports.default = {
     async setLocation({ locationName, locationSettings, }) {

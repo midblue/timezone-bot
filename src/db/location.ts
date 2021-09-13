@@ -1,7 +1,7 @@
 import memo from '../scripts/memo'
 import admin from 'firebase-admin'
 
-const memoedLocationData = memo(1500)
+const memoedLocationData = memo(2500)
 
 let firestore = admin.firestore()
 

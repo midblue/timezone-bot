@@ -15,9 +15,9 @@ const client: Discord.Client = new Discord.Client({
   makeCache: Discord.Options.cacheWithLimits({
     MessageManager: 0,
     GuildManager: Infinity, // client.guilds
-    GuildMemberManager: 200, // guild.members
-    PresenceManager: 200, // guild.presences
-    RoleManager: 200, // guild.roles
+    GuildMemberManager: 301, // guild.members
+    PresenceManager: 302, // guild.presences
+    RoleManager: 303, // guild.roles
     ThreadManager: 0, // channel.threads
     ThreadMemberManager: 0, // threadchannel.members
     UserManager: {
@@ -25,7 +25,7 @@ const client: Discord.Client = new Discord.Client({
       keepOverLimit: (value, key, collection) =>
         value.id === client.user?.id,
     }, // client.users
-    ChannelManager: 300,
+    ChannelManager: 304,
     GuildChannelManager: 0,
     ApplicationCommandManager: 0, // guild.commands
     BaseGuildEmojiManager: 0, // guild.emojis
@@ -89,7 +89,8 @@ client.on(`messageCreate`, async (msg) => {
     msg.author.bot
   )
     return
-  if (!msg.guild || !msg.guild.available) return // privateMessage(msg)
+  if (msg.guild && !msg.guild.available) return
+  if (!msg.guild) return privateMessage(msg)
   return guildMessage(msg, client)
 })
 

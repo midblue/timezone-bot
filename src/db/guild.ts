@@ -2,7 +2,7 @@ import admin from 'firebase-admin'
 import defaultServerSettings from '../scripts/defaultServerSettings'
 import memo from '../scripts/memo'
 
-const memoedGuildData = memo(300)
+const memoedGuildData = memo(600)
 
 let firestore = admin.firestore()
 
@@ -162,7 +162,7 @@ export default {
 
     if (!userId) {
       console.log(
-        `Failed to remove user ${userId} from guild ${guildId}: No user ID supplied`,
+        `Failed to remove user from guild ${guildId}: No user ID supplied`,
       )
       return
     }

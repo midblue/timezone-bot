@@ -35,16 +35,16 @@ const client = new Discord.Client({
     makeCache: Discord.Options.cacheWithLimits({
         MessageManager: 0,
         GuildManager: Infinity,
-        GuildMemberManager: 200,
-        PresenceManager: 200,
-        RoleManager: 200,
+        GuildMemberManager: 301,
+        PresenceManager: 302,
+        RoleManager: 303,
         ThreadManager: 0,
         ThreadMemberManager: 0,
         UserManager: {
             maxSize: 0,
             keepOverLimit: (value, key, collection) => { var _a; return value.id === ((_a = client.user) === null || _a === void 0 ? void 0 : _a.id); },
         },
-        ChannelManager: 300,
+        ChannelManager: 304,
         GuildChannelManager: 0,
         ApplicationCommandManager: 0,
         BaseGuildEmojiManager: 0,
@@ -67,6 +67,7 @@ const client = new Discord.Client({
 });
 const addedToServer_1 = __importDefault(require("./events/addedToServer"));
 const kickedFromServer_1 = __importDefault(require("./events/kickedFromServer"));
+const receivePrivateMessage_1 = __importDefault(require("./events/receivePrivateMessage"));
 const receiveGuildMessage_1 = __importDefault(require("./events/receiveGuildMessage"));
 const otherMemberLeaveServer_1 = __importDefault(require("./events/otherMemberLeaveServer"));
 const launchTime = Date.now();
@@ -90,8 +91,10 @@ client.on(`messageCreate`, async (msg) => {
         msg.author.id === process.env.BOT_ID ||
         msg.author.bot)
         return;
-    if (!msg.guild || !msg.guild.available)
-        return; // privateMessage(msg)
+    if (msg.guild && !msg.guild.available)
+        return;
+    if (!msg.guild)
+        return (0, receivePrivateMessage_1.default)(msg);
     return (0, receiveGuildMessage_1.default)(msg, client);
 });
 // added to a server

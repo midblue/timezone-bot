@@ -33,7 +33,7 @@ module.exports = async (
   const authorId = msg.author.id
 
   const savedUsers =
-    (await db.getGuildUsers(msg.guild?.id)) || []
+    (await db.getGuildUsers(msg.guild?.id)) || {}
   const authorTimezoneData = savedUsers[authorId]
   const matchedUsers = mentionedUserIds
     .map((id) =>
