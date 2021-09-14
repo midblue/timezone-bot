@@ -28,8 +28,18 @@ manager.on(`shardCreate`, (shard) => {
     console.log(`Launched shard ${shard.id}`);
 });
 console.log(`Launching with shards...`);
-manager.spawn({
+manager
+    .spawn({
     // amount: shards,
     // delay: 5000,
     timeout: 100000,
+})
+    .then((shardCollection) => {
+    manager
+        .fetchClientValues(`guilds.cache.size`)
+        .then((results) => {
+        if (results && Array.isArray(results))
+            console.log(`***** Logged in in ${results.reduce((acc, guildCount) => acc + guildCount, 0)} total guilds *****`);
+    })
+        .catch(console.error);
 });

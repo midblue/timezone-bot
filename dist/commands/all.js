@@ -36,7 +36,7 @@ exports.default = {
                 if (!users.find((u) => u.id === key))
                     delete allUsers[key];
         if ((await Object.keys(allUsers)).length === 0)
-            return (0, replyInChannel_1.send)(msg, `No users in this ${users ? `role` : `server`} have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, false, settings);
+            return (0, replyInChannel_1.send)(msg, `No users in this ${users ? `role` : `server`} have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, `none`, settings);
         const timezonesWithUsers = {};
         const asyncFilter = async (arr, predicate) => Promise.all(arr.map(predicate)).then((results) => arr.filter((_v, index) => results[index]));
         const guildMembers = (await asyncFilter(await (0, commonFunctions_1.getGuildMembers)({ msg }), async (guildMember) => {
@@ -77,7 +77,7 @@ exports.default = {
             timezonesWithUsers[timezoneUID].usernames.push((userObject.nickname || userObject.user.username) +
                 (context ? ` (@${context})` : ``));
         }
-        const timezonesWithUsersAsSortedArray = Object.values(timezonesWithUsers).sort((a, b) => b.dateObject.utcOffset() - a.dateObject.utcOffset());
+        const timezonesWithUsersAsSortedArray = Object.values(timezonesWithUsers).sort((a, b) => a.dateObject.utcOffset() - b.dateObject.utcOffset());
         if (!timezonesWithUsersAsSortedArray.length)
             return (0, replyInChannel_1.send)(msg, `No users with that criteria have added their timezone yet. Use \`${settings.prefix}set <city or country name>\` to set your timezone.`, `none`, settings);
         (0, replyInChannel_1.send)(msg, `${foundUsersCount} users with saved timezones${prependText ? ` ` + prependText : ``}${onlyHere ? ` in <#${msg.channel.id}>` : ``}:`, `none`, settings);

@@ -72,7 +72,7 @@ export default {
         } have added their timezone yet. Use \`${
           settings.prefix
         }set <city or country name>\` to set your timezone.`,
-        false,
+        `none`,
         settings,
       )
 
@@ -153,7 +153,7 @@ export default {
       timezonesWithUsers,
     ).sort(
       (a, b) =>
-        b.dateObject.utcOffset() - a.dateObject.utcOffset(),
+        a.dateObject.utcOffset() - b.dateObject.utcOffset(),
     )
 
     if (!timezonesWithUsersAsSortedArray.length)

@@ -12,8 +12,25 @@ manager.on(`shardCreate`, (shard: Discord.Shard) => {
 })
 
 console.log(`Launching with shards...`)
-manager.spawn({
-  // amount: shards,
-  // delay: 5000,
-  timeout: 100000,
-})
+
+manager
+  .spawn({
+    // amount: shards,
+    // delay: 5000,
+    timeout: 100000,
+  })
+  .then((shardCollection) => {
+    manager
+      .fetchClientValues(`guilds.cache.size`)
+      .then((results: any) => {
+        if (results && Array.isArray(results))
+          console.log(
+            `***** Logged in in ${results.reduce(
+              (acc: number, guildCount: number) =>
+                acc + guildCount,
+              0,
+            )} total guilds *****`,
+          )
+      })
+      .catch(console.error)
+  })

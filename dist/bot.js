@@ -82,7 +82,7 @@ setInterval(async () => {
 client.on(`error`, (e) => console.log(`Discord.js error:`, e.message));
 client.on(`ready`, async () => {
     var _a, _b;
-    console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag} in ${[...(await client.guilds.fetch()).keys()].length} guilds`);
+    console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag} in a shard`);
     (_b = client.user) === null || _b === void 0 ? void 0 : _b.setActivity(`t!info`, { type: `LISTENING` });
 });
 client.on(`messageCreate`, async (msg) => {
