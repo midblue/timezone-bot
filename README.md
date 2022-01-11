@@ -2,16 +2,22 @@
 
 A simple timezone bot for Discord servers.
 
-### [Click here to add it to your server!](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=75840&scope=bot)
+### Update Jan 2022:
+> tl;dr the public TimezoneBot is shutting down because Discord neutered it.
+
+> Discord changed their bot rules such that seeing message contents requires special permission. I applied for this permission, and was rejected with illogical reasoning. Since one of the primary purposes of this bot — to auto-reply to @messages — will become impossible, I've decided to shut down the publically hosted bot rather than continue to spend money on hosting a husk of the bot I've envisioned.
+
+> But! The good news is, you're welcome to run your own copy of the bot, which will work fully as envisioned as long as you don't pass 100 servers! The guide for self-hosting is available here: https://github.com/midblue/timezone-bot/blob/master/instructions%20selfhosting.md
+
+> Please be aware that I will not be actively developing the bot going forward. Feel free to fork your own versions for new features.
+
+> I'd like to give a special shout out to all the fantastic people who have supported the bot's development, and all of the great folks on the support server and elsewhere who have given advice, input, and support along the way.
+Thanks for understanding, and have a great day, wherever in the world you may be!
+
+---
 
 ![](https://www.jasperstephenson.com/posts/timezonebot/full/1.png)  
 Allows users to set their timezone, then passively notes timezones when appropriate.
-
-> [Read more about this project](https://www.jasperstephenson.com/posts/timezonebot)
-
-> [Donate to help with server costs](https://www.patreon.com/midblue)
-
-> [Support server invite link](https://discord.gg/9MKpMCV)
 
 ## Commands:
 
