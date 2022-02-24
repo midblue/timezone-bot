@@ -31,3 +31,6 @@ Please be aware that there will be limited/no support for self-hosting and apart
 2. Run `npm ci` and wait for it to finish
 3. To start the bot, run `npm start`
 4. That's it! You're bot should be up and running :)
+
+> Invite your bot to a server with a link in this format:
+> https://discord.com/api/oauth2/authorize?client_id=<YOUR_BOT_ID_HERE>&permissions=75840&scope=bot
