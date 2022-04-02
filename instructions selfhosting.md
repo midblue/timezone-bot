@@ -1,5 +1,5 @@
 **Note:**
-Please be aware that there will be limited/no support for self-hosting and apart from this wiki, you should figure out most stuff yourself. If you do not have experience with self hosting, we recommend using the public bot, that you can invite by clicking [here](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot)
+Please be aware that there will be limited/no support for self-hosting and apart from this wiki, you should figure out most stuff yourself. If you do not have experience with self hosting, you can join our Discord server and get help from fellow self-hosters. ~~we recommend using the public bot, that you can invite by clicking [here](https://discord.com/api/oauth2/authorize?client_id=437598259330940939&permissions=68672&scope=bot)~~
 
 ## Prerequisites
 1. Create a bot on the [Discord Developer Portal](https://discordapp.com/developers/)
